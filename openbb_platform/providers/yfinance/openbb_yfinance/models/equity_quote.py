@@ -78,7 +78,13 @@ class YFinanceEquityQuoteFetcher(
         """Extract the raw data from YFinance."""
         # pylint: disable=import-outside-toplevel
         import asyncio  # noqa
-        from yfinance import Ticker  # noqa
+        from curl_adapter import CurlCffiAdapter
+        from openbb_core.provider.utils.helpers import get_requests_session
+        from yfinance import Ticker
+
+        session = get_requests_session()
+        session.mount("https://", CurlCffiAdapter())
+        session.mount("http://", CurlCffiAdapter())
 
         symbols = query.symbol.split(",")
         results = []
@@ -108,10 +114,13 @@ class YFinanceEquityQuoteFetcher(
 
         async def get_one(symbol):
             """Get the data for one ticker symbol."""
-            result = {}
-            ticker = {}
+            result: dict = {}
+            ticker: dict = {}
             try:
-                ticker = Ticker(symbol).get_info()
+                ticker = Ticker(
+                    symbol,
+                    session=session,
+                ).get_info()
             except Exception as e:
                 warn(f"Error getting data for {symbol}: {e}")
             if ticker:

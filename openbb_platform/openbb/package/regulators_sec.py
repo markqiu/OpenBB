@@ -13,6 +13,8 @@ from typing_extensions import Annotated
 class ROUTER_regulators_sec(Container):
     """/regulators/sec
     cik_map
+    filing_headers
+    htm_file
     institutions_search
     rss_litigation
     schema_files
@@ -40,10 +42,10 @@ class ROUTER_regulators_sec(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         symbol : str
             Symbol to get data for.
-        provider : Optional[Literal['sec']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         use_cache : Optional[bool]
             Whether or not to use cache for the request, default is True. (provider: sec)
 
@@ -52,10 +54,10 @@ class ROUTER_regulators_sec(Container):
         OBBject
             results : CikMap
                 Serializable results.
-            provider : Optional[Literal['sec']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -91,6 +93,161 @@ class ROUTER_regulators_sec(Container):
 
     @exception_handler
     @validate
+    def filing_headers(
+        self,
+        provider: Annotated[
+            Optional[Literal["sec"]],
+            OpenBBField(
+                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
+            ),
+        ] = None,
+        **kwargs
+    ) -> OBBject:
+        """Download the index headers, and cover page if available, for any SEC filing.
+
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
+        url : str
+            URL for the SEC filing. The specific URL is not directly used or downloaded, but is used to generate the base URL for the filing. e.g. https://www.sec.gov/Archives/edgar/data/317540/000031754024000045/coke-20240731.htm and https://www.sec.gov/Archives/edgar/data/317540/000031754024000045/ are both valid URLs for the same filing. (provider: sec)
+        use_cache : bool
+            Use cache for the index headers and cover page. Default is True. (provider: sec)
+
+        Returns
+        -------
+        OBBject
+            results : SecFiling
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
+
+        SecFiling
+        ---------
+        base_url : Optional[str]
+            Base URL of the filing. (provider: sec)
+        name : Optional[str]
+            Name of the entity filing. (provider: sec)
+        cik : Optional[str]
+            Central Index Key. (provider: sec)
+        trading_symbols : Optional[list]
+            Trading symbols, if available. (provider: sec)
+        sic : Optional[str]
+            Standard Industrial Classification. (provider: sec)
+        sic_organization_name : Optional[str]
+            SIC Organization Name. (provider: sec)
+        filing_date : Optional[date]
+            Filing date. (provider: sec)
+        period_ending : Optional[date]
+            Date of the ending period for the filing, if available. (provider: sec)
+        fiscal_year_end : Optional[str]
+            Fiscal year end of the entity, if available. Format: MM-DD (provider: sec)
+        document_type : Optional[str]
+            Specific SEC filing type. (provider: sec)
+        has_cover_page : Optional[bool]
+            True if the filing has a cover page. (provider: sec)
+        description : Optional[str]
+            Description of attached content, mostly applicable to 8-K filings. (provider: sec)
+        cover_page : Optional[dict]
+            Cover page information, if available. (provider: sec)
+        document_urls : Optional[list]
+            list of files associated with the filing. (provider: sec)
+
+        Examples
+        --------
+        >>> from openbb import obb
+        >>> obb.regulators.sec.filing_headers(url='https://www.sec.gov/Archives/edgar/data/317540/000119312524076556/d645509ddef14a.htm', provider='sec')
+        """  # noqa: E501
+
+        return self._run(
+            "/regulators/sec/filing_headers",
+            **filter_inputs(
+                provider_choices={
+                    "provider": self._get_provider(
+                        provider,
+                        "regulators.sec.filing_headers",
+                        ("sec",),
+                    )
+                },
+                standard_params={},
+                extra_params=kwargs,
+                info={"url": {"sec": {"x-widget_config": {"label": "Filing URL"}}}},
+            )
+        )
+
+    @exception_handler
+    @validate
+    def htm_file(
+        self,
+        provider: Annotated[
+            Optional[Literal["sec"]],
+            OpenBBField(
+                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
+            ),
+        ] = None,
+        **kwargs
+    ) -> OBBject:
+        """Download a raw HTML object from the SEC website.
+
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
+        url : str
+            URL for the SEC filing. (provider: sec)
+        use_cache : bool
+            Cache the file for use later. Default is True. (provider: sec)
+
+        Returns
+        -------
+        OBBject
+            results : SecHtmFile
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
+
+        SecHtmFile
+        ----------
+        url : Optional[str]
+            URL of the downloaded file. (provider: sec)
+        content : Optional[str]
+            Raw content of the HTM/HTML file. (provider: sec)
+
+        Examples
+        --------
+        >>> from openbb import obb
+        >>> obb.regulators.sec.htm_file(url='https://www.sec.gov/Archives/edgar/data/1723690/000119312525030074/d866336dex991.htm', provider='sec')
+        """  # noqa: E501
+
+        return self._run(
+            "/regulators/sec/htm_file",
+            **filter_inputs(
+                provider_choices={
+                    "provider": self._get_provider(
+                        provider,
+                        "regulators.sec.htm_file",
+                        ("sec",),
+                    )
+                },
+                standard_params={},
+                extra_params=kwargs,
+            )
+        )
+
+    @exception_handler
+    @validate
     def institutions_search(
         self,
         query: Annotated[str, OpenBBField(description="Search query.")] = "",
@@ -106,22 +263,22 @@ class ROUTER_regulators_sec(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         query : str
             Search query.
-        provider : Optional[Literal['sec']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         use_cache : Optional[bool]
             Whether or not to use cache. (provider: sec)
 
         Returns
         -------
         OBBject
-            results : List[InstitutionsSearch]
+            results : list[InstitutionsSearch]
                 Serializable results.
-            provider : Optional[Literal['sec']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -174,18 +331,18 @@ class ROUTER_regulators_sec(Container):
 
         Parameters
         ----------
-        provider : Optional[Literal['sec']]
+        provider : str
             The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
 
         Returns
         -------
         OBBject
-            results : List[RssLitigation]
+            results : list[RssLitigation]
                 Serializable results.
-            provider : Optional[Literal['sec']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -242,10 +399,10 @@ class ROUTER_regulators_sec(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         query : str
             Search query.
-        provider : Optional[Literal['sec']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         url : Optional[str]
             Enter an optional URL path to fetch the next level. (provider: sec)
         use_cache : Optional[bool]
@@ -256,10 +413,10 @@ class ROUTER_regulators_sec(Container):
         OBBject
             results : SchemaFiles
                 Serializable results.
-            provider : Optional[Literal['sec']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -267,7 +424,7 @@ class ROUTER_regulators_sec(Container):
 
         SchemaFiles
         -----------
-        files : Optional[List[str]]
+        files : Optional[list[str]]
             Dictionary of URLs to SEC Schema Files (provider: sec)
 
         Examples
@@ -283,7 +440,7 @@ class ROUTER_regulators_sec(Container):
         >>> # The URL base will always be the 0 position in the list, feed  the URL back in as a parameter.
         >>> obb.regulators.sec.schema_files(url=url).results.files
         >>> ['https://xbrl.fasb.org/us-gaap/2024/'
-        >>> 'USGAAP2024FileList.xml'
+        >>> 'USGAAP2024Filelist.xml'
         >>> 'dis/'
         >>> 'dqcrules/'
         >>> 'ebp/'
@@ -328,22 +485,22 @@ class ROUTER_regulators_sec(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         query : str
             Search query.
-        provider : Optional[Literal['sec']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         use_cache : Optional[bool]
             Whether or not to use cache. (provider: sec)
 
         Returns
         -------
         OBBject
-            results : List[SicSearch]
+            results : list[SicSearch]
                 Serializable results.
-            provider : Optional[Literal['sec']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -405,22 +562,22 @@ class ROUTER_regulators_sec(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
         query : str
             Search query.
         use_cache : Optional[bool]
             Whether or not to use cache. If True, cache will store for seven days.
-        provider : Optional[Literal['sec']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
 
         Returns
         -------
         OBBject
             results : SymbolMap
                 Serializable results.
-            provider : Optional[Literal['sec']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]

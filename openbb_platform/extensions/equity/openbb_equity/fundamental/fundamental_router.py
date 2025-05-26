@@ -1,6 +1,6 @@
 # pylint: disable=W0613:unused-argument
 """Fundamental Analysis Router."""
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
+
 from openbb_core.app.model.command_context import CommandContext
 from openbb_core.app.model.example import APIEx
 from openbb_core.app.model.obbject import OBBject
@@ -44,10 +44,10 @@ async def multiples(
     ],
 )
 async def balance(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the balance sheet for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -61,10 +61,10 @@ async def balance(
     ],
 )
 async def balance_growth(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the growth of a company's balance sheet items over time."""
     return await OBBject.from_query(Query(**locals()))
@@ -85,10 +85,10 @@ async def balance_growth(
     ],
 )
 async def cash(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the cash flow statement for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -96,12 +96,6 @@ async def cash(
 
 @router.command(
     model="ReportedFinancials",
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available providers, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(parameters={"symbol": "AAPL", "provider": "intrinio"}),
         APIEx(
@@ -133,10 +127,10 @@ async def cash(
     ],
 )
 async def reported_financials(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get financial statements as reported by the company."""
     return await OBBject.from_query(Query(**locals()))
@@ -150,10 +144,10 @@ async def reported_financials(
     ],
 )
 async def cash_growth(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the growth of a company's cash flow statement items over time."""
     return await OBBject.from_query(Query(**locals()))
@@ -164,10 +158,10 @@ async def cash_growth(
     examples=[APIEx(parameters={"symbol": "AAPL", "provider": "intrinio"})],
 )
 async def dividends(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get historical dividend data for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -178,10 +172,10 @@ async def dividends(
     examples=[APIEx(parameters={"symbol": "AAPL", "provider": "fmp"})],
 )
 async def historical_eps(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get historical earnings per share data for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -192,10 +186,10 @@ async def historical_eps(
     examples=[APIEx(parameters={"symbol": "AAPL", "provider": "fmp"})],
 )
 async def employee_count(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get historical employee count data for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -203,19 +197,13 @@ async def employee_count(
 
 @router.command(
     model="SearchAttributes",
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available providers, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[APIEx(parameters={"query": "ebitda", "provider": "intrinio"})],
 )
 async def search_attributes(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Search Intrinio data tags to search in latest or historical attributes."""
     return await OBBject.from_query(Query(**locals()))
@@ -223,21 +211,15 @@ async def search_attributes(
 
 @router.command(
     model="LatestAttributes",
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available providers, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(parameters={"symbol": "AAPL", "tag": "ceo", "provider": "intrinio"})
     ],
 )
 async def latest_attributes(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the latest value of a data tag from Intrinio."""
     return await OBBject.from_query(Query(**locals()))
@@ -245,21 +227,15 @@ async def latest_attributes(
 
 @router.command(
     model="HistoricalAttributes",
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available providers, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(parameters={"symbol": "AAPL", "tag": "ebitda", "provider": "intrinio"})
     ],
 )
 async def historical_attributes(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the historical values of a data tag from Intrinio."""
     return await OBBject.from_query(Query(**locals()))
@@ -280,10 +256,10 @@ async def historical_attributes(
     ],
 )
 async def income(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the income statement for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -304,10 +280,10 @@ async def income(
     ],
 )
 async def income_growth(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the growth of a company's income statement items over time."""
     return await OBBject.from_query(Query(**locals()))
@@ -328,10 +304,10 @@ async def income_growth(
     ],
 )
 async def metrics(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get fundamental metrics for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -342,10 +318,10 @@ async def metrics(
     examples=[APIEx(parameters={"symbol": "AAPL", "provider": "fmp"})],
 )
 async def management(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get executive management team data for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -356,10 +332,10 @@ async def management(
     examples=[APIEx(parameters={"symbol": "AAPL", "provider": "fmp"})],
 )
 async def management_compensation(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get executive management team compensation for a given company over time."""
     return await OBBject.from_query(Query(**locals()))
@@ -380,10 +356,10 @@ async def management_compensation(
     ],
 )
 async def ratios(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get an extensive set of financial and accounting ratios for a given company over time."""
     return await OBBject.from_query(Query(**locals()))
@@ -403,10 +379,10 @@ async def ratios(
     ],
 )
 async def revenue_per_geography(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the geographic breakdown of revenue for a given company over time."""
     return await OBBject.from_query(Query(**locals()))
@@ -426,10 +402,10 @@ async def revenue_per_geography(
     ],
 )
 async def revenue_per_segment(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the revenue breakdown by business segment for a given company over time."""
     return await OBBject.from_query(Query(**locals()))
@@ -443,10 +419,10 @@ async def revenue_per_segment(
     ],
 )
 async def filings(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the URLs to SEC filings reported to EDGAR database, such as 10-K, 10-Q, 8-K, and more.
 
@@ -463,10 +439,10 @@ async def filings(
     examples=[APIEx(parameters={"symbol": "AAPL", "provider": "fmp"})],
 )
 async def historical_splits(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get historical stock splits for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -477,10 +453,10 @@ async def historical_splits(
     examples=[APIEx(parameters={"symbol": "AAPL", "year": 2020, "provider": "fmp"})],
 )
 async def transcript(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get earnings call transcripts for a given company."""
     return await OBBject.from_query(Query(**locals()))
@@ -488,24 +464,73 @@ async def transcript(
 
 @router.command(
     model="TrailingDividendYield",
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available providers, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(parameters={"symbol": "AAPL", "provider": "tiingo"}),
         APIEx(parameters={"symbol": "AAPL", "limit": 252, "provider": "tiingo"}),
     ],
 )
 async def trailing_dividend_yield(
-        cc: CommandContext,
-        provider_choices: ProviderChoices,
-        standard_params: StandardParams,
-        extra_params: ExtraParams,
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
 ) -> OBBject:
     """Get the 1 year trailing dividend yield for a given company over time."""
+    return await OBBject.from_query(Query(**locals()))
+
+
+@router.command(
+    model="ManagementDiscussionAnalysis",
+    examples=[
+        APIEx(parameters={"symbol": "AAPL", "provider": "sec"}),
+        APIEx(
+            description="Get the Management Discussion & Analysis section by calendar year and period.",
+            parameters={
+                "symbol": "AAPL",
+                "calendar_year": 2020,
+                "calendar_period": "Q4",
+                "provider": "sec",
+            },
+        ),
+        APIEx(
+            description="Setting 'include_tables' to True will attempt to extract all tables in valid Markdown.",
+            parameters={
+                "symbol": "AAPL",
+                "calendar_year": 2020,
+                "calendar_period": "Q4",
+                "provider": "sec",
+                "include_tables": True,
+            },
+        ),
+        APIEx(
+            description="Setting 'raw_html' to True will bypass extraction and return the raw HTML file, as is."
+            + " Use this for custom parsing or to access the entire HTML filing.",
+            parameters={
+                "symbol": "AAPL",
+                "calendar_year": 2020,
+                "calendar_period": "Q4",
+                "provider": "sec",
+                "raw_html": True,
+            },
+        ),
+    ],
+    openapi_extra={
+        "widget_config": {
+            "type": "markdown",
+            "data": {"dataKey": "results.content", "columnsDefs": []},
+            "staleTime": 86400000,
+            "refetchInterval": 86400000,
+            "source": "SEC",
+        }
+    },
+)
+async def management_discussion_analysis(
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
+) -> OBBject:
+    """Get the Management Discussion & Analysis section from the financial statements for a given company."""
     return await OBBject.from_query(Query(**locals()))
 
 

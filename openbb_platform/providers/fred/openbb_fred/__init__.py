@@ -20,6 +20,9 @@ from openbb_fred.models.high_quality_market import (
 )
 from openbb_fred.models.ice_bofa import FREDICEBofAFetcher
 from openbb_fred.models.iorb_rates import FREDIORBFetcher
+from openbb_fred.models.manufacturing_outlook_ny import (
+    FredManufacturingOutlookNYFetcher,
+)
 from openbb_fred.models.manufacturing_outlook_texas import (
     FredManufacturingOutlookTexasFetcher,
 )
@@ -52,9 +55,6 @@ from openbb_fred.models.tbffr import FREDSelectedTreasuryBillFetcher
 from openbb_fred.models.tips_yields import FredTipsYieldsFetcher
 from openbb_fred.models.tmc import FREDTreasuryConstantMaturityFetcher
 from openbb_fred.models.university_of_michigan import FredUofMichiganFetcher
-from openbb_fred.models.us_yield_curve import (
-    FREDYieldCurveFetcher as FREDUSYieldCurveFetcher,
-)
 from openbb_fred.models.yield_curve import FREDYieldCurveFetcher
 
 fred_provider = Provider(
@@ -69,7 +69,6 @@ Research division of the Federal Reserve Bank of St. Louis that has more than
         "BondIndices": FredBondIndicesFetcher,
         "CommoditySpotPrices": FredCommoditySpotPricesFetcher,
         "ConsumerPriceIndex": FREDConsumerPriceIndexFetcher,
-        "USYieldCurve": FREDUSYieldCurveFetcher,
         "SOFR": FREDSOFRFetcher,
         "EuroShortTermRate": FredEuroShortTermRateFetcher,
         "SONIA": FREDSONIAFetcher,
@@ -80,6 +79,7 @@ Research division of the Federal Reserve Bank of St. Louis that has more than
         "DiscountWindowPrimaryCreditRate": FREDDiscountWindowPrimaryCreditRateFetcher,
         "EuropeanCentralBankInterestRates": FREDEuropeanCentralBankInterestRatesFetcher,
         "ICEBofA": FREDICEBofAFetcher,
+        "ManufacturingOutlookNY": FredManufacturingOutlookNYFetcher,
         "ManufacturingOutlookTexas": FredManufacturingOutlookTexasFetcher,
         "MoodyCorporateBondIndex": FREDMoodyCorporateBondIndexFetcher,
         "MortgageIndices": FredMortgageIndicesFetcher,

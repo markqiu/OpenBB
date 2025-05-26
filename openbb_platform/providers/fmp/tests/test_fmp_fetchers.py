@@ -46,6 +46,7 @@ from openbb_fmp.models.executive_compensation import FMPExecutiveCompensationFet
 from openbb_fmp.models.financial_ratios import FMPFinancialRatiosFetcher
 from openbb_fmp.models.forward_ebitda_estimates import FMPForwardEbitdaEstimatesFetcher
 from openbb_fmp.models.forward_eps_estimates import FMPForwardEpsEstimatesFetcher
+from openbb_fmp.models.government_trades import FMPGovernmentTradesFetcher
 from openbb_fmp.models.historical_dividends import FMPHistoricalDividendsFetcher
 from openbb_fmp.models.historical_employees import FMPHistoricalEmployeesFetcher
 from openbb_fmp.models.historical_eps import FMPHistoricalEpsFetcher
@@ -789,17 +790,22 @@ def test_fmp_government_trades_fetcher(credentials=test_credentials):
     params limit only functions when there is no parameter symbol
     """
     params = {
-        "chamber": "all",
-        "symbol": "AAPL",
+        "chamber": "senate",
+        "limit": 1,
     }
     fetcher = FMPGovernmentTradesFetcher()
     result = fetcher.test(params, credentials)
     assert result is None
+
+
+@pytest.mark.record_http
+def test_fmp_calendar_events_fetcher(credentials=test_credentials):
+    """Test FMP calendar events fetcher."""
     params = {
-        "chamber": "all",
-        "limit": 300,
+        "start_date": date(2025, 1, 7),
+        "end_date": date(2025, 1, 10),
     }
-    fetcher = FMPGovernmentTradesFetcher()
+    fetcher = FMPCalendarEventsFetcher()
     result = fetcher.test(params, credentials)
     assert result is None
 

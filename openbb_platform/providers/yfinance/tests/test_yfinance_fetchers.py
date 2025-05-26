@@ -59,6 +59,7 @@ def vcr_config():
             ("period1", "MOCK_PERIOD_1"),
             ("period2", "MOCK_PERIOD_2"),
             ("crumb", "MOCK_CRUMB"),
+            ("date", "MOCK_DATE"),
         ],
     }
 
@@ -170,7 +171,7 @@ def test_y_finance_futures_curve_fetcher(credentials=test_credentials):
 @pytest.mark.record_http
 def test_y_finance_company_news_fetcher(credentials=test_credentials):
     """Test YFinanceCompanyNewsFetcher."""
-    params = {"symbol": "AAPL,MSFT"}
+    params = {"symbol": "AAPL,MSFT", "limit": 2}
 
     fetcher = YFinanceCompanyNewsFetcher()
     result = fetcher.test(params, credentials)

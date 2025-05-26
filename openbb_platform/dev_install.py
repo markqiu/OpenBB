@@ -17,7 +17,7 @@ CLI_LOCK = CLI_PATH / "poetry.lock"
 
 LOCAL_DEPS = """
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13"
+python = ">=3.9.21,<3.13"
 openbb-devtools = { path = "./extensions/devtools", develop = true, markers = "python_version >= '3.10'" }
 openbb-core = { path = "./core", develop = true }
 openbb-platform-api = { path = "./extensions/platform_api", develop = true }
@@ -147,7 +147,7 @@ def install_platform_local(_extras: bool = False):
         extras_args = ["-E", "all"] if _extras else []
 
         subprocess.run(
-            CMD + ["lock", "--no-update"],
+            CMD + ["lock"],
             cwd=PLATFORM_PATH,
             check=True,
         )
@@ -192,7 +192,7 @@ def install_platform_cli():
         CMD = [sys.executable, "-m", "poetry"]
 
         subprocess.run(
-            CMD + ["lock", "--no-update"],
+            CMD + ["lock"],
             cwd=CLI_PATH,
             check=True,  # noqa: S603
         )

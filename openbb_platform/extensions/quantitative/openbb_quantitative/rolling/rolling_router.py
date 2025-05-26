@@ -1,8 +1,5 @@
 """Rolling submenu of quantitative models for rolling statistics."""
 
-from typing import List
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.example import APIEx, PythonEx
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.router import Router
@@ -14,12 +11,6 @@ router = Router(prefix="/rolling")
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Get Rolling Mean.",
@@ -42,8 +33,8 @@ router = Router(prefix="/rolling")
     ],
 )
 def skew(
-    data: List[Data], target: str, window: PositiveInt = 21, index: str = "date"
-) -> OBBject[List[Data]]:
+    data: list[Data], target: str, window: PositiveInt = 21, index: str = "date"
+) -> OBBject[list[Data]]:
     """Get Rolling Skew.
 
     Skew is a statistical measure that reveals the degree of asymmetry of a distribution around its mean.
@@ -54,7 +45,7 @@ def skew(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         Time series data.
     target : str
         Target column name.
@@ -65,7 +56,7 @@ def skew(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         Rolling skew.
 
     """
@@ -92,12 +83,6 @@ def skew(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Get Rolling Variance.",
@@ -120,8 +105,8 @@ def skew(
     ],
 )
 def variance(
-    data: List[Data], target: str, window: PositiveInt = 21, index: str = "date"
-) -> OBBject[List[Data]]:
+    data: list[Data], target: str, window: PositiveInt = 21, index: str = "date"
+) -> OBBject[list[Data]]:
     """
     Calculate the rolling variance of a target column within a given window size.
 
@@ -130,7 +115,7 @@ def variance(
 
     Parameters
     ----------
-    data: List[Data]
+    data: list[Data]
         The time series data as a list of data points.
     target: str
         The name of the column for which to calculate variance.
@@ -141,7 +126,7 @@ def variance(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         An object containing the rolling variance values.
     """
     # pylint: disable=import-outside-toplevel
@@ -165,12 +150,6 @@ def variance(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Get Rolling Standard Deviation.",
@@ -193,8 +172,8 @@ def variance(
     ],
 )
 def stdev(
-    data: List[Data], target: str, window: PositiveInt = 21, index: str = "date"
-) -> OBBject[List[Data]]:
+    data: list[Data], target: str, window: PositiveInt = 21, index: str = "date"
+) -> OBBject[list[Data]]:
     """
     Calculate the rolling standard deviation of a target column within a given window size.
 
@@ -204,7 +183,7 @@ def stdev(
 
     Parameters
     ----------
-    data: List[Data]
+    data: list[Data]
         The time series data as a list of data points.
     target: str
         The name of the column for which to calculate standard deviation.
@@ -215,7 +194,7 @@ def stdev(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         An object containing the rolling standard deviation values.
     """
     # pylint: disable=import-outside-toplevel
@@ -241,12 +220,6 @@ def stdev(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Get Rolling Kurtosis.",
@@ -269,8 +242,8 @@ def stdev(
     ],
 )
 def kurtosis(
-    data: List[Data], target: str, window: PositiveInt = 21, index: str = "date"
-) -> OBBject[List[Data]]:
+    data: list[Data], target: str, window: PositiveInt = 21, index: str = "date"
+) -> OBBject[list[Data]]:
     """
     Calculate the rolling kurtosis of a target column within a given window size.
 
@@ -282,7 +255,7 @@ def kurtosis(
 
     Parameters
     ----------
-    data: List[Data]
+    data: list[Data]
         The time series data as a list of data points.
     target: str
         The name of the column for which to calculate kurtosis.
@@ -293,7 +266,7 @@ def kurtosis(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         An object containing the rolling kurtosis values.
     """
     # pylint: disable=import-outside-toplevel
@@ -319,12 +292,6 @@ def kurtosis(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Get Rolling Quantile.",
@@ -348,12 +315,12 @@ def kurtosis(
     ],
 )
 def quantile(
-    data: List[Data],
+    data: list[Data],
     target: str,
     window: PositiveInt = 21,
     quantile_pct: NonNegativeFloat = 0.5,
     index: str = "date",
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """
     Calculate the rolling quantile of a target column within a given window size at a specified quantile percentage.
 
@@ -363,7 +330,7 @@ def quantile(
 
     Parameters
     ----------
-    data: List[Data]
+    data: list[Data]
         The time series data as a list of data points.
     target: str
         The name of the column for which to calculate the quantile.
@@ -376,7 +343,7 @@ def quantile(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         An object containing the rolling quantile values with the median.
     """
     # pylint: disable=import-outside-toplevel
@@ -414,12 +381,6 @@ def quantile(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Get Rolling Mean.",
@@ -442,8 +403,8 @@ def quantile(
     ],
 )
 def mean(
-    data: List[Data], target: str, window: PositiveInt = 21, index: str = "date"
-) -> OBBject[List[Data]]:
+    data: list[Data], target: str, window: PositiveInt = 21, index: str = "date"
+) -> OBBject[list[Data]]:
     """Calculate the rolling average of a target column within a given window size.
 
     The rolling mean is a simple moving average that calculates the average of a target variable over a specified window.
@@ -452,7 +413,7 @@ def mean(
 
     Parameters
     ----------
-    data: List[Data]
+    data: list[Data]
         The time series data as a list of data points.
     target: str
         The name of the column for which to calculate the mean.
@@ -463,7 +424,7 @@ def mean(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         An object containing the rolling mean values.
     """
     # pylint: disable=import-outside-toplevel

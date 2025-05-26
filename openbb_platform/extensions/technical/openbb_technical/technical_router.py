@@ -1,8 +1,8 @@
 """Technical Analysis Router."""
 
-# pylint: disable=too-many-lines,unused-import,too-many-arguments
+# pylint: disable=too-many-lines,unused-import,too-many-arguments,too-many-positional-arguments
 
-from typing import Any, Dict, List, Literal, Optional
+from typing import Any, Literal, Optional
 
 from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.example import APIEx, PythonEx
@@ -66,14 +66,14 @@ router = Router(prefix="", description="Technical Analysis tools.")
     ],
 )
 async def relative_rotation(
-    data: List[Data],
+    data: list[Data],
     benchmark: str,
     study: Literal["price", "volume", "volatility"] = "price",
     long_period: Optional[int] = 252,
     short_period: Optional[int] = 21,
     window: Optional[int] = 21,
     trading_periods: Optional[int] = 252,
-    chart_params: Optional[Dict[str, Any]] = None,
+    chart_params: Optional[dict[str, Any]] = None,
 ) -> OBBject[RelativeRotationData]:
     """Calculate the Relative Strength Ratio and Relative Strength Momentum for a group of symbols against a benchmark.
 
@@ -190,13 +190,13 @@ async def relative_rotation(
     ],
 )
 def atr(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     length: PositiveInt = 14,
     mamode: Literal["rma", "ema", "sma", "wma"] = "rma",
     drift: NonNegativeInt = 1,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Average True Range.
 
     Used to measure volatility, especially volatility caused by gaps or limit moves.
@@ -209,8 +209,8 @@ def atr(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to apply the indicator to.
+    data : list[Data]
+        list of data to apply the indicator to.
     index : str, optional
         Index column name, by default "date"
     length : PositiveInt, optional
@@ -224,8 +224,8 @@ def atr(
 
     Returns
     -------
-    OBBject[List[Data]]
-        List of data with the indicator applied.
+    OBBject[list[Data]]
+        list of data with the indicator applied.
     """
     # pylint: disable=import-outside-toplevel
     import pandas as pd
@@ -264,13 +264,13 @@ def atr(
     ],
 )
 def fib(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     close_column: Literal["close", "adj_close"] = "close",
     period: PositiveInt = 120,
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Create Fibonacci Retracement Levels.
 
     This method draws from a classic technique to pinpoint significant price levels
@@ -281,8 +281,8 @@ def fib(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to apply the indicator to.
+    data : list[Data]
+        list of data to apply the indicator to.
     index : str, optional
         Index column name, by default "date"
     period : PositiveInt, optional
@@ -290,8 +290,8 @@ def fib(
 
     Returns
     -------
-    OBBject[List[Data]]
-        List of data with the indicator applied.
+    OBBject[list[Data]]
+        list of data with the indicator applied.
     """
     df = basemodel_to_df(data, index=index)
 
@@ -341,10 +341,10 @@ def fib(
     ],
 )
 def obv(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the On Balance Volume (OBV).
 
     Is a cumulative total of the up and down volume. When the close is higher than the
@@ -358,8 +358,8 @@ def obv(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to apply the indicator to.
+    data : list[Data]
+        list of data to apply the indicator to.
     index : str, optional
         Index column name, by default "date"
     offset : int, optional
@@ -367,8 +367,8 @@ def obv(
 
     Returns
     -------
-    OBBject[List[Data]]
-        List of data with the indicator applied.
+    OBBject[list[Data]]
+        list of data with the indicator applied.
     """
     # pylint: disable=import-outside-toplevel
     import pandas as pd
@@ -404,11 +404,11 @@ def obv(
     ],
 )
 def fisher(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     length: PositiveInt = 14,
     signal: PositiveInt = 1,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Perform the Fisher Transform.
 
     A technical indicator created by John F. Ehlers that converts prices into a Gaussian
@@ -419,8 +419,8 @@ def fisher(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to apply the indicator to.
+    data : list[Data]
+        list of data to apply the indicator to.
     index : str, optional
         Index column name, by default "date"
     length : PositiveInt, optional
@@ -430,8 +430,8 @@ def fisher(
 
     Returns
     -------
-    OBBject[List[Data]]
-        List of data with the indicator applied.
+    OBBject[list[Data]]
+        list of data with the indicator applied.
     """
     # pylint: disable=import-outside-toplevel
     import pandas as pd
@@ -468,12 +468,12 @@ def fisher(
     ],
 )
 def adosc(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     fast: PositiveInt = 3,
     slow: PositiveInt = 10,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Accumulation/Distribution Oscillator.
 
     Also known as the Chaikin Oscillator.
@@ -487,8 +487,8 @@ def adosc(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     fast : PositiveInt, optional
         Number of periods to be used for the fast calculation, by default 3.
     slow : PositiveInt, optional
@@ -498,7 +498,7 @@ def adosc(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -536,14 +536,14 @@ def adosc(
     ],
 )
 def bbands(
-    data: List[Data],
+    data: list[Data],
     target: str = "close",
     index: str = "date",
     length: int = 50,
     std: NonNegativeFloat = 2,
     mamode: Literal["sma", "ema", "wma", "rma"] = "sma",
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Bollinger Bands.
 
     Consist of three lines. The middle band is a simple moving average (generally 20
@@ -561,8 +561,8 @@ def bbands(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     target : str
         Target column name.
     index : str, optional
@@ -578,7 +578,7 @@ def bbands(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -625,12 +625,12 @@ def bbands(
     ],
 )
 def zlma(
-    data: List[Data],
+    data: list[Data],
     target: str = "close",
     index: str = "date",
     length: int = 50,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the zero lag exponential moving average (ZLEMA).
 
     Created by John Ehlers and Ric Way. The idea is do a
@@ -642,8 +642,8 @@ def zlma(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     target : str
         Target column name.
     index : str, optional
@@ -655,7 +655,7 @@ def zlma(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -700,11 +700,11 @@ def zlma(
     ],
 )
 def aroon(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     length: int = 25,
     scalar: float = 100,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Aroon Indicator.
 
     The word aroon is Sanskrit for "dawn's early light." The Aroon
@@ -721,8 +721,8 @@ def aroon(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     index: str, optional
         Index column name to use with `data`, by default "date".
     length : int, optional
@@ -732,7 +732,7 @@ def aroon(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -770,12 +770,12 @@ def aroon(
     ],
 )
 def sma(
-    data: List[Data],
+    data: list[Data],
     target: str = "close",
     index: str = "date",
     length: int = 50,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Simple Moving Average (SMA).
 
     Moving Averages are used to smooth the data in an array to
@@ -788,8 +788,8 @@ def sma(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     target : str
         Target column name.
     index : str, optional
@@ -801,7 +801,7 @@ def sma(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -846,13 +846,13 @@ def sma(
     ],
 )
 def demark(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     target: str = "close",
     show_all: bool = True,
     asint: bool = True,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Demark sequential indicator.
 
     This indicator offers a strategic way to spot potential reversals in market trends.
@@ -863,8 +863,8 @@ def demark(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
     target : str, optional
@@ -878,18 +878,18 @@ def demark(
 
     Returns
     -------
-    OBBject[List[Data]]
-        The calculated data.
+    OBBject[list[Data]]
+        The calculated data, with fields: [{index}, {target}, "up", "down"]
     """
     # pylint: disable=import-outside-toplevel
     import pandas_ta as ta  # noqa
+    from pandas import concat
 
     df = basemodel_to_df(data, index=index)
     df_target = get_target_column(df, target).to_frame()
-    _demark = ta.td_seq(
-        df_target[target], asint=asint, show_all=show_all, offset=offset
-    )
-    demark_df = df[[target]].reset_index().join(_demark)
+    _demark = ta.exhc(df_target[target], asint=asint, show_all=show_all, offset=offset)
+    demark_df = concat([df[[target]], _demark], axis=1).reset_index()
+    demark_df = demark_df.rename(columns={"EXHC_DNa": "down", "EXHC_UPa": "up"})
     results = df_to_basemodel(demark_df)
 
     return OBBject(results=results)
@@ -915,11 +915,11 @@ def demark(
     ],
 )
 def vwap(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     anchor: str = "D",
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Volume Weighted Average Price (VWAP).
 
     Measures the average typical price by volume.
@@ -929,8 +929,8 @@ def vwap(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
     anchor : str, optional
@@ -942,7 +942,7 @@ def vwap(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -989,13 +989,13 @@ def vwap(
     ],
 )
 def macd(
-    data: List[Data],
+    data: list[Data],
     target: str = "close",
     index: str = "date",
     fast: int = 12,
     slow: int = 26,
     signal: int = 9,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Moving Average Convergence Divergence (MACD).
 
     Difference between two Exponential Moving Averages. The Signal line is an
@@ -1011,8 +1011,8 @@ def macd(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     target : str
         Target column name.
     fast : int, optional
@@ -1024,7 +1024,7 @@ def macd(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1068,12 +1068,12 @@ def macd(
     ],
 )
 def hma(
-    data: List[Data],
+    data: list[Data],
     target: str = "close",
     index: str = "date",
     length: int = 50,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Hull Moving Average (HMA).
 
     Solves the age old dilemma of making a moving average more responsive to current
@@ -1083,8 +1083,8 @@ def hma(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     target : str
         Target column name.
     index : str, optional
@@ -1096,7 +1096,7 @@ def hma(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1147,12 +1147,12 @@ def hma(
     ],
 )
 def donchian(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     lower_length: PositiveInt = 20,
     upper_length: PositiveInt = 20,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Donchian Channels.
 
     Three lines generated by moving average calculations that comprise an indicator
@@ -1163,8 +1163,8 @@ def donchian(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
     lower_length : PositiveInt, optional
@@ -1176,7 +1176,7 @@ def donchian(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1217,14 +1217,14 @@ def donchian(
     ],
 )
 def ichimoku(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     conversion: PositiveInt = 9,
     base: PositiveInt = 26,
     lagging: PositiveInt = 52,
     offset: PositiveInt = 26,
     lookahead: bool = False,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Ichimoku Cloud.
 
     Also known as Ichimoku Kinko Hyo, is a versatile indicator that defines support and
@@ -1235,8 +1235,8 @@ def ichimoku(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
     conversion : PositiveInt, optional
@@ -1252,7 +1252,7 @@ def ichimoku(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     validate_data(data, [conversion, base, lagging])
@@ -1294,11 +1294,11 @@ def ichimoku(
     ],
 )
 def clenow(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     target: str = "close",
     period: PositiveInt = 90,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Clenow Volatility Adjusted Momentum.
 
     The Clenow Volatility Adjusted Momentum is a sophisticated approach to understanding market momentum with a twist.
@@ -1307,8 +1307,8 @@ def clenow(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
     target : str, optional
@@ -1318,7 +1318,7 @@ def clenow(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1365,7 +1365,7 @@ def clenow(
         APIEx(parameters={"data": APIEx.mock_data("timeseries")}),
     ],
 )
-def ad(data: List[Data], index: str = "date", offset: int = 0) -> OBBject[List[Data]]:
+def ad(data: list[Data], index: str = "date", offset: int = 0) -> OBBject[list[Data]]:
     """Calculate the Accumulation/Distribution Line.
 
     Similar to the On Balance Volume (OBV).
@@ -1383,8 +1383,8 @@ def ad(data: List[Data], index: str = "date", offset: int = 0) -> OBBject[List[D
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
     offset : int, optional
@@ -1392,7 +1392,7 @@ def ad(data: List[Data], index: str = "date", offset: int = 0) -> OBBject[List[D
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1429,12 +1429,12 @@ def ad(data: List[Data], index: str = "date", offset: int = 0) -> OBBject[List[D
     ],
 )
 def adx(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     length: int = 50,
     scalar: float = 100.0,
     drift: int = 1,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Average Directional Index (ADX).
 
     The ADX is a Welles Wilder style moving average of the Directional Movement Index (DX).
@@ -1443,8 +1443,8 @@ def adx(
 
     Parameters
     ----------
-    data : List[Data]
-        List of data to be used for the calculation.
+    data : list[Data]
+        list of data to be used for the calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
     length : int, optional
@@ -1456,7 +1456,7 @@ def adx(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1496,12 +1496,12 @@ def adx(
     ],
 )
 def wma(
-    data: List[Data],
+    data: list[Data],
     target: str = "close",
     index: str = "date",
     length: int = 50,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Weighted Moving Average (WMA).
 
     A Weighted Moving Average puts more weight on recent data and less on past data.
@@ -1511,7 +1511,7 @@ def wma(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         The data to use for the calculation.
     target : str
         Target column name.
@@ -1524,7 +1524,7 @@ def wma(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The WMA data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1569,11 +1569,11 @@ def wma(
     ],
 )
 def cci(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     length: PositiveInt = 14,
     scalar: PositiveFloat = 0.015,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Commodity Channel Index (CCI).
 
     The CCI is designed to detect beginning and ending market trends.
@@ -1584,7 +1584,7 @@ def cci(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         The data to use for the CCI calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
@@ -1595,7 +1595,7 @@ def cci(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The CCI data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1633,13 +1633,13 @@ def cci(
     ],
 )
 def rsi(
-    data: List[Data],
+    data: list[Data],
     target: str = "close",
     index: str = "date",
     length: int = 14,
     scalar: float = 100.0,
     drift: int = 1,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Relative Strength Index (RSI).
 
     RSI calculates a ratio of the recent upward price movements to the absolute price
@@ -1650,7 +1650,7 @@ def rsi(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         The data to use for the RSI calculation.
     target : str
         Target column name.
@@ -1665,7 +1665,7 @@ def rsi(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The RSI data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1710,12 +1710,12 @@ def rsi(
     ],
 )
 def stoch(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     fast_k_period: NonNegativeInt = 14,
     slow_d_period: NonNegativeInt = 3,
     slow_k_period: NonNegativeInt = 3,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Stochastic Oscillator.
 
     The Stochastic Oscillator measures where the close is in relation
@@ -1727,7 +1727,7 @@ def stoch(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         The data to use for the Stochastic Oscillator calculation.
     index : str, optional
         Index column name to use with `data`, by default "date".
@@ -1740,7 +1740,7 @@ def stoch(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The Stochastic Oscillator data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1784,13 +1784,13 @@ def stoch(
     ],
 )
 def kc(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     length: PositiveInt = 20,
     scalar: PositiveFloat = 20,
     mamode: Literal["ema", "sma", "wma", "hma", "zlma"] = "ema",
     offset: NonNegativeInt = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Keltner Channels.
 
     Keltner Channels are volatility-based bands that are placed
@@ -1801,7 +1801,7 @@ def kc(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         The data to use for the Keltner Channels calculation.
     index : str, optional
         Index column name to use with `data`, by default "date"
@@ -1816,7 +1816,7 @@ def kc(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The Keltner Channels data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1860,8 +1860,8 @@ def kc(
     ],
 )
 def cg(
-    data: List[Data], index: str = "date", length: PositiveInt = 14
-) -> OBBject[List[Data]]:
+    data: list[Data], index: str = "date", length: PositiveInt = 14
+) -> OBBject[list[Data]]:
     """Calculate the Center of Gravity.
 
     The Center of Gravity indicator, in short, is used to anticipate future price movements
@@ -1872,7 +1872,7 @@ def cg(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         The data to use for the COG calculation.
     index : str, optional
         Index column name to use with `data`, by default "date"
@@ -1881,7 +1881,7 @@ def cg(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The COG data.
     """
     # pylint: disable=import-outside-toplevel
@@ -1919,7 +1919,7 @@ def cg(
     ],
 )
 def cones(
-    data: List[Data],
+    data: list[Data],
     index: str = "date",
     lower_q: float = 0.25,
     upper_q: float = 0.75,
@@ -1933,7 +1933,7 @@ def cones(
     ] = "std",
     is_crypto: bool = False,
     trading_periods: Optional[int] = None,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the realized volatility quantiles over rolling windows of time.
 
     The cones indicator is designed to map out the ebb and flow of price movements through a detailed analysis of
@@ -1952,7 +1952,7 @@ def cones(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         The data to use for the calculation.
     index : str, optional
         Index column name to use with `data`, by default "date"
@@ -1989,7 +1989,7 @@ def cones(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The cones data.
     """
     if lower_q > upper_q:
@@ -2004,7 +2004,6 @@ def cones(
         is_crypto=is_crypto,
         trading_periods=trading_periods,
     )
-
     results = df_to_basemodel(df_cones)
 
     return OBBject(results=results)
@@ -2030,12 +2029,12 @@ def cones(
     ],
 )
 def ema(
-    data: List[Data],
+    data: list[Data],
     target: str = "close",
     index: str = "date",
     length: int = 50,
     offset: int = 0,
-) -> OBBject[List[Data]]:
+) -> OBBject[list[Data]]:
     """Calculate the Exponential Moving Average (EMA).
 
     EMA is a cumulative calculation, including all data. Past values have
@@ -2045,7 +2044,7 @@ def ema(
 
     Parameters
     ----------
-    data : List[Data]
+    data : list[Data]
         The data to use for the calculation.
     target : str
         Target column name.
@@ -2058,7 +2057,7 @@ def ema(
 
     Returns
     -------
-    OBBject[List[Data]]
+    OBBject[list[Data]]
         The calculated data.
     """
     # pylint: disable=import-outside-toplevel

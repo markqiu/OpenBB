@@ -20,7 +20,6 @@ class ROUTER_equity_discovery(Container):
     growth_tech
     latest_financial_reports
     losers
-    top_retail
     undervalued_growth
     undervalued_large_caps
     """
@@ -50,22 +49,22 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
-        provider : Optional[Literal['yfinance']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         limit : Optional[int]
             Limit the number of results. (provider: yfinance)
 
         Returns
         -------
         OBBject
-            results : List[EquityActive]
+            results : list[EquityActive]
                 Serializable results.
-            provider : Optional[Literal['yfinance']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -172,22 +171,22 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
-        provider : Optional[Literal['yfinance']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         limit : Optional[int]
             Limit the number of results. Default is all. (provider: yfinance)
 
         Returns
         -------
         OBBject
-            results : List[EquityAggressiveSmallCaps]
+            results : list[EquityAggressiveSmallCaps]
                 Serializable results.
-            provider : Optional[Literal['yfinance']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -311,6 +310,8 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
         start_date : Union[date, None, str]
             Start date of the data, in YYYY-MM-DD format.
         end_date : Union[date, None, str]
@@ -319,20 +320,18 @@ class ROUTER_equity_discovery(Container):
             Filter by form type. Visit https://www.sec.gov/forms for a list of supported form types.
         limit : int
             The number of data entries to return.
-        provider : Optional[Literal['fmp']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
         is_done : Optional[bool]
             Flag for whether or not the filing is done. (provider: fmp)
 
         Returns
         -------
         OBBject
-            results : List[DiscoveryFilings]
+            results : list[DiscoveryFilings]
                 Serializable results.
-            provider : Optional[Literal['fmp']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -392,9 +391,9 @@ class ROUTER_equity_discovery(Container):
             ),
         ] = "desc",
         provider: Annotated[
-            Optional[Literal["tmx", "yfinance"]],
+            Optional[Literal["yfinance"]],
             OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: tmx, yfinance."
+                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance."
             ),
         ] = None,
         **kwargs
@@ -403,24 +402,22 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
-        provider : Optional[Literal['tmx', 'yfinance']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: tmx, yfinance.
-        category : Literal['dividend', 'energy', 'healthcare', 'industrials', 'price_performer', 'rising_stars', 'real_estate', 'tech', 'utilities', '52w_high', 'volume']
-            The category of list to retrieve. Defaults to `price_performer`. (provider: tmx)
         limit : Optional[int]
             Limit the number of results. (provider: yfinance)
 
         Returns
         -------
         OBBject
-            results : List[EquityGainers]
+            results : list[EquityGainers]
                 Serializable results.
-            provider : Optional[Literal['tmx', 'yfinance']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -440,17 +437,6 @@ class ROUTER_equity_discovery(Container):
             Percent change.
         volume : Union[int, float]
             The trading volume.
-        thirty_day_price_change : Optional[float]
-            30 Day Price Change. (provider: tmx)
-        ninety_day_price_change : Optional[float]
-            90 Day Price Change. (provider: tmx)
-        dividend_yield : Optional[float]
-            Dividend Yield. (provider: tmx);
-            Trailing twelve month dividend yield. (provider: yfinance)
-        avg_volume_10d : Optional[float]
-            10 Day Avg. Volume. (provider: tmx)
-        rank : Optional[int]
-            The rank of the stock in the list. (provider: tmx)
         open : Optional[float]
             Open price for the day. (provider: yfinance)
         high : Optional[float]
@@ -481,6 +467,8 @@ class ROUTER_equity_discovery(Container):
             Forward earnings per share. (provider: yfinance)
         pe_forward : Optional[float]
             Forward price-to-earnings ratio. (provider: yfinance)
+        dividend_yield : Optional[float]
+            Trailing twelve month dividend yield. (provider: yfinance)
         exchange : Optional[str]
             Exchange where the stock is listed. (provider: yfinance)
         exchange_timezone : Optional[str]
@@ -504,33 +492,13 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.gainers",
-                        ("tmx", "yfinance"),
+                        ("yfinance",),
                     )
                 },
                 standard_params={
                     "sort": sort,
                 },
                 extra_params=kwargs,
-                info={
-                    "category": {
-                        "tmx": {
-                            "multiple_items_allowed": False,
-                            "choices": [
-                                "dividend",
-                                "energy",
-                                "healthcare",
-                                "industrials",
-                                "price_performer",
-                                "rising_stars",
-                                "real_estate",
-                                "tech",
-                                "utilities",
-                                "52w_high",
-                                "volume",
-                            ],
-                        }
-                    }
-                },
             )
         )
 
@@ -556,22 +524,22 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
-        provider : Optional[Literal['yfinance']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         limit : Optional[int]
             Limit the number of results. (provider: yfinance)
 
         Returns
         -------
         OBBject
-            results : List[GrowthTechEquities]
+            results : list[GrowthTechEquities]
                 Serializable results.
-            provider : Optional[Literal['yfinance']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -672,9 +640,9 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
-        provider : Optional[Literal['sec']]
+        provider : str
             The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
-        date : Optional[datetime.date]
+        date : Optional[date]
             A specific date to get data for. Defaults to today. (provider: sec)
         report_type : Optional[str]
             Return only a specific form type. Default is all quarterly, annual, and current reports. Choices: 1-K, 1-SA, 1-U, 10-D, 10-K, 10-KT, 10-Q, 10-QT, 20-F, 40-F, 6-K, 8-K. Multiple comma separated items allowed. (provider: sec)
@@ -682,12 +650,12 @@ class ROUTER_equity_discovery(Container):
         Returns
         -------
         OBBject
-            results : List[LatestFinancialReports]
+            results : list[LatestFinancialReports]
                 Serializable results.
-            provider : Optional[Literal['sec']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -789,22 +757,22 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
-        provider : Optional[Literal['yfinance']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         limit : Optional[int]
             Limit the number of results. (provider: yfinance)
 
         Returns
         -------
         OBBject
-            results : List[EquityLosers]
+            results : list[EquityLosers]
                 Serializable results.
-            provider : Optional[Literal['yfinance']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -891,82 +859,6 @@ class ROUTER_equity_discovery(Container):
 
     @exception_handler
     @validate
-    def top_retail(
-        self,
-        limit: Annotated[
-            int, OpenBBField(description="The number of data entries to return.")
-        ] = 5,
-        provider: Annotated[
-            Optional[Literal["nasdaq"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: nasdaq."
-            ),
-        ] = None,
-        **kwargs
-    ) -> OBBject:
-        """Track over $30B USD/day of individual investors trades.
-
-        It gives a daily view into retail activity and sentiment for over 9,500 US traded stocks,
-        ADRs, and ETPs.
-
-
-        Parameters
-        ----------
-        limit : int
-            The number of data entries to return.
-        provider : Optional[Literal['nasdaq']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: nasdaq.
-
-        Returns
-        -------
-        OBBject
-            results : List[TopRetail]
-                Serializable results.
-            provider : Optional[Literal['nasdaq']]
-                Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
-            chart : Optional[Chart]
-                Chart object.
-            extra : Dict[str, Any]
-                Extra info.
-
-        TopRetail
-        ---------
-        date : date
-            The date of the data.
-        symbol : str
-            Symbol representing the entity requested in the data.
-        activity : float
-            Activity of the symbol.
-        sentiment : float
-            Sentiment of the symbol. 1 is bullish, -1 is bearish.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.top_retail(provider='nasdaq')
-        """  # noqa: E501
-
-        return self._run(
-            "/equity/discovery/top_retail",
-            **filter_inputs(
-                provider_choices={
-                    "provider": self._get_provider(
-                        provider,
-                        "equity.discovery.top_retail",
-                        ("nasdaq",),
-                    )
-                },
-                standard_params={
-                    "limit": limit,
-                },
-                extra_params=kwargs,
-            )
-        )
-
-    @exception_handler
-    @validate
     def undervalued_growth(
         self,
         sort: Annotated[
@@ -987,22 +879,22 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
-        provider : Optional[Literal['yfinance']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         limit : Optional[int]
             Limit the number of results. (provider: yfinance)
 
         Returns
         -------
         OBBject
-            results : List[EquityUndervaluedGrowth]
+            results : list[EquityUndervaluedGrowth]
                 Serializable results.
-            provider : Optional[Literal['yfinance']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]
@@ -1109,22 +1001,22 @@ class ROUTER_equity_discovery(Container):
 
         Parameters
         ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
-        provider : Optional[Literal['yfinance']]
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
         limit : Optional[int]
             Limit the number of results. (provider: yfinance)
 
         Returns
         -------
         OBBject
-            results : List[EquityUndervaluedLargeCaps]
+            results : list[EquityUndervaluedLargeCaps]
                 Serializable results.
-            provider : Optional[Literal['yfinance']]
+            provider : Optional[str]
                 Provider name.
-            warnings : Optional[List[Warning_]]
-                List of warnings.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
             chart : Optional[Chart]
                 Chart object.
             extra : Dict[str, Any]

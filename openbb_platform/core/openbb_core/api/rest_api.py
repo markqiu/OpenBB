@@ -76,7 +76,11 @@ AppLoader.add_routers(
     routers=(
         [AuthService().router, router_system, router_coverage, router_commands]
         if Env().DEV_MODE
-        else [router_commands]
+        else (
+            [router_commands, router_coverage]
+            if hasattr(router_commands, "routes") and router_commands.routes
+            else [router_commands]
+        )
     ),
     prefix=system.api_settings.prefix,
 )
@@ -85,6 +89,17 @@ AppLoader.add_exception_handlers(app)
 
 
 if __name__ == "__main__":
+    # pylint: disable=import-outside-toplevel
     import uvicorn
 
-    uvicorn.run("openbb_core.api.rest_api:app", reload=True)
+    # This initializes the OpenBB environment variables so they can be read before uvicorn is run.
+    Env()
+    uvicorn_kwargs = system.python_settings.model_dump().get("uvicorn", {})
+    uvicorn_reload = uvicorn_kwargs.pop("reload", None)
+
+    if uvicorn_reload is None or uvicorn_reload:
+        uvicorn_kwargs["reload"] = True
+
+    uvicorn_app = uvicorn_kwargs.pop("app", "openbb_core.api.rest_api:app")
+
+    uvicorn.run(uvicorn_app, **uvicorn_kwargs)

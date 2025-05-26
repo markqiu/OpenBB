@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from plotly.graph_objs import Figure
 
 PLOTS_CORE_PATH = Path(__file__).parent.resolve()
-PLOTLYJS_PATH = PLOTS_CORE_PATH / "assets" / "plotly-2.32.0.min.js"
+PLOTLYJS_PATH = PLOTS_CORE_PATH / "assets" / "plotly-3.0.0.min.js"
 BACKEND = None
 
 try:
@@ -142,19 +142,8 @@ class Backend(PyWry):
         theme: Optional[str] = None,
     ) -> dict:
         """Get the json update for the backend."""
-        posthog: Dict[str, Any] = dict(collect_logs=self.charting_settings.log_collect)
-        if (
-            self.charting_settings.log_collect
-            and self.charting_settings.user_uuid
-            and not self.logged_in
-        ):
+        if self.charting_settings.user_uuid and not self.logged_in:
             self.logged_in = True
-            posthog.update(
-                dict(
-                    user_id=self.charting_settings.user_uuid,
-                    email=self.charting_settings.user_email,
-                )
-            )
 
         return dict(
             theme=theme or self.charting_settings.chart_style,
@@ -162,7 +151,6 @@ class Backend(PyWry):
             pywry_version=self.__version__,
             platform_version=self.charting_settings.version,
             python_version=self.charting_settings.python_version,
-            posthog=posthog,
             command_location=cmd_loc,
         )
 
@@ -197,7 +185,7 @@ class Backend(PyWry):
             if self.charting_settings.chart_style == "dark"
             else "rgba(255,255,255,0)"
         )
-        title = "Interactive Chart"
+        title = "OpenBB Platform"
         fig.layout.title.text = re.sub(
             r"<[^>]*>", "", fig.layout.title.text if fig.layout.title.text else title
         )
@@ -245,7 +233,7 @@ class Backend(PyWry):
             opener = "open" if sys.platform == "darwin" else "xdg-open"
             subprocess.check_call([opener, export_image])  # nosec: B603 # noqa: S603
 
-    def send_table(
+    def send_table(  # pylint: disable=too-many-positional-arguments
         self,
         df_table: "DataFrame",
         title: str = "",
