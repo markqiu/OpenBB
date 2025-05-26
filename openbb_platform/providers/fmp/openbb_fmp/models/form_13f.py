@@ -6,7 +6,6 @@ from typing import Any, Dict, List, Optional
 from warnings import warn
 
 from pydantic import Field
-
 from openbb_core.provider.abstract.fetcher import Fetcher
 from openbb_core.provider.standard_models.form_13FHR import (
     Form13FHRData,
@@ -75,7 +74,6 @@ class FMPForm13FHRFetcher(
         credentials: Optional[Dict[str, str]] = None,
         **kwargs: Any,
     ) -> List[Dict]:
-        """Return the raw data from the Form 13f endpoint."""
         """Return the raw data from the Form 13f endpoint."""
         api_key = credentials.get("fmp_api_key") if credentials else ""
         symbol = query.symbol

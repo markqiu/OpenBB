@@ -66,7 +66,6 @@ from openbb_fmp.models.share_statistics import FMPShareStatisticsFetcher
 from openbb_fmp.models.treasury_rates import FMPTreasuryRatesFetcher
 from openbb_fmp.models.world_news import FMPWorldNewsFetcher
 from openbb_fmp.models.yield_curve import FMPYieldCurveFetcher
-from openbb_fmp.models.advanced_dcf import FMPAdvancedDcfFetcher
 from openbb_fmp.models.dcf import FMPDcfFetcher
 from openbb_fmp.models.advanced_dcf import FMPAdvancedDcfFetcher
 from openbb_fmp.models.form_13f import FMPForm13FHRFetcher

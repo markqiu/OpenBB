@@ -77,7 +77,6 @@ from openbb_fmp.models.treasury_rates import FMPTreasuryRatesFetcher
 from openbb_fmp.models.world_news import FMPWorldNewsFetcher
 from openbb_fmp.models.yield_curve import FMPYieldCurveFetcher
 from openbb_fmp.models.form_13f import FMPForm13FHRFetcher
-from openbb_fmp.models.government_trades import FMPGovernmentTradesFetcher
 from openbb_fmp.models.dcf import FMPDcfFetcher
 
 test_credentials = UserService().default_user_settings.credentials.model_dump(
@@ -787,12 +786,20 @@ def test_fmp_form_13f_fetcher(credentials=test_credentials):
 
 @pytest.mark.record_http
 def test_fmp_government_trades_fetcher(credentials=test_credentials):
-    """Test FMP government trades fetcher.
-    params limit only functions when there is no parameter symbol
-    """
+    """Test FMP government trades fetcher."""
+    # 测试 symbol 参数
     params = {
-        "chamber": "senate",
-        "limit": 1,
+        "chamber": "all",
+        "symbol": "AAPL",
+    }
+    fetcher = FMPGovernmentTradesFetcher()
+    result = fetcher.test(params, credentials)
+    assert result is None
+
+    # 测试 limit 参数
+    params = {
+        "chamber": "all",
+        "limit": 300,
     }
     fetcher = FMPGovernmentTradesFetcher()
     result = fetcher.test(params, credentials)
