@@ -1,25 +1,77 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
+from openbb_core.app.static.container import Container
+from openbb_core.app.model.obbject import OBBject
+import openbb_core.provider
+from openbb_core.provider.abstract.data import Data
+import pandas
+from pandas import DataFrame, Series
+import numpy
+from numpy import ndarray
 import datetime
-from typing import Literal, Optional, Union
+from datetime import date
+import pydantic
+from pydantic import BaseModel
+from inspect import Parameter
+import typing
+from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
+from annotated_types import Ge, Le, Gt, Lt
+from warnings import warn, simplefilter
+from typing_extensions import Annotated, deprecated
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+
+from openbb_core.app.static.utils.filters import filter_inputs
+
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 
 from openbb_core.app.model.field import OpenBBField
-from openbb_core.app.model.obbject import OBBject
-from openbb_core.app.static.container import Container
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from fastapi import Depends
+import openbb_core.app.deprecation
+import openbb_core.app.model.command_context
+import openbb_core.app.provider_interface
+import typing
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from openbb_core.app.model.command_context import CommandContext
+from openbb_core.app.provider_interface import (
+    OBBject_DiscoveryFilings,
+    OBBject_EquityActive,
+    OBBject_EquityAggressiveSmallCaps,
+    OBBject_EquityBigDeals,
+    OBBject_EquityGainers,
+    OBBject_EquityLosers,
+    OBBject_EquityUndervaluedGrowth,
+    OBBject_EquityUndervaluedLargeCaps,
+    OBBject_GrowthTechEquities,
+    OBBject_LatestFinancialReports,
+    OBBject_TopRetail,
+)
+
+from typing import (
+    DiscoveryFilings,
+    EquityActive,
+    EquityAggressiveSmallCaps,
+    EquityBigDeals,
+    EquityGainers,
+    EquityLosers,
+    EquityUndervaluedGrowth,
+    EquityUndervaluedLargeCaps,
+    GrowthTechEquities,
+    LatestFinancialReports,
+    TopRetail,
+)
 
 class ROUTER_equity_discovery(Container):
     """/equity/discovery
     active
     aggressive_small_caps
+    big_deals
     filings
     gainers
     growth_tech
     latest_financial_reports
     losers
+    top_retail
     undervalued_growth
     undervalued_large_caps
     """
@@ -31,18 +83,8 @@ class ROUTER_equity_discovery(Container):
     @validate
     def active(
         self,
-        sort: Annotated[
-            Literal["asc", "desc"],
-            OpenBBField(
-                description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'."
-            ),
-        ] = "desc",
-        provider: Annotated[
-            Optional[Literal["yfinance"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance."
-            ),
-        ] = None,
+        sort: Annotated[Literal['asc', 'desc'], OpenBBField(description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.")] = 'desc',
+        provider: Annotated[Optional[Literal['yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the most actively traded stocks based on volume.
@@ -139,7 +181,7 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.active",
-                        ("yfinance",),
+                        ('yfinance',),
                     )
                 },
                 standard_params={
@@ -153,18 +195,8 @@ class ROUTER_equity_discovery(Container):
     @validate
     def aggressive_small_caps(
         self,
-        sort: Annotated[
-            Literal["asc", "desc"],
-            OpenBBField(
-                description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'."
-            ),
-        ] = "desc",
-        provider: Annotated[
-            Optional[Literal["yfinance"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance."
-            ),
-        ] = None,
+        sort: Annotated[Literal['asc', 'desc'], OpenBBField(description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.")] = 'desc',
+        provider: Annotated[Optional[Literal['xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan, yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Get top small cap stocks based on earnings growth.
@@ -172,9 +204,11 @@ class ROUTER_equity_discovery(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan, yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
+        use_cache : Optional[bool]
+            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
         limit : Optional[int]
             Limit the number of results. Default is all. (provider: yfinance)
 
@@ -206,6 +240,12 @@ class ROUTER_equity_discovery(Container):
             Percent change.
         volume : Union[int, float]
             The trading volume.
+        avg_volume_3_months : Optional[float]
+            Average volume over the last 3 months in millions. (provider: xiaoyuan)
+        market_cap : Optional[float]
+            Market Cap. (provider: xiaoyuan, yfinance)
+        pe_ratio_ttm : Optional[float]
+            PE Ratio (TTM). (provider: xiaoyuan)
         open : Optional[float]
             Open price for the day. (provider: yfinance)
         high : Optional[float]
@@ -222,8 +262,6 @@ class ROUTER_equity_discovery(Container):
             52-week high. (provider: yfinance)
         year_low : Optional[float]
             52-week low. (provider: yfinance)
-        market_cap : Optional[float]
-            Market Cap. (provider: yfinance)
         shares_outstanding : Optional[float]
             Shares outstanding. (provider: yfinance)
         book_value : Optional[float]
@@ -261,7 +299,7 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.aggressive_small_caps",
-                        ("yfinance",),
+                        ('xiaoyuan', 'yfinance'),
                     )
                 },
                 standard_params={
@@ -273,31 +311,84 @@ class ROUTER_equity_discovery(Container):
 
     @exception_handler
     @validate
+    def big_deals(
+        self,
+        provider: Annotated[Optional[Literal['xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan.')] = None,
+        **kwargs
+    ) -> OBBject:
+        """Get the big deals data for certaion symbol and date
+
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan.
+        symbol : Optional[str]
+            Symbol to get data for. (provider: xiaoyuan)
+        date : Optional[date]
+            A specific date to get data for. (provider: xiaoyuan)
+
+        Returns
+        -------
+        OBBject
+            results : list[EquityBigDeals]
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
+
+        EquityBigDeals
+        --------------
+        symbol : Optional[str]
+            Symbol representing the entity requested in the data. (provider: xiaoyuan)
+        name : Optional[str]
+            The name of the stock. (provider: xiaoyuan)
+        net_in_flow : Optional[float]
+            Net inflow of main funds today. (provider: xiaoyuan)
+        super_net_in_flow : Optional[float]
+            Net inflow of super-large orders today. (provider: xiaoyuan)
+        big_deal_net : Optional[float]
+            Net inflow of large orders today. (provider: xiaoyuan)
+        mid_deal_net : Optional[float]
+            Net inflow of medium orders today. (provider: xiaoyuan)
+        small_deal_net : Optional[float]
+            Net inflow of small orders today. (provider: xiaoyuan)
+
+        Examples
+        --------
+        >>> from openbb import obb
+        >>> obb.equity.discovery.big_deals(symbol='600519.SS,000001.SZ', date='2024-11-20', provider='xiaoyuan')
+        """  # noqa: E501
+
+        return self._run(
+            "/equity/discovery/big_deals",
+            **filter_inputs(
+                provider_choices={
+                    "provider": self._get_provider(
+                        provider,
+                        "equity.discovery.big_deals",
+                        ('xiaoyuan',),
+                    )
+                },
+                standard_params={
+                },
+                extra_params=kwargs,
+            )
+        )
+
+    @exception_handler
+    @validate
     def filings(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        form_type: Annotated[
-            Optional[str],
-            OpenBBField(
-                description="Filter by form type. Visit https://www.sec.gov/forms for a list of supported form types."
-            ),
-        ] = None,
-        limit: Annotated[
-            int, OpenBBField(description="The number of data entries to return.")
-        ] = 100,
-        provider: Annotated[
-            Optional[Literal["fmp"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        form_type: Annotated[Optional[str], OpenBBField(description='Filter by form type. Visit https://www.sec.gov/forms for a list of supported form types.')] = None,
+        limit: Annotated[int, OpenBBField(description='The number of data entries to return.')] = 100,
+        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the URLs to SEC filings reported to EDGAR database, such as 10-K, 10-Q, 8-K, and more.
@@ -306,7 +397,7 @@ class ROUTER_equity_discovery(Container):
         Foreign Investment Disclosures and others. The annual 10-K report is required to be
         filed annually and includes the company's financial statements, management discussion and analysis,
         and audited financial statements.
-
+        
 
         Parameters
         ----------
@@ -367,7 +458,7 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.filings",
-                        ("fmp",),
+                        ('fmp',),
                     )
                 },
                 standard_params={
@@ -384,18 +475,8 @@ class ROUTER_equity_discovery(Container):
     @validate
     def gainers(
         self,
-        sort: Annotated[
-            Literal["asc", "desc"],
-            OpenBBField(
-                description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'."
-            ),
-        ] = "desc",
-        provider: Annotated[
-            Optional[Literal["yfinance"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance."
-            ),
-        ] = None,
+        sort: Annotated[Literal['asc', 'desc'], OpenBBField(description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.")] = 'desc',
+        provider: Annotated[Optional[Literal['xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan, yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the top price gainers in the stock market.
@@ -403,9 +484,11 @@ class ROUTER_equity_discovery(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan, yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
+        use_cache : Optional[bool]
+            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
         limit : Optional[int]
             Limit the number of results. (provider: yfinance)
 
@@ -437,6 +520,12 @@ class ROUTER_equity_discovery(Container):
             Percent change.
         volume : Union[int, float]
             The trading volume.
+        avg_volume_3_months : Optional[float]
+            Average volume over the last 3 months in millions. (provider: xiaoyuan)
+        market_cap : Optional[float]
+            Market Cap. (provider: xiaoyuan, yfinance)
+        pe_ratio_ttm : Optional[float]
+            PE Ratio (TTM). (provider: xiaoyuan)
         open : Optional[float]
             Open price for the day. (provider: yfinance)
         high : Optional[float]
@@ -453,8 +542,6 @@ class ROUTER_equity_discovery(Container):
             52-week high. (provider: yfinance)
         year_low : Optional[float]
             52-week low. (provider: yfinance)
-        market_cap : Optional[float]
-            Market Cap. (provider: yfinance)
         shares_outstanding : Optional[float]
             Shares outstanding. (provider: yfinance)
         book_value : Optional[float]
@@ -492,7 +579,7 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.gainers",
-                        ("yfinance",),
+                        ('xiaoyuan', 'yfinance'),
                     )
                 },
                 standard_params={
@@ -506,18 +593,8 @@ class ROUTER_equity_discovery(Container):
     @validate
     def growth_tech(
         self,
-        sort: Annotated[
-            Literal["asc", "desc"],
-            OpenBBField(
-                description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'."
-            ),
-        ] = "desc",
-        provider: Annotated[
-            Optional[Literal["yfinance"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance."
-            ),
-        ] = None,
+        sort: Annotated[Literal['asc', 'desc'], OpenBBField(description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.")] = 'desc',
+        provider: Annotated[Optional[Literal['yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Get top tech stocks based on revenue and earnings growth.
@@ -614,7 +691,7 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.growth_tech",
-                        ("yfinance",),
+                        ('yfinance',),
                     )
                 },
                 standard_params={
@@ -628,12 +705,7 @@ class ROUTER_equity_discovery(Container):
     @validate
     def latest_financial_reports(
         self,
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the newest quarterly, annual, and current reports for all companies.
@@ -706,32 +778,13 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.latest_financial_reports",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
-                standard_params={},
-                extra_params=kwargs,
-                info={
-                    "report_type": {
-                        "sec": {
-                            "multiple_items_allowed": True,
-                            "choices": [
-                                "1-K",
-                                "1-SA",
-                                "1-U",
-                                "10-D",
-                                "10-K",
-                                "10-KT",
-                                "10-Q",
-                                "10-QT",
-                                "20-F",
-                                "40-F",
-                                "6-K",
-                                "8-K",
-                            ],
-                        }
-                    }
+                standard_params={
                 },
+                extra_params=kwargs,
+                info={'report_type': {'sec': {'multiple_items_allowed': True, 'choices': ['1-K', '1-SA', '1-U', '10-D', '10-K', '10-KT', '10-Q', '10-QT', '20-F', '40-F', '6-K', '8-K']}}},
             )
         )
 
@@ -739,18 +792,8 @@ class ROUTER_equity_discovery(Container):
     @validate
     def losers(
         self,
-        sort: Annotated[
-            Literal["asc", "desc"],
-            OpenBBField(
-                description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'."
-            ),
-        ] = "desc",
-        provider: Annotated[
-            Optional[Literal["yfinance"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance."
-            ),
-        ] = None,
+        sort: Annotated[Literal['asc', 'desc'], OpenBBField(description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.")] = 'desc',
+        provider: Annotated[Optional[Literal['xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan, yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the top price losers in the stock market.
@@ -758,9 +801,11 @@ class ROUTER_equity_discovery(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan, yfinance.
         sort : Literal['asc', 'desc']
             Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.
+        use_cache : Optional[bool]
+            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
         limit : Optional[int]
             Limit the number of results. (provider: yfinance)
 
@@ -792,6 +837,12 @@ class ROUTER_equity_discovery(Container):
             Percent change.
         volume : Union[int, float]
             The trading volume.
+        avg_volume_3_months : Optional[float]
+            Average volume over the last 3 months in millions. (provider: xiaoyuan)
+        market_cap : Optional[float]
+            Market Cap. (provider: xiaoyuan, yfinance)
+        pe_ratio_ttm : Optional[float]
+            PE Ratio (TTM). (provider: xiaoyuan)
         open : Optional[float]
             Open price for the day. (provider: yfinance)
         high : Optional[float]
@@ -808,8 +859,6 @@ class ROUTER_equity_discovery(Container):
             52-week high. (provider: yfinance)
         year_low : Optional[float]
             52-week low. (provider: yfinance)
-        market_cap : Optional[float]
-            Market Cap. (provider: yfinance)
         shares_outstanding : Optional[float]
             Shares outstanding. (provider: yfinance)
         book_value : Optional[float]
@@ -847,7 +896,7 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.losers",
-                        ("yfinance",),
+                        ('xiaoyuan', 'yfinance'),
                     )
                 },
                 standard_params={
@@ -859,20 +908,86 @@ class ROUTER_equity_discovery(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "Yfinance requires a VPN, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
+    def top_retail(
+        self,
+        limit: Annotated[int, OpenBBField(description='The number of data entries to return.')] = 5,
+        provider: Annotated[Optional[Literal['nasdaq']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: nasdaq.')] = None,
+        **kwargs
+    ) -> OBBject:
+        """Track over $30B USD/day of individual investors trades.
+
+        It gives a daily view into retail activity and sentiment for over 9,500 US traded stocks,
+        ADRs, and ETPs.
+        
+
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: nasdaq.
+        limit : int
+            The number of data entries to return.
+
+        Returns
+        -------
+        OBBject
+            results : list[TopRetail]
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
+
+        TopRetail
+        ---------
+        date : date
+            The date of the data.
+        symbol : str
+            Symbol representing the entity requested in the data.
+        activity : float
+            Activity of the symbol.
+        sentiment : float
+            Sentiment of the symbol. 1 is bullish, -1 is bearish.
+
+        Examples
+        --------
+        >>> from openbb import obb
+        >>> obb.equity.discovery.top_retail(provider='nasdaq')
+        """  # noqa: E501
+
+        simplefilter('always', DeprecationWarning)
+        warn("Yfinance requires a VPN, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
+        return self._run(
+            "/equity/discovery/top_retail",
+            **filter_inputs(
+                provider_choices={
+                    "provider": self._get_provider(
+                        provider,
+                        "equity.discovery.top_retail",
+                        ('nasdaq',),
+                    )
+                },
+                standard_params={
+                    "limit": limit,
+                },
+                extra_params=kwargs,
+            )
+        )
+
+    @exception_handler
+    @validate
     def undervalued_growth(
         self,
-        sort: Annotated[
-            Literal["asc", "desc"],
-            OpenBBField(
-                description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'."
-            ),
-        ] = "desc",
-        provider: Annotated[
-            Optional[Literal["yfinance"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance."
-            ),
-        ] = None,
+        sort: Annotated[Literal['asc', 'desc'], OpenBBField(description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.")] = 'desc',
+        provider: Annotated[Optional[Literal['yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Get potentially undervalued growth stocks.
@@ -969,7 +1084,7 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.undervalued_growth",
-                        ("yfinance",),
+                        ('yfinance',),
                     )
                 },
                 standard_params={
@@ -983,18 +1098,8 @@ class ROUTER_equity_discovery(Container):
     @validate
     def undervalued_large_caps(
         self,
-        sort: Annotated[
-            Literal["asc", "desc"],
-            OpenBBField(
-                description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'."
-            ),
-        ] = "desc",
-        provider: Annotated[
-            Optional[Literal["yfinance"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance."
-            ),
-        ] = None,
+        sort: Annotated[Literal['asc', 'desc'], OpenBBField(description="Sort order. Possible values: 'asc', 'desc'. Default: 'desc'.")] = 'desc',
+        provider: Annotated[Optional[Literal['yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Get potentially undervalued large cap stocks.
@@ -1091,7 +1196,7 @@ class ROUTER_equity_discovery(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.discovery.undervalued_large_caps",
-                        ("yfinance",),
+                        ('yfinance',),
                     )
                 },
                 standard_params={

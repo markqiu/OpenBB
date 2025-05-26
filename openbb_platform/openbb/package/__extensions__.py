@@ -1,8 +1,31 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-
 from openbb_core.app.static.container import Container
+from openbb_core.app.model.obbject import OBBject
+import openbb_core.provider
+from openbb_core.provider.abstract.data import Data
+import pandas
+from pandas import DataFrame, Series
+import numpy
+from numpy import ndarray
+import datetime
+from datetime import date
+import pydantic
+from pydantic import BaseModel
+from inspect import Parameter
+import typing
+from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
+from annotated_types import Ge, Le, Gt, Lt
+from warnings import warn, simplefilter
+from typing_extensions import Annotated, deprecated
+from openbb_core.app.static.utils.decorators import exception_handler, validate
 
+from openbb_core.app.static.utils.filters import filter_inputs
+
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
+
+from openbb_core.app.model.field import OpenBBField
+from fastapi import Depends
 
 class Extensions(Container):
     # fmt: off
@@ -16,6 +39,7 @@ Routers:
     /equity
     /etf
     /fixedincome
+    /fund
     /index
     /news
     /regulators
@@ -29,25 +53,31 @@ Extensions:
     - equity@1.4.1
     - etf@1.4.1
     - fixedincome@1.4.3
+    - fund@0.0.2
     - index@1.4.1
     - news@1.4.1
     - regulators@1.4.2
 
+    - akshare@0.6.2
     - benzinga@1.4.1
     - bls@1.1.2
     - cftc@1.1.1
+    - ecb@1.4.2
     - econdb@1.3.1
-    - federal_reserve@1.4.2
+    - federal_reserve@1.4.3
     - fmp@1.4.2
     - fred@1.4.4
+    - government_us@1.4.1
     - imf@1.1.1
     - intrinio@1.4.1
+    - nasdaq@1.4.1
     - oecd@1.4.1
     - polygon@1.4.1
     - sec@1.4.3
     - tiingo@1.4.1
     - tradingeconomics@1.4.1
     - us_eia@1.1.1
+    - xiaoyuan@0.6.2
     - yfinance@1.4.6    """
     # fmt: on
 
@@ -109,6 +139,13 @@ Extensions:
         from . import fixedincome
 
         return fixedincome.ROUTER_fixedincome(command_runner=self._command_runner)
+
+    @property
+    def fund(self):
+        # pylint: disable=import-outside-toplevel
+        from . import fund
+
+        return fund.ROUTER_fund(command_runner=self._command_runner)
 
     @property
     def index(self):

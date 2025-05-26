@@ -1,15 +1,47 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
+from openbb_core.app.static.container import Container
+from openbb_core.app.model.obbject import OBBject
+import openbb_core.provider
+from openbb_core.provider.abstract.data import Data
+import pandas
+from pandas import DataFrame, Series
+import numpy
+from numpy import ndarray
 import datetime
-from typing import Literal, Optional, Union
+from datetime import date
+import pydantic
+from pydantic import BaseModel
+from inspect import Parameter
+import typing
+from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
+from annotated_types import Ge, Le, Gt, Lt
+from warnings import warn, simplefilter
+from typing_extensions import Annotated, deprecated
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+
+from openbb_core.app.static.utils.filters import filter_inputs
+
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 
 from openbb_core.app.model.field import OpenBBField
-from openbb_core.app.model.obbject import OBBject
-from openbb_core.app.static.container import Container
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from fastapi import Depends
+import openbb_core.app.deprecation
+import openbb_core.app.model.command_context
+import openbb_core.app.provider_interface
+import typing
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from openbb_core.app.model.command_context import CommandContext
+from openbb_core.app.provider_interface import (
+    OBBject_PetroleumStatusReport,
+    OBBject_ShortTermEnergyOutlook,
+)
+
+from typing import (
+    PetroleumStatusReport,
+    ShortTermEnergyOutlook,
+)
 
 class ROUTER_commodity(Container):
     """/commodity
@@ -23,22 +55,15 @@ class ROUTER_commodity(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def petroleum_status_report(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["eia"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: eia."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['eia']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: eia.')] = None,
         **kwargs
     ) -> OBBject:
         """EIA Weekly Petroleum Status Report.
@@ -141,6 +166,9 @@ class ROUTER_commodity(Container):
         >>> obb.commodity.petroleum_status_report(category='weekly_estimates', table='imports', provider='eia')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/commodity/petroleum_status_report",
             **filter_inputs(
@@ -148,7 +176,7 @@ class ROUTER_commodity(Container):
                     "provider": self._get_provider(
                         provider,
                         "commodity.petroleum_status_report",
-                        ("eia",),
+                        ('eia',),
                     )
                 },
                 standard_params={
@@ -156,74 +184,7 @@ class ROUTER_commodity(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={
-                    "category": {
-                        "eia": {
-                            "multiple_items_allowed": False,
-                            "choices": [
-                                "balance_sheet",
-                                "inputs_and_production",
-                                "refiner_blender_net_production",
-                                "crude_petroleum_stocks",
-                                "gasoline_fuel_stocks",
-                                "total_gasoline_by_sub_padd",
-                                "distillate_fuel_oil_stocks",
-                                "imports",
-                                "imports_by_country",
-                                "weekly_estimates",
-                                "spot_prices_crude_gas_heating",
-                                "spot_prices_diesel_jet_fuel_propane",
-                                "retail_prices",
-                            ],
-                        }
-                    },
-                    "table": {
-                        "eia": {
-                            "multiple_items_allowed": True,
-                            "choices": [
-                                "all",
-                                "conventional_gas",
-                                "crude",
-                                "crude_production",
-                                "crude_production_avg",
-                                "diesel",
-                                "ethanol_plant_production",
-                                "ethanol_plant_production_avg",
-                                "exports",
-                                "exports_avg",
-                                "heating_oil",
-                                "imports",
-                                "imports_avg",
-                                "imports_by_country",
-                                "imports_by_country_avg",
-                                "inputs_and_utilization",
-                                "inputs_and_utilization_avg",
-                                "jet_fuel",
-                                "monthly",
-                                "net_imports_inc_spr_avg",
-                                "net_imports_incl_spr",
-                                "net_production",
-                                "net_production_avg",
-                                "net_production_by_product",
-                                "net_production_by_production_avg",
-                                "product_by_region",
-                                "product_by_region_avg",
-                                "product_supplied",
-                                "product_supplied_avg",
-                                "propane",
-                                "rbob",
-                                "refiner_blender_net_production",
-                                "refiner_blender_net_production_avg",
-                                "stocks",
-                                "supply",
-                                "supply_avg",
-                                "ulta_low_sulfur_distillate_reclassification",
-                                "ulta_low_sulfur_distillate_reclassification_avg",
-                                "weekly",
-                            ],
-                        }
-                    },
-                },
+                info={'category': {'eia': {'multiple_items_allowed': False, 'choices': ['balance_sheet', 'inputs_and_production', 'refiner_blender_net_production', 'crude_petroleum_stocks', 'gasoline_fuel_stocks', 'total_gasoline_by_sub_padd', 'distillate_fuel_oil_stocks', 'imports', 'imports_by_country', 'weekly_estimates', 'spot_prices_crude_gas_heating', 'spot_prices_diesel_jet_fuel_propane', 'retail_prices']}}, 'table': {'eia': {'multiple_items_allowed': True, 'choices': ['all', 'conventional_gas', 'crude', 'crude_production', 'crude_production_avg', 'diesel', 'ethanol_plant_production', 'ethanol_plant_production_avg', 'exports', 'exports_avg', 'heating_oil', 'imports', 'imports_avg', 'imports_by_country', 'imports_by_country_avg', 'inputs_and_utilization', 'inputs_and_utilization_avg', 'jet_fuel', 'monthly', 'net_imports_inc_spr_avg', 'net_imports_incl_spr', 'net_production', 'net_production_avg', 'net_production_by_product', 'net_production_by_production_avg', 'product_by_region', 'product_by_region_avg', 'product_supplied', 'product_supplied_avg', 'propane', 'rbob', 'refiner_blender_net_production', 'refiner_blender_net_production_avg', 'stocks', 'supply', 'supply_avg', 'ulta_low_sulfur_distillate_reclassification', 'ulta_low_sulfur_distillate_reclassification_avg', 'weekly']}}},
             )
         )
 
@@ -232,34 +193,25 @@ class ROUTER_commodity(Container):
         # pylint: disable=import-outside-toplevel
         from . import commodity_price
 
-        return commodity_price.ROUTER_commodity_price(
-            command_runner=self._command_runner
-        )
+        return commodity_price.ROUTER_commodity_price(command_runner=self._command_runner)
 
     @exception_handler
     @validate
+    @deprecated(
+        "Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def short_term_energy_outlook(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["eia"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: eia."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['eia']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: eia.')] = None,
         **kwargs
     ) -> OBBject:
         """Monthly short term (18 month) projections using EIA's STEO model.
 
         Source: www.eia.gov/steo/
-
+        
 
         Parameters
         ----------
@@ -342,6 +294,9 @@ class ROUTER_commodity(Container):
         >>> obb.commodity.short_term_energy_outlook(table='03d', provider='eia')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/commodity/short_term_energy_outlook",
             **filter_inputs(
@@ -349,7 +304,7 @@ class ROUTER_commodity(Container):
                     "provider": self._get_provider(
                         provider,
                         "commodity.short_term_energy_outlook",
-                        ("eia",),
+                        ('eia',),
                     )
                 },
                 standard_params={
@@ -357,49 +312,6 @@ class ROUTER_commodity(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={
-                    "symbol": {
-                        "eia": {"multiple_items_allowed": True, "choices": None}
-                    },
-                    "table": {
-                        "eia": {
-                            "multiple_items_allowed": False,
-                            "choices": [
-                                "01",
-                                "02",
-                                "03a",
-                                "03b",
-                                "03c",
-                                "03d",
-                                "03e",
-                                "04a",
-                                "04b",
-                                "04c",
-                                "04d",
-                                "05a",
-                                "05b",
-                                "06",
-                                "07a",
-                                "07b",
-                                "07c",
-                                "07d1",
-                                "07d2",
-                                "07e",
-                                "08",
-                                "09a",
-                                "09b",
-                                "09c",
-                                "10a",
-                                "10b",
-                            ],
-                        }
-                    },
-                    "frequency": {
-                        "eia": {
-                            "multiple_items_allowed": False,
-                            "choices": ["month", "quarter", "annual"],
-                        }
-                    },
-                },
+                info={'symbol': {'eia': {'multiple_items_allowed': True, 'choices': None}}, 'table': {'eia': {'multiple_items_allowed': False, 'choices': ['01', '02', '03a', '03b', '03c', '03d', '03e', '04a', '04b', '04c', '04d', '05a', '05b', '06', '07a', '07b', '07c', '07d1', '07d2', '07e', '08', '09a', '09b', '09c', '10a', '10b']}}, 'frequency': {'eia': {'multiple_items_allowed': False, 'choices': ['month', 'quarter', 'annual']}}},
             )
         )

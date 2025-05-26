@@ -1,16 +1,45 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-import datetime
-from typing import Literal, Optional, Union
-
-from annotated_types import Ge
-from openbb_core.app.model.field import OpenBBField
-from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
+from openbb_core.app.model.obbject import OBBject
+import openbb_core.provider
+from openbb_core.provider.abstract.data import Data
+import pandas
+from pandas import DataFrame, Series
+import numpy
+from numpy import ndarray
+import datetime
+from datetime import date
+import pydantic
+from pydantic import BaseModel
+from inspect import Parameter
+import typing
+from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
+from annotated_types import Ge, Le, Gt, Lt
+from warnings import warn, simplefilter
+from typing_extensions import Annotated, deprecated
 from openbb_core.app.static.utils.decorators import exception_handler, validate
-from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
 
+from openbb_core.app.static.utils.filters import filter_inputs
+
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
+
+from openbb_core.app.model.field import OpenBBField
+from fastapi import Depends
+import openbb_core.app.model.command_context
+import openbb_core.app.provider_interface
+import typing
+
+from openbb_core.app.model.command_context import CommandContext
+from openbb_core.app.provider_interface import (
+    OBBject_CompanyNews,
+    OBBject_WorldNews,
+)
+
+from typing import (
+    CompanyNews,
+    WorldNews,
+)
 
 class ROUTER_news(Container):
     """/news
@@ -25,32 +54,11 @@ class ROUTER_news(Container):
     @validate
     def company(
         self,
-        symbol: Annotated[
-            Union[str, None, list[Optional[str]]],
-            OpenBBField(
-                description="Symbol to get data for. Multiple comma separated items allowed for provider(s): benzinga, fmp, intrinio, polygon, tiingo, yfinance."
-            ),
-        ] = None,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        limit: Annotated[
-            Optional[Annotated[int, Ge(ge=0)]],
-            OpenBBField(description="The number of data entries to return."),
-        ] = 2500,
-        provider: Annotated[
-            Optional[
-                Literal["benzinga", "fmp", "intrinio", "polygon", "tiingo", "yfinance"]
-            ],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: benzinga, fmp, intrinio, polygon, tiingo, yfinance."
-            ),
-        ] = None,
+        symbol: Annotated[Union[str, None, list[Optional[str]]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): benzinga, fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        limit: Annotated[Optional[Annotated[int, Ge(ge=0)]], OpenBBField(description='The number of data entries to return.')] = 2500,
+        provider: Annotated[Optional[Literal['benzinga', 'fmp', 'intrinio', 'polygon', 'tiingo', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: benzinga, fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Company News. Get news for one or more companies.
@@ -58,9 +66,9 @@ class ROUTER_news(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: benzinga, fmp, intrinio, polygon, tiingo, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: benzinga, fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance.
         symbol : Union[str, None, list[Optional[str]]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): benzinga, fmp, intrinio, polygon, tiingo, yfinance.
+            Symbol to get data for. Multiple comma separated items allowed for provider(s): benzinga, fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance.
         start_date : Union[date, None, str]
             Start date of the data, in YYYY-MM-DD format.
         end_date : Union[date, None, str]
@@ -113,6 +121,8 @@ class ROUTER_news(Container):
             News stories will have a business relevance score less than this value. Unsupported for yahoo source. Value is a decimal between 0 and 1. (provider: intrinio)
         offset : Optional[int]
             Page offset, used in conjunction with limit. (provider: tiingo)
+        use_cache : Optional[bool]
+            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
 
         Returns
         -------
@@ -157,10 +167,7 @@ class ROUTER_news(Container):
         updated : Optional[datetime]
             Updated date of the news. (provider: benzinga)
         source : Optional[str]
-            Name of the news source. (provider: fmp);
-            The source of the news article. (provider: intrinio);
-            Source of the article. (provider: polygon);
-            News source. (provider: tiingo);
+            Name of the news source. (provider: fmp, intrinio, polygon, tiingo, xiaoyuan);
             Source of the news article (provider: yfinance)
         summary : Optional[str]
             The summary of the news article. (provider: intrinio)
@@ -213,14 +220,7 @@ class ROUTER_news(Container):
                     "provider": self._get_provider(
                         provider,
                         "news.company",
-                        (
-                            "benzinga",
-                            "fmp",
-                            "intrinio",
-                            "polygon",
-                            "tiingo",
-                            "yfinance",
-                        ),
+                        ('benzinga', 'fmp', 'intrinio', 'polygon', 'tiingo', 'xiaoyuan', 'yfinance'),
                     )
                 },
                 standard_params={
@@ -230,40 +230,7 @@ class ROUTER_news(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={
-                    "symbol": {
-                        "benzinga": {"multiple_items_allowed": True, "choices": None},
-                        "fmp": {"multiple_items_allowed": True, "choices": None},
-                        "intrinio": {"multiple_items_allowed": True, "choices": None},
-                        "polygon": {"multiple_items_allowed": True, "choices": None},
-                        "tiingo": {"multiple_items_allowed": True, "choices": None},
-                        "yfinance": {"multiple_items_allowed": True, "choices": None},
-                    },
-                    "order": {
-                        "polygon": {
-                            "multiple_items_allowed": False,
-                            "choices": ["asc", "desc"],
-                        }
-                    },
-                    "source": {
-                        "intrinio": {
-                            "multiple_items_allowed": False,
-                            "choices": [
-                                "yahoo",
-                                "moody",
-                                "moody_us_news",
-                                "moody_us_press_releases",
-                            ],
-                        },
-                        "tiingo": {"multiple_items_allowed": True, "choices": None},
-                    },
-                    "sentiment": {
-                        "intrinio": {
-                            "multiple_items_allowed": False,
-                            "choices": ["positive", "neutral", "negative"],
-                        }
-                    },
-                },
+                info={'symbol': {'benzinga': {'multiple_items_allowed': True, 'choices': None}, 'fmp': {'multiple_items_allowed': True, 'choices': None}, 'intrinio': {'multiple_items_allowed': True, 'choices': None}, 'polygon': {'multiple_items_allowed': True, 'choices': None}, 'tiingo': {'multiple_items_allowed': True, 'choices': None}, 'xiaoyuan': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': True, 'choices': None}}, 'order': {'polygon': {'multiple_items_allowed': False, 'choices': ['asc', 'desc']}}, 'source': {'intrinio': {'multiple_items_allowed': False, 'choices': ['yahoo', 'moody', 'moody_us_news', 'moody_us_press_releases']}, 'tiingo': {'multiple_items_allowed': True, 'choices': None}}, 'sentiment': {'intrinio': {'multiple_items_allowed': False, 'choices': ['positive', 'neutral', 'negative']}}},
             )
         )
 
@@ -271,26 +238,10 @@ class ROUTER_news(Container):
     @validate
     def world(
         self,
-        limit: Annotated[
-            int,
-            OpenBBField(
-                description="The number of data entries to return. The number of articles to return."
-            ),
-        ] = 2500,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["benzinga", "fmp", "intrinio", "tiingo"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: benzinga, fmp, intrinio, tiingo."
-            ),
-        ] = None,
+        limit: Annotated[int, OpenBBField(description='The number of data entries to return. The number of articles to return.')] = 2500,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['benzinga', 'fmp', 'intrinio', 'tiingo', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: benzinga, fmp, intrinio, tiingo, xiaoyuan.')] = None,
         **kwargs
     ) -> OBBject:
         """World News. Global news data.
@@ -298,7 +249,7 @@ class ROUTER_news(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: benzinga, fmp, intrinio, tiingo.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: benzinga, fmp, intrinio, tiingo, xiaoyuan.
         limit : int
             The number of data entries to return. The number of articles to return.
         start_date : Union[date, None, str]
@@ -391,7 +342,7 @@ class ROUTER_news(Container):
         updated : Optional[datetime]
             Updated date of the news. (provider: benzinga)
         site : Optional[str]
-            News source. (provider: fmp, tiingo)
+            News source. (provider: fmp, tiingo, xiaoyuan)
         source : Optional[str]
             The source of the news article. (provider: intrinio)
         summary : Optional[str]
@@ -445,7 +396,7 @@ class ROUTER_news(Container):
                     "provider": self._get_provider(
                         provider,
                         "news.world",
-                        ("benzinga", "fmp", "intrinio", "tiingo"),
+                        ('benzinga', 'fmp', 'intrinio', 'tiingo', 'xiaoyuan'),
                     )
                 },
                 standard_params={
@@ -454,10 +405,6 @@ class ROUTER_news(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={
-                    "source": {
-                        "tiingo": {"multiple_items_allowed": True, "choices": None}
-                    }
-                },
+                info={'source': {'tiingo': {'multiple_items_allowed': True, 'choices': None}}},
             )
         )

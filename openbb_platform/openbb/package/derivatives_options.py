@@ -1,14 +1,49 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from typing import Literal, Optional
+from openbb_core.app.static.container import Container
+from openbb_core.app.model.obbject import OBBject
+import openbb_core.provider
+from openbb_core.provider.abstract.data import Data
+import pandas
+from pandas import DataFrame, Series
+import numpy
+from numpy import ndarray
+import datetime
+from datetime import date
+import pydantic
+from pydantic import BaseModel
+from inspect import Parameter
+import typing
+from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
+from annotated_types import Ge, Le, Gt, Lt
+from warnings import warn, simplefilter
+from typing_extensions import Annotated, deprecated
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+
+from openbb_core.app.static.utils.filters import filter_inputs
+
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 
 from openbb_core.app.model.field import OpenBBField
-from openbb_core.app.model.obbject import OBBject
-from openbb_core.app.static.container import Container
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from fastapi import Depends
+import openbb_core.app.deprecation
+import openbb_core.app.model.command_context
+import openbb_core.app.provider_interface
+import typing
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from openbb_core.app.model.command_context import CommandContext
+from openbb_core.app.provider_interface import (
+    OBBject_OptionsChains,
+    OBBject_OptionsSnapshots,
+    OBBject_OptionsUnusual,
+)
+
+from typing import (
+    OptionsChains,
+    OptionsSnapshots,
+    OptionsUnusual,
+)
 
 class ROUTER_derivatives_options(Container):
     """/derivatives/options
@@ -24,13 +59,8 @@ class ROUTER_derivatives_options(Container):
     @validate
     def chains(
         self,
-        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
-        provider: Annotated[
-            Optional[Literal["intrinio", "yfinance"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio, yfinance."
-            ),
-        ] = None,
+        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
+        provider: Annotated[Optional[Literal['intrinio', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio, yfinance.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the complete options chain for a ticker.
@@ -208,52 +238,26 @@ class ROUTER_derivatives_options(Container):
                     "provider": self._get_provider(
                         provider,
                         "derivatives.options.chains",
-                        ("intrinio", "yfinance"),
+                        ('intrinio', 'yfinance'),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={
-                    "delay": {
-                        "intrinio": {
-                            "multiple_items_allowed": False,
-                            "choices": ["eod", "realtime", "delayed"],
-                        }
-                    },
-                    "option_type": {
-                        "intrinio": {
-                            "multiple_items_allowed": False,
-                            "choices": ["call", "put"],
-                        }
-                    },
-                    "moneyness": {
-                        "intrinio": {
-                            "multiple_items_allowed": False,
-                            "choices": ["otm", "itm", "all"],
-                        }
-                    },
-                    "model": {
-                        "intrinio": {
-                            "multiple_items_allowed": False,
-                            "choices": ["black_scholes", "bjerk"],
-                        }
-                    },
-                },
+                info={'delay': {'intrinio': {'multiple_items_allowed': False, 'choices': ['eod', 'realtime', 'delayed']}}, 'option_type': {'intrinio': {'multiple_items_allowed': False, 'choices': ['call', 'put']}}, 'moneyness': {'intrinio': {'multiple_items_allowed': False, 'choices': ['otm', 'itm', 'all']}}, 'model': {'intrinio': {'multiple_items_allowed': False, 'choices': ['black_scholes', 'bjerk']}}},
             )
         )
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def snapshots(
         self,
-        provider: Annotated[
-            Optional[Literal["intrinio"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio."
-            ),
-        ] = None,
+        provider: Annotated[Optional[Literal['intrinio']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.')] = None,
         **kwargs
     ) -> OBBject:
         """Get a snapshot of the options market universe.
@@ -344,6 +348,9 @@ class ROUTER_derivatives_options(Container):
         >>> obb.derivatives.options.snapshots(provider='intrinio')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/derivatives/options/snapshots",
             **filter_inputs(
@@ -351,28 +358,25 @@ class ROUTER_derivatives_options(Container):
                     "provider": self._get_provider(
                         provider,
                         "derivatives.options.snapshots",
-                        ("intrinio",),
+                        ('intrinio',),
                     )
                 },
-                standard_params={},
+                standard_params={
+                },
                 extra_params=kwargs,
             )
         )
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def unusual(
         self,
-        symbol: Annotated[
-            Optional[str],
-            OpenBBField(description="Symbol to get data for. (the underlying symbol)"),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["intrinio"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio."
-            ),
-        ] = None,
+        symbol: Annotated[Optional[str], OpenBBField(description='Symbol to get data for. (the underlying symbol)')] = None,
+        provider: Annotated[Optional[Literal['intrinio']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the complete options chain for a ticker.
@@ -447,6 +451,9 @@ class ROUTER_derivatives_options(Container):
         >>> obb.derivatives.options.unusual(symbol='TSLA', provider='intrinio')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/derivatives/options/unusual",
             **filter_inputs(
@@ -454,7 +461,7 @@ class ROUTER_derivatives_options(Container):
                     "provider": self._get_provider(
                         provider,
                         "derivatives.options.unusual",
-                        ("intrinio",),
+                        ('intrinio',),
                     )
                 },
                 standard_params={

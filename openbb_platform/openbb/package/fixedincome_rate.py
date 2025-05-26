@@ -1,15 +1,61 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
+from openbb_core.app.static.container import Container
+from openbb_core.app.model.obbject import OBBject
+import openbb_core.provider
+from openbb_core.provider.abstract.data import Data
+import pandas
+from pandas import DataFrame, Series
+import numpy
+from numpy import ndarray
 import datetime
-from typing import Literal, Optional, Union
+from datetime import date
+import pydantic
+from pydantic import BaseModel
+from inspect import Parameter
+import typing
+from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
+from annotated_types import Ge, Le, Gt, Lt
+from warnings import warn, simplefilter
+from typing_extensions import Annotated, deprecated
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+
+from openbb_core.app.static.utils.filters import filter_inputs
+
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 
 from openbb_core.app.model.field import OpenBBField
-from openbb_core.app.model.obbject import OBBject
-from openbb_core.app.static.container import Container
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from fastapi import Depends
+import openbb_core.app.model.command_context
+import openbb_core.app.provider_interface
+import typing
 
+from openbb_core.app.model.command_context import CommandContext
+from openbb_core.app.provider_interface import (
+    OBBject_Ameribor,
+    OBBject_DiscountWindowPrimaryCreditRate,
+    OBBject_EuroShortTermRate,
+    OBBject_EuropeanCentralBankInterestRates,
+    OBBject_FederalFundsRate,
+    OBBject_IORB,
+    OBBject_OvernightBankFundingRate,
+    OBBject_PROJECTIONS,
+    OBBject_SOFR,
+    OBBject_SONIA,
+)
+
+from typing import (
+    Ameribor,
+    DiscountWindowPrimaryCreditRate,
+    EuroShortTermRate,
+    EuropeanCentralBankInterestRates,
+    FederalFundsRate,
+    IORB,
+    OvernightBankFundingRate,
+    PROJECTIONS,
+    SOFR,
+    SONIA,
+)
 
 class ROUTER_fixedincome_rate(Container):
     """/fixedincome/rate
@@ -32,20 +78,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def ameribor(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """AMERIBOR.
@@ -53,7 +88,7 @@ class ROUTER_fixedincome_rate(Container):
         AMERIBOR (short for the American interbank offered rate) is a benchmark interest rate that reflects the true cost of
         short-term interbank borrowing. This rate is based on transactions in overnight unsecured loans conducted on the
         American Financial Exchange (AFX).
-
+        
 
         Parameters
         ----------
@@ -66,7 +101,7 @@ class ROUTER_fixedincome_rate(Container):
         maturity : Union[Literal['all', 'overnight', 'average_30d', 'average_90d', 'term_30d', 'term_90d'], str]
             Period of AMERIBOR rate. Multiple comma separated items allowed. (provider: fred)
         frequency : Optional[Literal['a', 'q', 'm', 'w', 'wef', 'weth', 'wew', 'wetu', 'wem', 'wesu', 'wesa', 'bwew', 'bwem']]
-
+            
                     Frequency aggregation to convert daily data to lower frequency.
                         a = Annual
                         q = Quarterly
@@ -83,14 +118,14 @@ class ROUTER_fixedincome_rate(Container):
                         bwem = Biweekly, Ending Monday
                      (provider: fred)
         aggregation_method : Optional[Literal['avg', 'sum', 'eop']]
-
+            
                     A key that indicates the aggregation method used for frequency aggregation.
                         avg = Average
                         sum = Sum
                         eop = End of Period
                      (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
-
+            
                     Transformation type
                         None = No transformation
                         chg = Change
@@ -145,7 +180,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.ameribor",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -153,21 +188,7 @@ class ROUTER_fixedincome_rate(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={
-                    "maturity": {
-                        "fred": {
-                            "multiple_items_allowed": True,
-                            "choices": [
-                                "all",
-                                "overnight",
-                                "average_30d",
-                                "average_90d",
-                                "term_30d",
-                                "term_90d",
-                            ],
-                        }
-                    }
-                },
+                info={'maturity': {'fred': {'multiple_items_allowed': True, 'choices': ['all', 'overnight', 'average_30d', 'average_90d', 'term_30d', 'term_90d']}}},
             )
         )
 
@@ -175,20 +196,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def dpcredit(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Discount Window Primary Credit Rate.
@@ -197,7 +207,7 @@ class ROUTER_fixedincome_rate(Container):
         The rates central banks charge are set to stabilize the economy.
         In the United States, the Federal Reserve System's Board of Governors set the bank rate,
         also known as the discount rate.
-
+        
 
         Parameters
         ----------
@@ -245,7 +255,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.dpcredit",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -260,24 +270,10 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def ecb(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        interest_rate_type: Annotated[
-            Literal["deposit", "lending", "refinancing"],
-            OpenBBField(description="The type of interest rate."),
-        ] = "lending",
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        interest_rate_type: Annotated[Literal['deposit', 'lending', 'refinancing'], OpenBBField(description='The type of interest rate.')] = 'lending',
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """European Central Bank Interest Rates.
@@ -288,7 +284,7 @@ class ROUTER_fixedincome_rate(Container):
         the bulk of liquidity to the banking system.
         - The rate on the deposit facility, which banks may use to make overnight deposits with the Eurosystem.
         - The rate on the marginal lending facility, which offers overnight credit to banks from the Eurosystem.
-
+        
 
         Parameters
         ----------
@@ -336,7 +332,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.ecb",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -352,27 +348,16 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def effr(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["federal_reserve", "fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['federal_reserve', 'fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Fed Funds Rate.
 
         Get Effective Federal Funds Rate data. A bank rate is the interest rate a nation's central bank charges to its
         domestic banks to borrow money. The rates central banks charge are set to stabilize the economy.
-
+        
 
         Parameters
         ----------
@@ -383,7 +368,7 @@ class ROUTER_fixedincome_rate(Container):
         end_date : Union[date, None, str]
             End date of the data, in YYYY-MM-DD format.
         frequency : Optional[Literal['a', 'q', 'm', 'w', 'wef', 'weth', 'wew', 'wetu', 'wem', 'wesu', 'wesa', 'bwew', 'bwem']]
-
+            
                     Frequency aggregation to convert daily data to lower frequency.
                         a = Annual
                         q = Quarterly
@@ -400,14 +385,14 @@ class ROUTER_fixedincome_rate(Container):
                         bwem = Biweekly, Ending Monday
                      (provider: fred)
         aggregation_method : Optional[Literal['avg', 'sum', 'eop']]
-
+            
                     A key that indicates the aggregation method used for frequency aggregation.
                         avg = Average
                         sum = Sum
                         eop = End of Period
                      (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
-
+            
                     Transformation type
                         None = No transformation
                         chg = Change
@@ -479,7 +464,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.effr",
-                        ("federal_reserve", "fred"),
+                        ('federal_reserve', 'fred'),
                     )
                 },
                 standard_params={
@@ -494,12 +479,7 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def effr_forecast(
         self,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Fed Funds Rate Projections.
@@ -508,7 +488,7 @@ class ROUTER_fixedincome_rate(Container):
         projected appropriate target range for the federal funds rate or the projected
         appropriate target level for the federal funds rate at the end of the specified
         calendar year or over the longer run.
-
+        
 
         Parameters
         ----------
@@ -564,10 +544,11 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.effr_forecast",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
-                standard_params={},
+                standard_params={
+                },
                 extra_params=kwargs,
             )
         )
@@ -576,20 +557,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def estr(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Euro Short-Term Rate.
@@ -598,7 +568,7 @@ class ROUTER_fixedincome_rate(Container):
         the euro area. The €STR is published on each TARGET2 business day based on transactions conducted and settled on
         the previous TARGET2 business day (the reporting date “T”) with a maturity date of T+1 which are deemed to have been
         executed at arm's length and thus reflect market rates in an unbiased way.
-
+        
 
         Parameters
         ----------
@@ -610,63 +580,63 @@ class ROUTER_fixedincome_rate(Container):
             End date of the data, in YYYY-MM-DD format.
         frequency : Optional[Literal['a', 'q', 'm', 'w', 'wef', 'weth', 'wew', 'wetu', 'wem', 'wesu', 'wesa', 'bwew', 'bwem']]
             Frequency aggregation to convert daily data to lower frequency.
-
+                    
                 a = Annual
-
+                    
                 q = Quarterly
-
+                    
                 m = Monthly
-
+                    
                 w = Weekly
-
+                    
                 d = Daily
-
+                    
                 wef = Weekly, Ending Friday
-
+                    
                 weth = Weekly, Ending Thursday
-
+                    
                 wew = Weekly, Ending Wednesday
-
+                    
                 wetu = Weekly, Ending Tuesday
-
+                    
                 wem = Weekly, Ending Monday
-
+                    
                 wesu = Weekly, Ending Sunday
-
+                    
                 wesa = Weekly, Ending Saturday
-
+                    
                 bwew = Biweekly, Ending Wednesday
-
+                    
                 bwem = Biweekly, Ending Monday
                      (provider: fred)
         aggregation_method : Optional[Literal['avg', 'sum', 'eop']]
             A key that indicates the aggregation method used for frequency aggregation.
-
+                    
                 avg = Average
-
+                    
                 sum = Sum
-
+                    
                 eop = End of Period
                      (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
             Transformation type
-
+                    
                 None = No transformation
-
+                    
                 chg = Change
-
+                    
                 ch1 = Change from Year Ago
-
+                    
                 pch = Percent Change
-
+                    
                 pc1 = Percent Change from Year Ago
-
+                    
                 pca = Compounded Annual Rate of Change
-
+                    
                 cch = Continuously Compounded Rate of Change
-
+                    
                 cca = Continuously Compounded Annual Rate of Change
-
+                    
                 log = Natural Log
                      (provider: fred)
 
@@ -717,7 +687,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.estr",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -732,20 +702,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def iorb(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Interest on Reserve Balances.
@@ -753,7 +712,7 @@ class ROUTER_fixedincome_rate(Container):
         Get Interest Rate on Reserve Balances data A bank rate is the interest rate a nation's central bank charges to its
         domestic banks to borrow money. The rates central banks charge are set to stabilize the economy. In the
         United States, the Federal Reserve System's Board of Governors set the bank rate, also known as the discount rate.
-
+        
 
         Parameters
         ----------
@@ -798,7 +757,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.iorb",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -813,20 +772,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def overnight_bank_funding(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["federal_reserve", "fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['federal_reserve', 'fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Overnight Bank Funding.
@@ -834,7 +782,7 @@ class ROUTER_fixedincome_rate(Container):
         For the United States, the overnight bank funding rate (OBFR) is calculated as a volume-weighted median of
         overnight federal funds transactions and Eurodollar transactions reported in the
         FR 2420 Report of Selected Money Market Rates.
-
+        
 
         Parameters
         ----------
@@ -845,7 +793,7 @@ class ROUTER_fixedincome_rate(Container):
         end_date : Union[date, None, str]
             End date of the data, in YYYY-MM-DD format.
         frequency : Optional[Literal['a', 'q', 'm', 'w', 'wef', 'weth', 'wew', 'wetu', 'wem', 'wesu', 'wesa', 'bwew', 'bwem']]
-
+            
                     Frequency aggregation to convert daily data to lower frequency.
                         a = Annual
                         q = Quarterly
@@ -862,14 +810,14 @@ class ROUTER_fixedincome_rate(Container):
                         bwem = Biweekly, Ending Monday
                      (provider: fred)
         aggregation_method : Optional[Literal['avg', 'sum', 'eop']]
-
+            
                     A key that indicates the aggregation method used for frequency aggregation.
                         avg = Average
                         sum = Sum
                         eop = End of Period
                      (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
-
+            
                     Transformation type
                         None = No transformation
                         chg = Change
@@ -928,7 +876,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.overnight_bank_funding",
-                        ("federal_reserve", "fred"),
+                        ('federal_reserve', 'fred'),
                     )
                 },
                 standard_params={
@@ -943,27 +891,16 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def sofr(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["federal_reserve", "fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['federal_reserve', 'fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Secured Overnight Financing Rate.
 
         The Secured Overnight Financing Rate (SOFR) is a broad measure of the cost of
         borrowing cash overnight collateralizing by Treasury securities.
-
+        
 
         Parameters
         ----------
@@ -974,7 +911,7 @@ class ROUTER_fixedincome_rate(Container):
         end_date : Union[date, None, str]
             End date of the data, in YYYY-MM-DD format.
         frequency : Optional[Literal['a', 'q', 'm', 'w', 'wef', 'weth', 'wew', 'wetu', 'wem', 'wesu', 'wesa', 'bwew', 'bwem']]
-
+            
                     Frequency aggregation to convert daily data to lower frequency.
                         a = Annual
                         q = Quarterly
@@ -991,14 +928,14 @@ class ROUTER_fixedincome_rate(Container):
                         bwem = Biweekly, Ending Monday
                      (provider: fred)
         aggregation_method : Optional[Literal['avg', 'sum', 'eop']]
-
+            
                     A key that indicates the aggregation method used for frequency aggregation.
                         avg = Average
                         sum = Sum
                         eop = End of Period
                      (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
-
+            
                     Transformation type
                         None = No transformation
                         chg = Change
@@ -1063,7 +1000,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.sofr",
-                        ("federal_reserve", "fred"),
+                        ('federal_reserve', 'fred'),
                     )
                 },
                 standard_params={
@@ -1078,20 +1015,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def sonia(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Sterling Overnight Index Average.
@@ -1099,7 +1025,7 @@ class ROUTER_fixedincome_rate(Container):
         SONIA (Sterling Overnight Index Average) is an important interest rate benchmark. SONIA is based on actual
         transactions and reflects the average of the interest rates that banks pay to borrow sterling overnight from other
         financial institutions and other institutional investors.
-
+        
 
         Parameters
         ----------
@@ -1147,7 +1073,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.sonia",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={

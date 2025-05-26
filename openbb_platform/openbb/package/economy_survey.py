@@ -1,15 +1,59 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
+from openbb_core.app.static.container import Container
+from openbb_core.app.model.obbject import OBBject
+import openbb_core.provider
+from openbb_core.provider.abstract.data import Data
+import pandas
+from pandas import DataFrame, Series
+import numpy
+from numpy import ndarray
 import datetime
-from typing import Literal, Optional, Union
+from datetime import date
+import pydantic
+from pydantic import BaseModel
+from inspect import Parameter
+import typing
+from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
+from annotated_types import Ge, Le, Gt, Lt
+from warnings import warn, simplefilter
+from typing_extensions import Annotated, deprecated
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+
+from openbb_core.app.static.utils.filters import filter_inputs
+
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 
 from openbb_core.app.model.field import OpenBBField
-from openbb_core.app.model.obbject import OBBject
-from openbb_core.app.static.container import Container
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from fastapi import Depends
+import openbb_core.app.deprecation
+import openbb_core.app.model.command_context
+import openbb_core.app.provider_interface
+import typing
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from openbb_core.app.model.command_context import CommandContext
+from openbb_core.app.provider_interface import (
+    OBBject_BlsSearch,
+    OBBject_BlsSeries,
+    OBBject_ManufacturingOutlookNY,
+    OBBject_ManufacturingOutlookTexas,
+    OBBject_NonFarmPayrolls,
+    OBBject_SeniorLoanOfficerSurvey,
+    OBBject_SurveyOfEconomicConditionsChicago,
+    OBBject_UniversityOfMichigan,
+)
+
+from typing import (
+    BlsSearch,
+    BlsSeries,
+    ManufacturingOutlookNY,
+    ManufacturingOutlookTexas,
+    NonFarmPayrolls,
+    SeniorLoanOfficerSurvey,
+    SurveyOfEconomicConditionsChicago,
+    UniversityOfMichigan,
+)
 
 class ROUTER_economy_survey(Container):
     """/economy/survey
@@ -30,93 +74,83 @@ class ROUTER_economy_survey(Container):
     @validate
     def bls_search(
         self,
-        query: Annotated[
-            str,
-            OpenBBField(
-                description="The search word(s). Use semi-colon to separate multiple queries as an & operator."
-            ),
-        ] = "",
-        provider: Annotated[
-            Optional[Literal["bls"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: bls."
-            ),
-        ] = None,
+        query: Annotated[str, OpenBBField(description='The search word(s). Use semi-colon to separate multiple queries as an & operator.')] = '',
+        provider: Annotated[Optional[Literal['bls']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: bls.')] = None,
         **kwargs
     ) -> OBBject:
         """Search BLS surveys by category and keyword or phrase to identify BLS series IDs.
 
-            Parameters
-            ----------
-            provider : str
-                The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: bls.
-            query : str
-                The search word(s). Use semi-colon to separate multiple queries as an & operator.
-            category : Optional[Literal['cpi', 'pce', 'ppi', 'ip', 'jolts', 'nfp', 'cps', 'lfs', 'wages', 'ec', 'sla', 'bed', 'tu']]
-                The category of BLS survey to search within.
-            An empty search query will return all series within the category. Options are:
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: bls.
+        query : str
+            The search word(s). Use semi-colon to separate multiple queries as an & operator.
+        category : Optional[Literal['cpi', 'pce', 'ppi', 'ip', 'jolts', 'nfp', 'cps', 'lfs', 'wages', 'ec', 'sla', 'bed', 'tu']]
+            The category of BLS survey to search within.
+        An empty search query will return all series within the category. Options are:
+        
+    cpi - Consumer Price Index
+        
+    pce - Personal Consumption Expenditure
+        
+    ppi - Producer Price Index
+        
+    ip - Industry Productivity
+        
+    jolts - Job Openings and Labor Turnover Survey
+        
+    nfp - Nonfarm Payrolls
+        
+    cps - Current Population Survey
+        
+    lfs - Labor Force Statistics
+        
+    wages - Wages
+        
+    ec - Employer Costs
+        
+    sla - State and Local Area Employment
+        
+    bed - Business Employment Dynamics
+        
+    tu - Time Use
+         (provider: bls)
+            Choices for bls: 'cpi', 'pce', 'ppi', 'ip', 'jolts', 'nfp', 'cps', 'lfs', 'wages', 'ec', 'sla', 'bed', 'tu'
+        include_extras : bool
+            Include additional information in the search results. Extra fields returned are metadata and vary by survey. Fields are undefined strings that typically have names ending with '_code'. (provider: bls)
+        include_code_map : bool
+            When True, includes the complete code map for eaçh survey in the category, returned separately as a nested JSON to the `extras['results_metadata']` property of the response. Example content is the NAICS industry map for PPI surveys. Each code is a value within the 'symbol' of the time series. (provider: bls)
 
-        cpi - Consumer Price Index
+        Returns
+        -------
+        OBBject
+            results : list[BlsSearch]
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
 
-        pce - Personal Consumption Expenditure
+        BlsSearch
+        ---------
+        symbol : str
+            Symbol representing the entity requested in the data.
+        title : Optional[str]
+            The title of the series.
+        survey_name : Optional[str]
+            The name of the survey.
 
-        ppi - Producer Price Index
-
-        ip - Industry Productivity
-
-        jolts - Job Openings and Labor Turnover Survey
-
-        nfp - Nonfarm Payrolls
-
-        cps - Current Population Survey
-
-        lfs - Labor Force Statistics
-
-        wages - Wages
-
-        ec - Employer Costs
-
-        sla - State and Local Area Employment
-
-        bed - Business Employment Dynamics
-
-        tu - Time Use
-             (provider: bls)
-                Choices for bls: 'cpi', 'pce', 'ppi', 'ip', 'jolts', 'nfp', 'cps', 'lfs', 'wages', 'ec', 'sla', 'bed', 'tu'
-            include_extras : bool
-                Include additional information in the search results. Extra fields returned are metadata and vary by survey. Fields are undefined strings that typically have names ending with '_code'. (provider: bls)
-            include_code_map : bool
-                When True, includes the complete code map for eaçh survey in the category, returned separately as a nested JSON to the `extras['results_metadata']` property of the response. Example content is the NAICS industry map for PPI surveys. Each code is a value within the 'symbol' of the time series. (provider: bls)
-
-            Returns
-            -------
-            OBBject
-                results : list[BlsSearch]
-                    Serializable results.
-                provider : Optional[str]
-                    Provider name.
-                warnings : Optional[list[Warning_]]
-                    list of warnings.
-                chart : Optional[Chart]
-                    Chart object.
-                extra : Dict[str, Any]
-                    Extra info.
-
-            BlsSearch
-            ---------
-            symbol : str
-                Symbol representing the entity requested in the data.
-            title : Optional[str]
-                The title of the series.
-            survey_name : Optional[str]
-                The name of the survey.
-
-            Examples
-            --------
-            >>> from openbb import obb
-            >>> obb.economy.survey.bls_search(provider='bls', category='cpi')
-            >>> # Use semi-colon to separate multiple queries as an & operator.
-            >>> obb.economy.survey.bls_search(provider='bls', category='cpi', query='seattle;gasoline')
+        Examples
+        --------
+        >>> from openbb import obb
+        >>> obb.economy.survey.bls_search(provider='bls', category='cpi')
+        >>> # Use semi-colon to separate multiple queries as an & operator.
+        >>> obb.economy.survey.bls_search(provider='bls', category='cpi', query='seattle;gasoline')
         """  # noqa: E501
 
         return self._run(
@@ -126,62 +160,29 @@ class ROUTER_economy_survey(Container):
                     "provider": self._get_provider(
                         provider,
                         "economy.survey.bls_search",
-                        ("bls",),
+                        ('bls',),
                     )
                 },
                 standard_params={
                     "query": query,
                 },
                 extra_params=kwargs,
-                info={
-                    "category": {
-                        "bls": {
-                            "multiple_items_allowed": False,
-                            "choices": [
-                                "cpi",
-                                "pce",
-                                "ppi",
-                                "ip",
-                                "jolts",
-                                "nfp",
-                                "cps",
-                                "lfs",
-                                "wages",
-                                "ec",
-                                "sla",
-                                "bed",
-                                "tu",
-                            ],
-                        }
-                    }
-                },
+                info={'category': {'bls': {'multiple_items_allowed': False, 'choices': ['cpi', 'pce', 'ppi', 'ip', 'jolts', 'nfp', 'cps', 'lfs', 'wages', 'ec', 'sla', 'bed', 'tu']}}},
             )
         )
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def bls_series(
         self,
-        symbol: Annotated[
-            Union[str, list[str]],
-            OpenBBField(
-                description="Symbol to get data for. Multiple comma separated items allowed for provider(s): bls."
-            ),
-        ],
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["bls"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: bls."
-            ),
-        ] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): bls.')],
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['bls']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: bls.')] = None,
         **kwargs
     ) -> OBBject:
         """Get time series data for one, or more, BLS series IDs.
@@ -254,6 +255,9 @@ class ROUTER_economy_survey(Container):
         >>> obb.economy.survey.bls_series(provider='bls', symbol='CES0000000001')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/economy/survey/bls_series",
             **filter_inputs(
@@ -261,7 +265,7 @@ class ROUTER_economy_survey(Container):
                     "provider": self._get_provider(
                         provider,
                         "economy.survey.bls_series",
-                        ("bls",),
+                        ('bls',),
                     )
                 },
                 standard_params={
@@ -270,30 +274,21 @@ class ROUTER_economy_survey(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={
-                    "symbol": {"bls": {"multiple_items_allowed": True, "choices": None}}
-                },
+                info={'symbol': {'bls': {'multiple_items_allowed': True, 'choices': None}}},
             )
         )
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def economic_conditions_chicago(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Get The Survey Of Economic Conditions For The Chicago Region.
@@ -310,32 +305,32 @@ class ROUTER_economy_survey(Container):
             Frequency aggregation to convert monthly data to lower frequency. None is monthly. (provider: fred)
         aggregation_method : Optional[Literal['avg', 'sum', 'eop']]
             A key that indicates the aggregation method used for frequency aggregation.
-
+                    
                 avg = Average
-
+                    
                 sum = Sum
-
+                    
                 eop = End of Period
                      (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
             Transformation type
-
+                    
                 None = No transformation
-
+                    
                 chg = Change
-
+                    
                 ch1 = Change from Year Ago
-
+                    
                 pch = Percent Change
-
+                    
                 pc1 = Percent Change from Year Ago
-
+                    
                 pca = Compounded Annual Rate of Change
-
+                    
                 cch = Continuously Compounded Rate of Change
-
+                    
                 cca = Continuously Compounded Annual Rate of Change
-
+                    
                 log = Natural Log
                      (provider: fred)
 
@@ -382,6 +377,9 @@ class ROUTER_economy_survey(Container):
         >>> obb.economy.survey.economic_conditions_chicago(provider='fred')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/economy/survey/economic_conditions_chicago",
             **filter_inputs(
@@ -389,7 +387,7 @@ class ROUTER_economy_survey(Container):
                     "provider": self._get_provider(
                         provider,
                         "economy.survey.economic_conditions_chicago",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -404,20 +402,9 @@ class ROUTER_economy_survey(Container):
     @validate
     def manufacturing_outlook_ny(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the Empire State Manufacturing Survey.
@@ -434,7 +421,7 @@ class ROUTER_economy_survey(Container):
         manufacturing executives in New York State, typically the president or CEO.
 
         About 100 responses are received. Most are completed by the tenth, although surveys are accepted until the fifteenth.
-
+        
 
         Parameters
         ----------
@@ -512,7 +499,7 @@ class ROUTER_economy_survey(Container):
                     "provider": self._get_provider(
                         provider,
                         "economy.survey.manufacturing_outlook_ny",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -520,48 +507,21 @@ class ROUTER_economy_survey(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={
-                    "topic": {
-                        "fred": {
-                            "multiple_items_allowed": True,
-                            "choices": [
-                                "business_outlook",
-                                "hours_worked",
-                                "employment",
-                                "inventories",
-                                "prices_received",
-                                "prices_paid",
-                                "capex",
-                                "unfilled_orders",
-                                "new_orders",
-                                "shipments",
-                                "delivery_times",
-                            ],
-                            "x-widget_config": {"value": "new_orders"},
-                        }
-                    }
-                },
+                info={'topic': {'fred': {'multiple_items_allowed': True, 'choices': ['business_outlook', 'hours_worked', 'employment', 'inventories', 'prices_received', 'prices_paid', 'capex', 'unfilled_orders', 'new_orders', 'shipments', 'delivery_times'], 'x-widget_config': {'value': 'new_orders'}}}},
             )
         )
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def manufacturing_outlook_texas(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Get The Manufacturing Outlook Survey For The Texas Region.
@@ -577,18 +537,18 @@ class ROUTER_economy_survey(Container):
         topic : Union[Literal['business_activity', 'business_outlook', 'capex', 'prices_paid', 'production', 'inventory', 'new_orders', 'new_orders_growth', 'unfilled_orders', 'shipments', 'delivery_time', 'employment', 'wages', 'hours_worked'], str]
             The topic for the survey response. Multiple comma separated items allowed. (provider: fred)
         frequency : Optional[Literal['annual', 'quarter']]
-
+            
                     Frequency aggregation to convert monthly data to lower frequency. None is monthly.
                      (provider: fred)
         aggregation_method : Optional[Literal['avg', 'sum', 'eop']]
-
+            
                     A key that indicates the aggregation method used for frequency aggregation.
                         avg = Average
                         sum = Sum
                         eop = End of Period
                      (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
-
+            
                     Transformation type
                         None = No transformation
                         chg = Change
@@ -637,6 +597,9 @@ class ROUTER_economy_survey(Container):
         >>> obb.economy.survey.manufacturing_outlook_texas(topic='business_outlook,new_orders', transform='pc1', provider='fred')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/economy/survey/manufacturing_outlook_texas",
             **filter_inputs(
@@ -644,7 +607,7 @@ class ROUTER_economy_survey(Container):
                     "provider": self._get_provider(
                         provider,
                         "economy.survey.manufacturing_outlook_texas",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -652,48 +615,20 @@ class ROUTER_economy_survey(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={
-                    "topic": {
-                        "fred": {
-                            "multiple_items_allowed": True,
-                            "choices": [
-                                "business_activity",
-                                "business_outlook",
-                                "capex",
-                                "prices_paid",
-                                "production",
-                                "inventory",
-                                "new_orders",
-                                "new_orders_growth",
-                                "unfilled_orders",
-                                "shipments",
-                                "delivery_time",
-                                "employment",
-                                "wages",
-                                "hours_worked",
-                            ],
-                        }
-                    }
-                },
+                info={'topic': {'fred': {'multiple_items_allowed': True, 'choices': ['business_activity', 'business_outlook', 'capex', 'prices_paid', 'production', 'inventory', 'new_orders', 'new_orders_growth', 'unfilled_orders', 'shipments', 'delivery_time', 'employment', 'wages', 'hours_worked']}}},
             )
         )
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def nonfarm_payrolls(
         self,
-        date: Annotated[
-            Union[datetime.date, str, None, list[Union[datetime.date, str, None]]],
-            OpenBBField(
-                description="A specific date to get data for. Default is the latest report. Multiple comma separated items allowed for provider(s): fred."
-            ),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        date: Annotated[Union[str, datetime.date, None, list[Union[str, datetime.date, None]]], OpenBBField(description='A specific date to get data for. Default is the latest report. Multiple comma separated items allowed for provider(s): fred.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Get Nonfarm Payrolls Survey.
@@ -702,7 +637,7 @@ class ROUTER_economy_survey(Container):
         ----------
         provider : str
             The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.
-        date : Union[date, str, None, list[Union[date, str, None]]]
+        date : Union[str, date, None, list[Union[str, date, None]]]
             A specific date to get data for. Default is the latest report. Multiple comma separated items allowed for provider(s): fred.
         category : Literal['employees_nsa', 'employees_sa', 'employees_production_and_nonsupervisory', 'employees_women', 'employees_women_percent', 'avg_hours', 'avg_hours_production_and_nonsupervisory', 'avg_hours_overtime', 'avg_hours_overtime_production_and_nonsupervisory', 'avg_earnings_hourly', 'avg_earnings_hourly_production_and_nonsupervisory', 'avg_earnings_weekly', 'avg_earnings_weekly_production_and_nonsupervisory', 'index_weekly_hours', 'index_weekly_hours_production_and_nonsupervisory', 'index_weekly_payrolls', 'index_weekly_payrolls_production_and_nonsupervisory']
             The category to query. (provider: fred)
@@ -728,7 +663,7 @@ class ROUTER_economy_survey(Container):
         symbol : str
             Symbol representing the entity requested in the data.
         value : float
-
+            
         name : Optional[str]
             The name of the series. (provider: fred)
         element_id : Optional[str]
@@ -747,6 +682,9 @@ class ROUTER_economy_survey(Container):
         >>> obb.economy.survey.nonfarm_payrolls(category='avg_hours', provider='fred')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/economy/survey/nonfarm_payrolls",
             **filter_inputs(
@@ -754,37 +692,28 @@ class ROUTER_economy_survey(Container):
                     "provider": self._get_provider(
                         provider,
                         "economy.survey.nonfarm_payrolls",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
                     "date": date,
                 },
                 extra_params=kwargs,
-                info={
-                    "date": {"fred": {"multiple_items_allowed": True, "choices": None}}
-                },
+                info={'date': {'fred': {'multiple_items_allowed': True, 'choices': None}}},
             )
         )
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def sloos(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Get Senior Loan Officers Opinion Survey.
@@ -800,7 +729,7 @@ class ROUTER_economy_survey(Container):
         category : Literal['spreads', 'consumer', 'auto', 'credit_card', 'firms', 'mortgage', 'commercial_real_estate', 'standards', 'demand', 'foreign_banks']
             Category of survey response. (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
-
+            
                     Transformation type
                         None = No transformation
                         chg = Change
@@ -845,6 +774,9 @@ class ROUTER_economy_survey(Container):
         >>> obb.economy.survey.sloos(category='credit_card', provider='fred')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/economy/survey/sloos",
             **filter_inputs(
@@ -852,7 +784,7 @@ class ROUTER_economy_survey(Container):
                     "provider": self._get_provider(
                         provider,
                         "economy.survey.sloos",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={
@@ -865,22 +797,15 @@ class ROUTER_economy_survey(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def university_of_michigan(
         self,
-        start_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="Start date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        end_date: Annotated[
-            Union[datetime.date, None, str],
-            OpenBBField(description="End date of the data, in YYYY-MM-DD format."),
-        ] = None,
-        provider: Annotated[
-            Optional[Literal["fred"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred."
-            ),
-        ] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
+        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
         **kwargs
     ) -> OBBject:
         """Get University of Michigan Consumer Sentiment and Inflation Expectations Surveys.
@@ -897,32 +822,32 @@ class ROUTER_economy_survey(Container):
             Frequency aggregation to convert monthly data to lower frequency. None is monthly. (provider: fred)
         aggregation_method : Optional[Literal['avg', 'sum', 'eop']]
             A key that indicates the aggregation method used for frequency aggregation.
-
+                    
                 avg = Average
-
+                    
                 sum = Sum
-
+                    
                 eop = End of Period
                      (provider: fred)
         transform : Optional[Literal['chg', 'ch1', 'pch', 'pc1', 'pca', 'cch', 'cca', 'log']]
             Transformation type
-
+                    
                 None = No transformation
-
+                    
                 chg = Change
-
+                    
                 ch1 = Change from Year Ago
-
+                    
                 pch = Percent Change
-
+                    
                 pc1 = Percent Change from Year Ago
-
+                    
                 pca = Compounded Annual Rate of Change
-
+                    
                 cch = Continuously Compounded Rate of Change
-
+                    
                 cca = Continuously Compounded Annual Rate of Change
-
+                    
                 log = Natural Log
                      (provider: fred)
 
@@ -955,6 +880,9 @@ class ROUTER_economy_survey(Container):
         >>> obb.economy.survey.university_of_michigan(provider='fred')
         """  # noqa: E501
 
+        simplefilter('always', DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
+
         return self._run(
             "/economy/survey/university_of_michigan",
             **filter_inputs(
@@ -962,7 +890,7 @@ class ROUTER_economy_survey(Container):
                     "provider": self._get_provider(
                         provider,
                         "economy.survey.university_of_michigan",
-                        ("fred",),
+                        ('fred',),
                     )
                 },
                 standard_params={

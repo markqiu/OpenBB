@@ -1,14 +1,57 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from typing import Literal, Optional
+from openbb_core.app.static.container import Container
+from openbb_core.app.model.obbject import OBBject
+import openbb_core.provider
+from openbb_core.provider.abstract.data import Data
+import pandas
+from pandas import DataFrame, Series
+import numpy
+from numpy import ndarray
+import datetime
+from datetime import date
+import pydantic
+from pydantic import BaseModel
+from inspect import Parameter
+import typing
+from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
+from annotated_types import Ge, Le, Gt, Lt
+from warnings import warn, simplefilter
+from typing_extensions import Annotated, deprecated
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+
+from openbb_core.app.static.utils.filters import filter_inputs
+
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 
 from openbb_core.app.model.field import OpenBBField
-from openbb_core.app.model.obbject import OBBject
-from openbb_core.app.static.container import Container
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from fastapi import Depends
+import openbb_core.app.model.command_context
+import openbb_core.app.provider_interface
+import typing
 
+from openbb_core.app.model.command_context import CommandContext
+from openbb_core.app.provider_interface import (
+    OBBject_CikMap,
+    OBBject_InstitutionsSearch,
+    OBBject_RssLitigation,
+    OBBject_SchemaFiles,
+    OBBject_SecFiling,
+    OBBject_SecHtmFile,
+    OBBject_SicSearch,
+    OBBject_SymbolMap,
+)
+
+from typing import (
+    CikMap,
+    InstitutionsSearch,
+    RssLitigation,
+    SchemaFiles,
+    SecFiling,
+    SecHtmFile,
+    SicSearch,
+    SymbolMap,
+)
 
 class ROUTER_regulators_sec(Container):
     """/regulators/sec
@@ -29,13 +72,8 @@ class ROUTER_regulators_sec(Container):
     @validate
     def cik_map(
         self,
-        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Map a ticker symbol to a CIK number.
@@ -81,7 +119,7 @@ class ROUTER_regulators_sec(Container):
                     "provider": self._get_provider(
                         provider,
                         "regulators.sec.cik_map",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
                 standard_params={
@@ -95,12 +133,7 @@ class ROUTER_regulators_sec(Container):
     @validate
     def filing_headers(
         self,
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Download the index headers, and cover page if available, for any SEC filing.
@@ -172,12 +205,13 @@ class ROUTER_regulators_sec(Container):
                     "provider": self._get_provider(
                         provider,
                         "regulators.sec.filing_headers",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
-                standard_params={},
+                standard_params={
+                },
                 extra_params=kwargs,
-                info={"url": {"sec": {"x-widget_config": {"label": "Filing URL"}}}},
+                info={'url': {'sec': {'x-widget_config': {'label': 'Filing URL'}}}},
             )
         )
 
@@ -185,12 +219,7 @@ class ROUTER_regulators_sec(Container):
     @validate
     def htm_file(
         self,
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Download a raw HTML object from the SEC website.
@@ -238,10 +267,11 @@ class ROUTER_regulators_sec(Container):
                     "provider": self._get_provider(
                         provider,
                         "regulators.sec.htm_file",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
-                standard_params={},
+                standard_params={
+                },
                 extra_params=kwargs,
             )
         )
@@ -250,13 +280,8 @@ class ROUTER_regulators_sec(Container):
     @validate
     def institutions_search(
         self,
-        query: Annotated[str, OpenBBField(description="Search query.")] = "",
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        query: Annotated[str, OpenBBField(description='Search query.')] = '',
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Search SEC-regulated institutions by name and return a list of results with CIK numbers.
@@ -305,7 +330,7 @@ class ROUTER_regulators_sec(Container):
                     "provider": self._get_provider(
                         provider,
                         "regulators.sec.institutions_search",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
                 standard_params={
@@ -319,12 +344,7 @@ class ROUTER_regulators_sec(Container):
     @validate
     def rss_litigation(
         self,
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Get the RSS feed that provides links to litigation releases concerning civil lawsuits brought by the Commission in federal court.
@@ -374,10 +394,11 @@ class ROUTER_regulators_sec(Container):
                     "provider": self._get_provider(
                         provider,
                         "regulators.sec.rss_litigation",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
-                standard_params={},
+                standard_params={
+                },
                 extra_params=kwargs,
             )
         )
@@ -386,13 +407,8 @@ class ROUTER_regulators_sec(Container):
     @validate
     def schema_files(
         self,
-        query: Annotated[str, OpenBBField(description="Search query.")] = "",
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        query: Annotated[str, OpenBBField(description='Search query.')] = '',
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Use tool for navigating the directory of SEC XML schema files by year.
@@ -458,7 +474,7 @@ class ROUTER_regulators_sec(Container):
                     "provider": self._get_provider(
                         provider,
                         "regulators.sec.schema_files",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
                 standard_params={
@@ -472,13 +488,8 @@ class ROUTER_regulators_sec(Container):
     @validate
     def sic_search(
         self,
-        query: Annotated[str, OpenBBField(description="Search query.")] = "",
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        query: Annotated[str, OpenBBField(description='Search query.')] = '',
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Search for Industry Titles, Reporting Office, and SIC Codes. An empty query string returns all results.
@@ -529,7 +540,7 @@ class ROUTER_regulators_sec(Container):
                     "provider": self._get_provider(
                         provider,
                         "regulators.sec.sic_search",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
                 standard_params={
@@ -543,19 +554,9 @@ class ROUTER_regulators_sec(Container):
     @validate
     def symbol_map(
         self,
-        query: Annotated[str, OpenBBField(description="Search query.")],
-        use_cache: Annotated[
-            Optional[bool],
-            OpenBBField(
-                description="Whether or not to use cache. If True, cache will store for seven days."
-            ),
-        ] = True,
-        provider: Annotated[
-            Optional[Literal["sec"]],
-            OpenBBField(
-                description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec."
-            ),
-        ] = None,
+        query: Annotated[str, OpenBBField(description='Search query.')],
+        use_cache: Annotated[Optional[bool], OpenBBField(description='Whether or not to use cache. If True, cache will store for seven days.')] = True,
+        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
         **kwargs
     ) -> OBBject:
         """Map a CIK number to a ticker symbol, leading 0s can be omitted or included.
@@ -601,7 +602,7 @@ class ROUTER_regulators_sec(Container):
                     "provider": self._get_provider(
                         provider,
                         "regulators.sec.symbol_map",
-                        ("sec",),
+                        ('sec',),
                     )
                 },
                 standard_params={

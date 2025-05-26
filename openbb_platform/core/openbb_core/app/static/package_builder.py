@@ -6,6 +6,7 @@ import inspect
 import re
 import shutil
 import sys
+from datetime import date, datetime
 from functools import partial
 from inspect import Parameter, _empty, isclass, signature
 from json import dumps, load
@@ -78,6 +79,16 @@ TAB = "    "
 def create_indent(n: int) -> str:
     """Create n indentation space."""
     return TAB * n
+
+
+class DateTimeEncoder(json.JSONEncoder):
+    """Custom JSON encoder for handling date and datetime objects."""
+
+    def default(self, obj: Any) -> Any:
+        """Convert date and datetime objects to ISO format strings."""
+        if isinstance(obj, (date, datetime)):
+            return obj.isoformat()
+        return super().default(obj)
 
 
 class PackageBuilder:
@@ -201,6 +212,7 @@ class PackageBuilder:
                 "routers": ReferenceGenerator.get_routers(self.route_map),
             },
             indent=4,
+            cls=DateTimeEncoder,
         )
         self._write(code=code, name="reference", extension="json", folder="assets")
 
