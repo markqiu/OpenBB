@@ -2,13 +2,15 @@
 
 import datetime
 from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_equity_price(Container):
@@ -138,12 +140,6 @@ class ROUTER_equity_price(Container):
             If true, the equity price represents an unfinished period (be it day, week, quarter, month, or year), meaning that the close price is the latest price available, not the official close price for the period (provider: intrinio)
         transactions : Optional[Annotated[int, Gt(gt=0)]]
             Number of transactions for the symbol in the time period. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.price.historical(symbol='AAPL', provider='fmp')
-        >>> obb.equity.price.historical(symbol='AAPL', interval='1d', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -168,6 +164,10 @@ class ROUTER_equity_price(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def nbbo(
         self,
         symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
@@ -239,12 +239,10 @@ class ROUTER_equity_price(Container):
             The nanosecond accuracy SIP Unix Timestamp. This is the timestamp of when the SIP received this quote from the exchange which produced it. (provider: polygon)
         trf_timestamp : Optional[datetime]
             The nanosecond accuracy TRF (Trade Reporting Facility) Unix Timestamp. This is the timestamp of when the trade reporting facility received this quote. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.price.nbbo(symbol='AAPL', provider='polygon')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/equity/price/nbbo",
@@ -330,11 +328,6 @@ class ROUTER_equity_price(Container):
             Ten-year return.
         max : Optional[float]
             Return from the beginning of the time series.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.price.performance(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -490,11 +483,6 @@ class ROUTER_equity_price(Container):
             Average daily trading volume in the last 10 days. (provider: yfinance)
         currency : Optional[str]
             Currency of the price. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.price.quote(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(

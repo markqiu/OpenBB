@@ -95,13 +95,6 @@ class ROUTER_equity_compare(Container):
             The display name of the fact or concept. (provider: sec)
         unit : Optional[str]
             The unit of measurement for the fact or concept. (provider: sec)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.compare.company_facts(provider='sec')
-        >>> obb.equity.compare.company_facts(provider='sec', fact='PaymentsForRepurchaseOfCommonStock', year=2023)
-        >>> obb.equity.compare.company_facts(provider='sec', symbol='NVDA,AAPL,AMZN,MSFT,GOOG,SMCI', fact='RevenueFromContractWithCustomerExcludingAssessedTax', year=2024)
         """  # noqa: E501
 
         return self._run(
@@ -162,11 +155,6 @@ class ROUTER_equity_compare(Container):
         -----------
         peers_list : list[str]
             A list of equity peers based on sector, exchange and market cap.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.compare.peers(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(

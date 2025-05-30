@@ -2,13 +2,15 @@
 
 import datetime
 from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_economy_survey(Container):
@@ -100,13 +102,6 @@ class ROUTER_economy_survey(Container):
             The title of the series.
         survey_name : Optional[str]
             The name of the survey.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.economy.survey.bls_search(provider='bls', category='cpi')
-        >>> # Use semi-colon to separate multiple queries as an & operator.
-        >>> obb.economy.survey.bls_search(provider='bls', category='cpi', query='seattle;gasoline')
         """  # noqa: E501
 
         return self._run(
@@ -129,6 +124,10 @@ class ROUTER_economy_survey(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def bls_series(
         self,
         symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): bls.")],
@@ -200,12 +199,10 @@ class ROUTER_economy_survey(Container):
             Latest value indicator. (provider: bls)
         footnotes : Optional[str]
             Footnotes accompanying the value. (provider: bls)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.economy.survey.bls_series(provider='bls', symbol='CES0000000001')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/economy/survey/bls_series",
@@ -229,6 +226,10 @@ class ROUTER_economy_survey(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def economic_conditions_chicago(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -315,12 +316,10 @@ class ROUTER_economy_survey(Container):
             Labor Costs Index.
         non_labor_costs : Optional[float]
             Non-Labor Costs Index.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.economy.survey.economic_conditions_chicago(provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/economy/survey/economic_conditions_chicago",
@@ -426,12 +425,6 @@ class ROUTER_economy_survey(Container):
             Percent of respondents reporting a decrease over the last month.
         percent_reporting_no_change : Optional[float]
             Percent of respondents reporting no change over the last month.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.economy.survey.manufacturing_outlook_ny(provider='fred')
-        >>> obb.economy.survey.manufacturing_outlook_ny(topic='hours_worked,new_orders', transform='pc1', provider='fred', seasonally_adjusted=True)
         """  # noqa: E501
 
         return self._run(
@@ -455,6 +448,10 @@ class ROUTER_economy_survey(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def manufacturing_outlook_texas(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -527,13 +524,10 @@ class ROUTER_economy_survey(Container):
             Percent of respondents reporting a decrease over the last month.
         percent_reporting_no_change : Optional[float]
             Percent of respondents reporting no change over the last month.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.economy.survey.manufacturing_outlook_texas(provider='fred')
-        >>> obb.economy.survey.manufacturing_outlook_texas(topic='business_outlook,new_orders', transform='pc1', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/economy/survey/manufacturing_outlook_texas",
@@ -556,6 +550,10 @@ class ROUTER_economy_survey(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def nonfarm_payrolls(
         self,
         date: Annotated[Union[datetime.date, str, None, list[Union[datetime.date, str, None]]], OpenBBField(description="A specific date to get data for. Default is the latest report. Multiple comma separated items allowed for provider(s): fred.")] = None,
@@ -605,13 +603,10 @@ class ROUTER_economy_survey(Container):
             The element_id of each child, as a comma-separated string. (provider: fred)
         level : Optional[int]
             The indentation level of the element. (provider: fred)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.economy.survey.nonfarm_payrolls(provider='fred')
-        >>> obb.economy.survey.nonfarm_payrolls(category='avg_hours', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/economy/survey/nonfarm_payrolls",
@@ -633,6 +628,10 @@ class ROUTER_economy_survey(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def sloos(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -690,13 +689,10 @@ class ROUTER_economy_survey(Container):
             Survey value.
         title : Optional[str]
             Survey title.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.economy.survey.sloos(provider='fred')
-        >>> obb.economy.survey.sloos(category='credit_card', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/economy/survey/sloos",
@@ -718,6 +714,10 @@ class ROUTER_economy_survey(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def university_of_michigan(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -790,12 +790,10 @@ class ROUTER_economy_survey(Container):
             Index of the results of the University of Michigan's monthly Survey of Consumers, which is used to estimate future spending and saving.  (1966:Q1=100).
         inflation_expectation : Optional[float]
             Median expected price change next 12 months, Surveys of Consumers.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.economy.survey.university_of_michigan(provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/economy/survey/university_of_michigan",

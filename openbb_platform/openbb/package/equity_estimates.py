@@ -1,25 +1,31 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
 from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_equity_estimates(Container):
     """/equity/estimates
+    advanced_dcf
     analyst_search
     consensus
+    dcf
     forward_ebitda
     forward_eps
     forward_pe
     forward_sales
     historical
+    historical_rating
     price_target
+    rating
     """
 
     def __repr__(self) -> str:
@@ -27,6 +33,170 @@ class ROUTER_equity_estimates(Container):
 
     @exception_handler
     @validate
+    def advanced_dcf(
+        self,
+        symbol: Annotated[Optional[str], OpenBBField(description="Symbol to get data for.")] = None,
+        debt: Annotated[bool, OpenBBField(description="Take the debt level into account or not.")] = False,
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
+        **kwargs
+    ) -> OBBject:
+        """Get AdvancedDcf Data
+
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
+        symbol : Optional[str]
+            Symbol to get data for.
+        debt : bool
+            Take the debt level into account or not.
+
+        Returns
+        -------
+        OBBject
+            results : list[AdvancedDcf]
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
+
+        AdvancedDcf
+        -----------
+        year : Optional[int]
+            Year of the data.
+        symbol : Optional[str]
+            Symbol representing the entity requested in the data.
+        revenue : Optional[float]
+            Annual revenue of the company, i.e., total sales.
+        revenue_percentage : Optional[float]
+            Revenue percentage, typically relative to industry or overall financials.
+        capital_expenditure : Optional[float]
+            Capital expenditure, i.e., spending on fixed assets or asset expansion.
+        capital_expenditure_percentage : Optional[float]
+            Capital expenditure percentage, usually relative to revenue.
+        price : Optional[float]
+            Stock price.
+        beta : Optional[float]
+            Stock beta, indicating volatility relative to the market.
+        diluted_shares_outstanding : Optional[float]
+            Diluted shares outstanding, i.e., total shares after all potential issuances.
+        cost_of_debt : Optional[float]
+            Cost of debt, or the average interest rate on the company's borrowing.
+        tax_rate : Optional[float]
+            Corporate income tax rate.
+        after_tax_cost_of_debt : Optional[float]
+            After-tax cost of debt, actual debt cost after tax deductions.
+        risk_free_rate : Optional[float]
+            Risk-free rate, typically represented by government bond yields.
+        market_risk_premium : Optional[float]
+            Market risk premium, i.e., the difference between market returns and the risk-free rate.
+        cost_of_equity : Optional[float]
+            Cost of equity, or the expected return rate by investors.
+        total_debt : Optional[float]
+            Total debt of the company.
+        total_equity : Optional[float]
+            Total equity or shareholder assets of the company.
+        total_capital : Optional[float]
+            Total capital, or the sum of debt and equity.
+        debt_weighting : Optional[float]
+            Debt weighting in capital structure, in percentage.
+        equity_weighting : Optional[float]
+            Equity weighting in capital structure, in percentage.
+        wacc : Optional[float]
+            Weighted average cost of capital, or the company's overall financing cost.
+        long_term_growth_rate : Optional[float]
+            Long-term growth rate forecast for the company.
+        terminal_value : Optional[float]
+            Terminal value, an estimate of future cash flows in DCF models.
+        present_terminal_value : Optional[float]
+            Present terminal value, i.e., the discounted value of terminal value.
+        enterprise_value : Optional[float]
+            Enterprise value, or the total value of the company excluding cash and debt.
+        net_debt : Optional[float]
+            Net debt, or total debt minus cash.
+        equity_value : Optional[float]
+            Equity value of the company, or enterprise value minus net debt.
+        equity_value_per_share : Optional[float]
+            Equity value per share, calculated as equity value divided by shares outstanding.
+        free_cash_flow_t1 : Optional[float]
+            Projected free cash flow for the first year.
+        ebitda : Optional[float]
+            Earnings Before Interest, Taxes, Depreciation, and Amortization, indicating company profitability. (provider: fmp)
+        ebitda_percentage : Optional[float]
+            Percentage of EBITDA relative to revenue. (provider: fmp)
+        ebit : Optional[float]
+            Earnings Before Interest and Taxes, representing operating profit after costs. (provider: fmp)
+        ebit_percentage : Optional[float]
+            Percentage of EBIT relative to revenue. (provider: fmp)
+        depreciation : Optional[float]
+            Depreciation and amortization expenses spread over asset lifespan. (provider: fmp)
+        depreciation_percentage : Optional[float]
+            Percentage of depreciation relative to revenue. (provider: fmp)
+        total_cash : Optional[float]
+            Total cash held by the company. (provider: fmp)
+        total_cash_percentage : Optional[float]
+            Percentage of total cash relative to revenue. (provider: fmp)
+        receivables : Optional[float]
+            Accounts receivable, representing amounts owed from sales. (provider: fmp)
+        receivables_percentage : Optional[float]
+            Percentage of receivables relative to revenue. (provider: fmp)
+        inventories : Optional[float]
+            Inventory, including raw materials, work-in-progress, and finished goods not yet sold. (provider: fmp)
+        inventories_percentage : Optional[float]
+            Percentage of inventory relative to revenue. (provider: fmp)
+        payable : Optional[float]
+            Accounts payable, representing amounts owed for purchased goods or services. (provider: fmp)
+        payable_percentage : Optional[float]
+            Percentage of payable relative to revenue. (provider: fmp)
+        tax_rate_cash : Optional[float]
+            Cash tax rate, representing the effective tax rate paid by the company. (provider: fmp)
+        ebiat : Optional[float]
+            Earnings Before Interest After Taxes, representing operating earnings after tax. (provider: fmp)
+        ufcf : Optional[float]
+            Unlevered Free Cash Flow, representing cash flow after capex and working capital changes. (provider: fmp)
+        sum_pv_ufcf : Optional[float]
+            Total present value of future unlevered free cash flows. (provider: fmp)
+        operating_cash_flow : Optional[float]
+            Operating cash flow generated from core business activities. (provider: fmp)
+        pv_lfcf : Optional[float]
+            Present value of levered free cash flow, discounted at appropriate rate. (provider: fmp)
+        sum_pv_lfcf : Optional[float]
+            Total present value of future levered cash flows. (provider: fmp)
+        free_cash_flow : Optional[float]
+            Levered Free Cash Flow, representing cash flow after interest and capex. (provider: fmp)
+        operating_cash_flow_percentage : Optional[float]
+            Percentage of operating cash flow relative to revenue. (provider: fmp)
+        """  # noqa: E501
+
+        return self._run(
+            "/equity/estimates/advanced_dcf",
+            **filter_inputs(
+                provider_choices={
+                    "provider": self._get_provider(
+                        provider,
+                        "equity.estimates.advanced_dcf",
+                        ("fmp",),
+                    )
+                },
+                standard_params={
+                    "symbol": symbol,
+                    "debt": debt,
+                },
+                extra_params=kwargs,
+            )
+        )
+
+    @exception_handler
+    @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def analyst_search(
         self,
         analyst_name: Annotated[Union[str, None, list[Optional[str]]], OpenBBField(description="Analyst names to return. Omitting will return all available analysts. Multiple comma separated items allowed for provider(s): benzinga.")] = None,
@@ -183,13 +353,10 @@ class ROUTER_equity_estimates(Container):
             A weighted average smart score over the last 3 years. (provider: benzinga)
         success_rate_3y : Optional[float]
             The percentage (normalized) of gain/loss ratings that resulted in a gain over the last 3 years (provider: benzinga)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.estimates.analyst_search(provider='benzinga')
-        >>> obb.equity.estimates.analyst_search(firm_name='Wedbush', provider='benzinga')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/equity/estimates/analyst_search",
@@ -279,12 +446,6 @@ class ROUTER_equity_estimates(Container):
             Current price of the stock. (provider: yfinance)
         currency : Optional[str]
             Currency the stock is priced in. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.estimates.consensus(symbol='AAPL', provider='fmp')
-        >>> obb.equity.estimates.consensus(symbol='AAPL,MSFT', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -302,6 +463,66 @@ class ROUTER_equity_estimates(Container):
                 },
                 extra_params=kwargs,
                 info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "intrinio": {"multiple_items_allowed": True, "choices": None}, "yfinance": {"multiple_items_allowed": True, "choices": None}}},
+            )
+        )
+
+    @exception_handler
+    @validate
+    def dcf(
+        self,
+        symbol: Annotated[Optional[str], OpenBBField(description="Symbol to get data for.")] = None,
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
+        **kwargs
+    ) -> OBBject:
+        """Get Discounted cashflow
+
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
+        symbol : Optional[str]
+            Symbol to get data for.
+
+        Returns
+        -------
+        OBBject
+            results : list[Dcf]
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
+
+        Dcf
+        ---
+        symbol : Optional[str]
+            Symbol representing the entity requested in the data.
+        date : date
+            The date of the data.
+        dcf : Optional[float]
+            Discounted Cash Flow value.
+        stock_price : Optional[float]
+            Stock Price. (provider: fmp)
+        """  # noqa: E501
+
+        return self._run(
+            "/equity/estimates/dcf",
+            **filter_inputs(
+                provider_choices={
+                    "provider": self._get_provider(
+                        provider,
+                        "equity.estimates.dcf",
+                        ("fmp",),
+                    )
+                },
+                standard_params={
+                    "symbol": symbol,
+                },
+                extra_params=kwargs,
             )
         )
 
@@ -376,13 +597,6 @@ class ROUTER_equity_estimates(Container):
             Number of analysts providing estimates for the period.
         conensus_type : Optional[Literal['ebitda', 'ebit', 'enterprise_value', 'cash_flow_per_share', 'pretax_income']]
             The type of estimate. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.estimates.forward_ebitda(provider='intrinio')
-        >>> obb.equity.estimates.forward_ebitda(symbol='AAPL', fiscal_period='annual', provider='intrinio')
-        >>> obb.equity.estimates.forward_ebitda(symbol='AAPL,MSFT', fiscal_period='quarter', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -485,12 +699,6 @@ class ROUTER_equity_estimates(Container):
             The mean estimate for the period two months ago. (provider: intrinio)
         mean_3m : Optional[float]
             The mean estimate for the period three months ago. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.estimates.forward_eps(symbol='AAPL', provider='intrinio')
-        >>> obb.equity.estimates.forward_eps(fiscal_year=2025, fiscal_period='fy', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -513,6 +721,10 @@ class ROUTER_equity_estimates(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def forward_pe(
         self,
         symbol: Annotated[Union[str, None, list[Optional[str]]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): intrinio.")] = None,
@@ -564,13 +776,10 @@ class ROUTER_equity_estimates(Container):
             The latest trailing twelve months earnings per share. (provider: intrinio)
         last_updated : Optional[date]
             The date the data was last updated. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.estimates.forward_pe(provider='intrinio')
-        >>> obb.equity.estimates.forward_pe(symbol='AAPL,MSFT,GOOG', provider='intrinio')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/equity/estimates/forward_pe",
@@ -675,12 +884,6 @@ class ROUTER_equity_estimates(Container):
             Number of revisions down in the last 3 months. (provider: intrinio)
         revisions_3m_change_percent : Optional[float]
             The analyst revisions percent change in estimate for the period of 3 months. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.estimates.forward_sales(symbol='AAPL', provider='intrinio')
-        >>> obb.equity.estimates.forward_sales(fiscal_year=2025, fiscal_period='fy', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -782,11 +985,6 @@ class ROUTER_equity_estimates(Container):
             Number of analysts who estimated revenue.
         number_analysts_estimated_eps : Optional[int]
             Number of analysts who estimated EPS.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.estimates.historical(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -804,6 +1002,92 @@ class ROUTER_equity_estimates(Container):
                 },
                 extra_params=kwargs,
                 info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}}},
+            )
+        )
+
+    @exception_handler
+    @validate
+    def historical_rating(
+        self,
+        symbol: Annotated[Optional[str], OpenBBField(description="Symbol to get data for.")] = None,
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
+        **kwargs
+    ) -> OBBject:
+        """Get Historical Rating Data
+
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
+        symbol : Optional[str]
+            Symbol to get data for.
+
+        Returns
+        -------
+        OBBject
+            results : list[HistoricalRating]
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
+
+        HistoricalRating
+        ----------------
+        symbol : Optional[str]
+            Symbol representing the entity requested in the data.
+        date : Optional[str]
+            The date of the data.
+        rating : Optional[str]
+            Overall rating of the stock.
+        rating_score : Optional[int]
+            Overall rating score.
+        rating_recommendation : Optional[str]
+            Overall recommendation based on the rating.
+        rating_details_dcf_score : Optional[int]
+            Score based on DCF analysis.
+        rating_details_dcf_recommendation : Optional[str]
+            Recommendation based on DCF score.
+        rating_details_roe_score : Optional[int]
+            Score based on ROE analysis.
+        rating_details_roe_recommendation : Optional[str]
+            Recommendation based on ROE score.
+        rating_details_roa_score : Optional[int]
+            Score based on ROA analysis.
+        rating_details_roa_recommendation : Optional[str]
+            Recommendation based on ROA score.
+        rating_details_de_score : Optional[int]
+            Score based on DE (Debt to Equity) analysis.
+        rating_details_de_recommendation : Optional[str]
+            Recommendation based on DE score.
+        rating_details_pe_score : Optional[int]
+            Score based on PE (Price to Earnings) analysis.
+        rating_details_pe_recommendation : Optional[str]
+            Recommendation based on PE score.
+        rating_details_pb_score : Optional[int]
+            Score based on PB (Price to Book) analysis.
+        rating_details_pb_recommendation : Optional[str]
+            Recommendation based on PB score.
+        """  # noqa: E501
+
+        return self._run(
+            "/equity/estimates/historical_rating",
+            **filter_inputs(
+                provider_choices={
+                    "provider": self._get_provider(
+                        provider,
+                        "equity.estimates.historical_rating",
+                        ("fmp",),
+                    )
+                },
+                standard_params={
+                    "symbol": symbol,
+                },
+                extra_params=kwargs,
             )
         )
 
@@ -921,13 +1205,6 @@ class ROUTER_equity_estimates(Container):
             News publisher of the price target. (provider: fmp)
         news_base_url : Optional[str]
             News base URL of the price target. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.estimates.price_target(provider='benzinga')
-        >>> # Get price targets for Microsoft using 'benzinga' as provider.
-        >>> obb.equity.estimates.price_target(start_date='2020-01-01', end_date='2024-02-16', limit=10, symbol='msft', provider='benzinga', action='downgrades')
         """  # noqa: E501
 
         return self._run(
@@ -946,5 +1223,91 @@ class ROUTER_equity_estimates(Container):
                 },
                 extra_params=kwargs,
                 info={"symbol": {"benzinga": {"multiple_items_allowed": True, "choices": None}, "fmp": {"multiple_items_allowed": True, "choices": None}}, "action": {"benzinga": {"multiple_items_allowed": False, "choices": ["downgrades", "maintains", "reinstates", "reiterates", "upgrades", "assumes", "initiates", "terminates", "removes", "suspends", "firm_dissolved"]}}, "analyst_ids": {"benzinga": {"multiple_items_allowed": True, "choices": None}}, "firm_ids": {"benzinga": {"multiple_items_allowed": True, "choices": None}}, "fields": {"benzinga": {"multiple_items_allowed": True, "choices": None}}},
+            )
+        )
+
+    @exception_handler
+    @validate
+    def rating(
+        self,
+        symbol: Annotated[Optional[str], OpenBBField(description="Symbol to get data for.")] = None,
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
+        **kwargs
+    ) -> OBBject:
+        """Get Rating Data
+
+        Parameters
+        ----------
+        provider : str
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
+        symbol : Optional[str]
+            Symbol to get data for.
+
+        Returns
+        -------
+        OBBject
+            results : list[Rating]
+                Serializable results.
+            provider : Optional[str]
+                Provider name.
+            warnings : Optional[list[Warning_]]
+                list of warnings.
+            chart : Optional[Chart]
+                Chart object.
+            extra : Dict[str, Any]
+                Extra info.
+
+        Rating
+        ------
+        symbol : Optional[str]
+            Symbol representing the entity requested in the data.
+        date : Optional[str]
+            The date of the data.
+        rating : Optional[str]
+            Overall rating of the stock.
+        rating_score : Optional[int]
+            Overall rating score.
+        rating_recommendation : Optional[str]
+            Overall recommendation based on the rating.
+        rating_details_dcf_score : Optional[int]
+            Score based on DCF analysis.
+        rating_details_dcf_recommendation : Optional[str]
+            Recommendation based on DCF score.
+        rating_details_roe_score : Optional[int]
+            Score based on ROE analysis.
+        rating_details_roe_recommendation : Optional[str]
+            Recommendation based on ROE score.
+        rating_details_roa_score : Optional[int]
+            Score based on ROA analysis.
+        rating_details_roa_recommendation : Optional[str]
+            Recommendation based on ROA score.
+        rating_details_de_score : Optional[int]
+            Score based on DE (Debt to Equity) analysis.
+        rating_details_de_recommendation : Optional[str]
+            Recommendation based on DE score.
+        rating_details_pe_score : Optional[int]
+            Score based on PE (Price to Earnings) analysis.
+        rating_details_pe_recommendation : Optional[str]
+            Recommendation based on PE score.
+        rating_details_pb_score : Optional[int]
+            Score based on PB (Price to Book) analysis.
+        rating_details_pb_recommendation : Optional[str]
+            Recommendation based on PB score.
+        """  # noqa: E501
+
+        return self._run(
+            "/equity/estimates/rating",
+            **filter_inputs(
+                provider_choices={
+                    "provider": self._get_provider(
+                        provider,
+                        "equity.estimates.rating",
+                        ("fmp",),
+                    )
+                },
+                standard_params={
+                    "symbol": symbol,
+                },
+                extra_params=kwargs,
             )
         )

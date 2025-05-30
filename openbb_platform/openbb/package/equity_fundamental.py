@@ -362,12 +362,6 @@ class ROUTER_equity_fundamental(Container):
             Total stock holders equity (provider: polygon)
         total_equity : Optional[float]
             Total equity (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.balance(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.balance(symbol='AAPL', period='annual', limit=5, provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -513,12 +507,6 @@ class ROUTER_equity_fundamental(Container):
             Growth rate of total debt. (provider: fmp)
         growth_net_debt : Optional[float]
             Growth rate of net debt. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.balance_growth(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.balance_growth(symbol='AAPL', limit=10, provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -772,12 +760,6 @@ class ROUTER_equity_fundamental(Container):
             Exchange gains losses. (provider: polygon)
         net_cash_flow : Optional[float]
             Net cash flow. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.cash(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.cash(symbol='AAPL', period='annual', limit=5, provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -905,12 +887,6 @@ class ROUTER_equity_fundamental(Container):
             Growth rate of capital expenditure. (provider: fmp)
         growth_free_cash_flow : Optional[float]
             Growth rate of free cash flow. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.cash_growth(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.cash_growth(symbol='AAPL', limit=10, provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -993,11 +969,6 @@ class ROUTER_equity_fundamental(Container):
             The currency in which the dividend is paid. (provider: intrinio)
         split_ratio : Optional[float]
             The ratio of the stock split, if a stock split occurred. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.dividends(symbol='AAPL', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -1070,11 +1041,6 @@ class ROUTER_equity_fundamental(Container):
             Count of employees of the company.
         source : str
             Source URL which retrieves this data for the company.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.employee_count(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -1102,7 +1068,13 @@ class ROUTER_equity_fundamental(Container):
         provider: Annotated[Optional[Literal["fmp", "intrinio", "sec"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, sec.")] = None,
         **kwargs
     ) -> OBBject:
-        """Get public company filings.
+        """Get the URLs to SEC filings reported to EDGAR database, such as 10-K, 10-Q, 8-K, and more.
+
+        SEC filings include Form 10-K, Form 10-Q, Form 8-K, the proxy statement, Forms 3, 4, and 5, Schedule 13, Form 114,
+        Foreign Investment Disclosures and others. The annual 10-K report is required to be
+        filed annually and includes the company's financial statements, management discussion and analysis,
+        and audited financial statements.
+        
 
         Parameters
         ----------
@@ -1196,12 +1168,6 @@ class ROUTER_equity_fundamental(Container):
             The URL to the complete filing submission. (provider: sec)
         filing_detail_url : Optional[str]
             The URL to the filing details. (provider: sec)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.filings(provider='fmp')
-        >>> obb.equity.fundamental.filings(limit=100, provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -1284,11 +1250,6 @@ class ROUTER_equity_fundamental(Container):
             Tag name for the fetched data.
         value : Optional[float]
             The value of the data.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.historical_attributes(symbol='AAPL', tag='ebitda', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -1371,11 +1332,6 @@ class ROUTER_equity_fundamental(Container):
             The date when the data was last updated. (provider: fmp)
         period_ending : Optional[date]
             The fiscal period end date. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.historical_eps(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -1436,11 +1392,6 @@ class ROUTER_equity_fundamental(Container):
             Denominator of the split.
         split_ratio : Optional[str]
             Split ratio.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.historical_splits(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -1786,12 +1737,6 @@ class ROUTER_equity_fundamental(Container):
             Common Stock Dividends (provider: polygon)
         preferred_stock_dividends_and_other_adjustments : Optional[float]
             Preferred stock dividends and other adjustments (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.income(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.income(symbol='AAPL', period='annual', limit=5, provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -1911,12 +1856,6 @@ class ROUTER_equity_fundamental(Container):
             Growth rate of weighted average shares outstanding. (provider: fmp)
         growth_weighted_average_diluted_shares_outstanding : Optional[float]
             Growth rate of diluted weighted average shares outstanding. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.income_growth(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.income_growth(symbol='AAPL', limit=10, period='annual', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -1980,11 +1919,6 @@ class ROUTER_equity_fundamental(Container):
             Tag name for the fetched data.
         value : Optional[Union[str, float]]
             The value of the data.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.latest_attributes(symbol='AAPL', tag='ceo', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -2059,11 +1993,6 @@ class ROUTER_equity_fundamental(Container):
             Value of shares not exercised. (provider: yfinance)
         fiscal_year : Optional[int]
             Fiscal year of the pay. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.management(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -2148,11 +2077,6 @@ class ROUTER_equity_fundamental(Container):
             Date the filing was accepted. (provider: fmp)
         url : Optional[str]
             URL to the filing data. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.management_compensation(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -2234,17 +2158,6 @@ class ROUTER_equity_fundamental(Container):
             The content of the management discussion and analysis.
         url : Optional[str]
             The URL of the filing from which the data was extracted. (provider: sec)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.management_discussion_analysis(symbol='AAPL', provider='sec')
-        >>> # Get the Management Discussion & Analysis section by calendar year and period.
-        >>> obb.equity.fundamental.management_discussion_analysis(symbol='AAPL', calendar_year=2020, calendar_period='Q4', provider='sec')
-        >>> # Setting 'include_tables' to True will attempt to extract all tables in valid Markdown.
-        >>> obb.equity.fundamental.management_discussion_analysis(symbol='AAPL', calendar_year=2020, calendar_period='Q4', provider='sec', include_tables=True)
-        >>> # Setting 'raw_html' to True will bypass extraction and return the raw HTML file, as is. Use this for custom parsing or to access the entire HTML filing.
-        >>> obb.equity.fundamental.management_discussion_analysis(symbol='AAPL', calendar_year=2020, calendar_period='Q4', provider='sec', raw_html=True)
         """  # noqa: E501
 
         return self._run(
@@ -2533,12 +2446,6 @@ class ROUTER_equity_fundamental(Container):
             One-year price return, as a normalized percent. (provider: yfinance)
         currency : Optional[str]
             Currency in which the data is presented. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.metrics(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.metrics(symbol='AAPL', period='annual', limit=100, provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -2715,11 +2622,6 @@ class ROUTER_equity_fundamental(Container):
             Return on equity calculated as trailing twelve months.
         capex_per_share_ttm : Optional[float]
             Capital expenditures per share calculated as trailing twelve months.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.multiples(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -2900,12 +2802,6 @@ class ROUTER_equity_fundamental(Container):
             Enterprise value multiple. (provider: fmp)
         price_fair_value : Optional[float]
             Price fair value. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.ratios(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.ratios(symbol='AAPL', period='annual', limit=12, provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -2977,17 +2873,6 @@ class ROUTER_equity_fundamental(Container):
             The fiscal period of the report (e.g. FY, Q1, etc.).
         fiscal_year : Optional[int]
             The fiscal year of the fiscal period.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.reported_financials(symbol='AAPL', provider='intrinio')
-        >>> # Get AAPL balance sheet with a limit of 10 items.
-        >>> obb.equity.fundamental.reported_financials(symbol='AAPL', period='annual', statement_type='balance', limit=10, provider='intrinio')
-        >>> # Get reported income statement
-        >>> obb.equity.fundamental.reported_financials(symbol='AAPL', statement_type='income', provider='intrinio')
-        >>> # Get reported cash flow statement
-        >>> obb.equity.fundamental.reported_financials(symbol='AAPL', statement_type='cash', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -3057,12 +2942,6 @@ class ROUTER_equity_fundamental(Container):
             The region represented by the revenue data.
         revenue : Union[int, float]
             The total revenue attributed to the region.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.revenue_per_geography(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.revenue_per_geography(symbol='AAPL', period='quarter', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -3130,12 +3009,6 @@ class ROUTER_equity_fundamental(Container):
             The business line represented by the revenue data.
         revenue : Union[int, float]
             The total revenue attributed to the business line.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.revenue_per_segment(symbol='AAPL', provider='fmp')
-        >>> obb.equity.fundamental.revenue_per_segment(symbol='AAPL', period='quarter', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -3214,11 +3087,6 @@ class ROUTER_equity_fundamental(Container):
             Type of the financial attribute.
         unit : Optional[str]
             Unit of the financial attribute.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.search_attributes(query='ebitda', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -3279,12 +3147,6 @@ class ROUTER_equity_fundamental(Container):
             The date of the data.
         trailing_dividend_yield : float
             Trailing dividend yield.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.trailing_dividend_yield(symbol='AAPL', provider='tiingo')
-        >>> obb.equity.fundamental.trailing_dividend_yield(symbol='AAPL', limit=252, provider='tiingo')
         """  # noqa: E501
 
         return self._run(
@@ -3351,11 +3213,6 @@ class ROUTER_equity_fundamental(Container):
             The date of the data.
         content : str
             Content of the earnings call transcript.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.transcript(symbol='AAPL', year='2020', provider='fmp')
         """  # noqa: E501
 
         return self._run(

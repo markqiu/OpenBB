@@ -62,11 +62,6 @@ class ROUTER_etf(Container):
         ------------
         country : str
             The country of the exposure.  Corresponding values are normalized percentage points.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.etf.countries(symbol='VT', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -130,13 +125,6 @@ class ROUTER_etf(Container):
             The weight of the equity in the ETF, as a normalized percent.
         market_value : Optional[Union[int, float]]
             The market value of the equity position in the ETF.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.etf.equity_exposure(symbol='MSFT', provider='fmp')
-        >>> # This function accepts multiple tickers.
-        >>> obb.etf.equity_exposure(symbol='MSFT,AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -273,14 +261,6 @@ class ROUTER_etf(Container):
             If true, the equity price represents an unfinished period (be it day, week, quarter, month, or year), meaning that the close price is the latest price available, not the official close price for the period (provider: intrinio)
         transactions : Optional[Annotated[int, Gt(gt=0)]]
             Number of transactions for the symbol in the time period. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.etf.historical(symbol='SPY', provider='fmp')
-        >>> obb.etf.historical(symbol='SPY', provider='yfinance')
-        >>> # This function accepts multiple tickers.
-        >>> obb.etf.historical(symbol='SPY,IWM,QQQ,DJIA', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -526,15 +506,6 @@ class ROUTER_etf(Container):
             The currency of the derivative's notional amount. (provider: sec)
         unrealized_gain : Optional[float]
             The unrealized gain or loss on the derivative. (provider: sec)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.etf.holdings(symbol='XLK', provider='fmp')
-        >>> # Including a date (FMP, SEC) will return the holdings as per NPORT-P filings.
-        >>> obb.etf.holdings(symbol='XLK', date='2022-03-31', provider='fmp')
-        >>> # The same data can be returned from the SEC directly.
-        >>> obb.etf.holdings(symbol='XLK', date='2022-03-31', provider='sec')
         """  # noqa: E501
 
         return self._run(
@@ -591,11 +562,6 @@ class ROUTER_etf(Container):
         ---------------
         date : date
             The date of the data.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.etf.holdings_date(symbol='XLK', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -964,13 +930,6 @@ class ROUTER_etf(Container):
             The trading volume of the most recent trading session. (provider: yfinance)
         prev_close : Optional[float]
             The previous closing price. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.etf.info(symbol='SPY', provider='fmp')
-        >>> # This function accepts multiple tickers.
-        >>> obb.etf.info(symbol='SPY,IWM,QQQ,DJIA', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -1092,12 +1051,6 @@ class ROUTER_etf(Container):
             The number of shares outstanding. (provider: intrinio)
         updated : Optional[date]
             The date of the data. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.etf.price_performance(symbol='QQQ', provider='fmp')
-        >>> obb.etf.price_performance(symbol='SPY,QQQ,IWM,DJIA', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -1195,14 +1148,6 @@ class ROUTER_etf(Container):
             The Stock Exchange Daily Official list. (provider: intrinio)
         intrinio_id : Optional[str]
             The unique Intrinio ID for the security. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> # An empty query returns the full list of ETFs from the provider.
-        >>> obb.etf.search(provider='fmp')
-        >>> # The query will return results from text-based fields containing the term.
-        >>> obb.etf.search(query='commercial real estate', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -1260,11 +1205,6 @@ class ROUTER_etf(Container):
             Sector of exposure.
         weight : Optional[float]
             Exposure of the ETF to the sector in normalized percentage points.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.etf.sectors(symbol='SPY', provider='fmp')
         """  # noqa: E501
 
         return self._run(

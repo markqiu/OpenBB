@@ -114,12 +114,6 @@ class ROUTER_equity_discovery(Container):
             Most recent earnings date. (provider: yfinance)
         currency : Optional[str]
             Currency of the price data. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.active(provider='yfinance')
-        >>> obb.equity.discovery.active(sort='desc', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -226,12 +220,6 @@ class ROUTER_equity_discovery(Container):
             Most recent earnings date. (provider: yfinance)
         currency : Optional[str]
             Currency of the price data. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.aggressive_small_caps(provider='yfinance')
-        >>> obb.equity.discovery.aggressive_small_caps(sort='desc', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -313,13 +301,6 @@ class ROUTER_equity_discovery(Container):
             The form type of the filing
         link : str
             URL to the filing page on the SEC site.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.filings(provider='fmp')
-        >>> # Get filings for the year 2023, limited to 100 results
-        >>> obb.equity.discovery.filings(start_date='2023-01-01', end_date='2023-12-31', limit=100, provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -429,12 +410,6 @@ class ROUTER_equity_discovery(Container):
             Most recent earnings date. (provider: yfinance)
         currency : Optional[str]
             Currency of the price data. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.gainers(provider='yfinance')
-        >>> obb.equity.discovery.gainers(sort='desc', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -541,12 +516,6 @@ class ROUTER_equity_discovery(Container):
             Most recent earnings date. (provider: yfinance)
         currency : Optional[str]
             Currency of the price data. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.growth_tech(provider='yfinance')
-        >>> obb.equity.discovery.growth_tech(sort='desc', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -628,12 +597,6 @@ class ROUTER_equity_discovery(Container):
             URL to the MetaLinks.json file, if available. (provider: sec)
         financial_report : Optional[str]
             URL to the Financial_Report.xlsx file, if available. (provider: sec)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.latest_financial_reports(provider='sec')
-        >>> obb.equity.discovery.latest_financial_reports(provider='sec', date='2024-09-30')
         """  # noqa: E501
 
         return self._run(
@@ -740,12 +703,6 @@ class ROUTER_equity_discovery(Container):
             Most recent earnings date. (provider: yfinance)
         currency : Optional[str]
             Currency of the price data. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.losers(provider='yfinance')
-        >>> obb.equity.discovery.losers(sort='desc', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -852,12 +809,6 @@ class ROUTER_equity_discovery(Container):
             Most recent earnings date. (provider: yfinance)
         currency : Optional[str]
             Currency of the price data. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.undervalued_growth(provider='yfinance')
-        >>> obb.equity.discovery.undervalued_growth(sort='desc', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -964,12 +915,6 @@ class ROUTER_equity_discovery(Container):
             Most recent earnings date. (provider: yfinance)
         currency : Optional[str]
             Currency of the price data. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.discovery.undervalued_large_caps(provider='yfinance')
-        >>> obb.equity.discovery.undervalued_large_caps(sort='desc', provider='yfinance')
         """  # noqa: E501
 
         return self._run(

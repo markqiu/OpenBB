@@ -2,13 +2,15 @@
 
 import datetime
 from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_fixedincome_government(Container):
@@ -23,6 +25,10 @@ class ROUTER_fixedincome_government(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def tips_yields(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -104,13 +110,10 @@ class ROUTER_fixedincome_government(Container):
             The name of the security.
         value : Optional[float]
             The yield value.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.government.tips_yields(provider='fred')
-        >>> obb.fixedincome.government.tips_yields(maturity='10', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/government/tips_yields",
@@ -194,11 +197,6 @@ class ROUTER_fixedincome_government(Container):
             20 year Treasury rate.
         year_30 : Optional[float]
             30 year Treasury rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.government.treasury_rates(provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -262,14 +260,6 @@ class ROUTER_fixedincome_government(Container):
             The date of the data.
         maturity : str
             Maturity length of the security.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.government.yield_curve(provider='federal_reserve')
-        >>> obb.fixedincome.government.yield_curve(date='2023-05-01,2024-05-01', provider='fmp')
-        >>> obb.fixedincome.government.yield_curve(date='2023-05-01', country='united_kingdom', provider='econdb')
-        >>> obb.fixedincome.government.yield_curve(provider='fred', yield_curve_type='real', date='2023-05-01,2024-05-01')
         """  # noqa: E501
 
         return self._run(

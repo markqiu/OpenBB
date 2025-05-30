@@ -113,11 +113,6 @@ class ROUTER_equity(Container):
             Symbol representing the entity requested in the data.
         market_cap : Union[int, float]
             Market capitalization of the security.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.historical_market_cap(provider='fmp', symbol='AAPL')
         """  # noqa: E501
 
         return self._run(
@@ -270,11 +265,6 @@ class ROUTER_equity(Container):
             The last trade condition codes. (provider: polygon)
         last_trade_exchange : Optional[int]
             The last trade exchange ID code. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.market_snapshots(provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -462,11 +452,6 @@ class ROUTER_equity(Container):
             The reported number of shares short. (provider: yfinance)
         dividend_yield : Optional[float]
             The dividend yield of the asset, as a normalized percent. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.profile(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -620,11 +605,6 @@ class ROUTER_equity(Container):
             Most recent earnings date. (provider: yfinance)
         currency : Optional[str]
             Currency of the price data. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.screener(provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -699,11 +679,6 @@ class ROUTER_equity(Container):
             The Legal Entity Identifier (LEI) of the company. (provider: intrinio)
         intrinio_id : Optional[str]
             The Intrinio ID of the company. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.search(provider='intrinio')
         """  # noqa: E501
 
         return self._run(

@@ -27,6 +27,10 @@ class ROUTER_fixedincome_corporate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def commercial_paper(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -120,13 +124,10 @@ class ROUTER_fixedincome_corporate(Container):
             Title of the series.
         asset_type : Optional[Literal['asset_backed', 'financial', 'nonfinancial', 'a2p2']]
             The category of asset. (provider: fred)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.corporate.commercial_paper(provider='fred')
-        >>> obb.fixedincome.corporate.commercial_paper(category='all', maturity='15d', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/corporate/commercial_paper",
@@ -149,6 +150,10 @@ class ROUTER_fixedincome_corporate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def hqm(
         self,
         date: Annotated[Union[datetime.date, str, None, list[Union[datetime.date, str, None]]], OpenBBField(description="A specific date to get data for. Multiple comma separated items allowed for provider(s): fred.")] = None,
@@ -194,13 +199,10 @@ class ROUTER_fixedincome_corporate(Container):
             Interest rate.
         maturity : str
             Maturity.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.corporate.hqm(provider='fred')
-        >>> obb.fixedincome.corporate.hqm(yield_curve='par', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/corporate/hqm",
@@ -282,12 +284,6 @@ class ROUTER_fixedincome_corporate(Container):
             The date of the data.
         rate : Optional[float]
             ICE BofA US Corporate Bond Indices Rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.corporate.ice_bofa(provider='fred')
-        >>> obb.fixedincome.corporate.ice_bofa(index_type='yield_to_worst', provider='fred')
         """  # noqa: E501
 
         simplefilter("always", DeprecationWarning)
@@ -367,12 +363,6 @@ class ROUTER_fixedincome_corporate(Container):
             The date of the data.
         rate : Optional[float]
             Moody Corporate Bond Index Rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.corporate.moody(provider='fred')
-        >>> obb.fixedincome.corporate.moody(index_type='baa', provider='fred')
         """  # noqa: E501
 
         simplefilter("always", DeprecationWarning)
@@ -399,6 +389,10 @@ class ROUTER_fixedincome_corporate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def spot_rates(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -450,13 +444,10 @@ class ROUTER_fixedincome_corporate(Container):
             The date of the data.
         rate : Optional[float]
             Spot Rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.corporate.spot_rates(provider='fred')
-        >>> obb.fixedincome.corporate.spot_rates(maturity='10,20,30,50', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/corporate/spot_rates",

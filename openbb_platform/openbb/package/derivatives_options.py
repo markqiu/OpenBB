@@ -1,13 +1,15 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
 from typing import Literal, Optional
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_derivatives_options(Container):
@@ -187,13 +189,6 @@ class ROUTER_derivatives_options(Container):
             Whether the option is in the money. (provider: yfinance)
         currency : list[Optional[str]]
             Currency of the option. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.derivatives.options.chains(symbol='AAPL', provider='intrinio')
-        >>> # Use the "date" parameter to get the end-of-day-data for a specific date, where supported.
-        >>> obb.derivatives.options.chains(symbol='AAPL', date='2023-01-25', provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -216,6 +211,10 @@ class ROUTER_derivatives_options(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def snapshots(
         self,
         provider: Annotated[Optional[Literal["intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.")] = None,
@@ -302,12 +301,10 @@ class ROUTER_derivatives_options(Container):
             The highest ask price. (provider: intrinio)
         ask_low : list[Optional[float]]
             The lowest ask price. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.derivatives.options.snapshots(provider='intrinio')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/derivatives/options/snapshots",
@@ -327,6 +324,10 @@ class ROUTER_derivatives_options(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def unusual(
         self,
         symbol: Annotated[Optional[str], OpenBBField(description="Symbol to get data for. (the underlying symbol)")] = None,
@@ -396,14 +397,10 @@ class ROUTER_derivatives_options(Container):
             The total number of contracts involved in a single transaction. (provider: intrinio)
         total_value : Optional[Union[int, float]]
             The aggregated value of all option contract premiums included in the trade. (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.derivatives.options.unusual(symbol='TSLA', provider='intrinio')
-        >>> # Use the 'symbol' parameter to get the most recent activity for a specific symbol.
-        >>> obb.derivatives.options.unusual(symbol='TSLA', provider='intrinio')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/derivatives/options/unusual",

@@ -86,13 +86,6 @@ class ROUTER_index_price(Container):
             Change in the price from the previous close, as a normalized percent. (provider: fmp)
         transactions : Optional[Annotated[int, Gt(gt=0)]]
             Number of transactions for the symbol in the time period. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.index.price.historical(symbol='^GSPC', provider='fmp')
-        >>> # Not all providers have the same symbols.
-        >>> obb.index.price.historical(symbol='SPX', provider='intrinio')
         """  # noqa: E501
 
         return self._run(

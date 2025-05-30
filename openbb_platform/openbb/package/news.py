@@ -169,20 +169,6 @@ class ROUTER_news(Container):
             Unique ID of the news article. (provider: tiingo)
         crawl_date : Optional[datetime]
             Date the news article was crawled. (provider: tiingo)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.news.company(provider='benzinga')
-        >>> obb.news.company(limit=100, provider='benzinga')
-        >>> # Get news on the specified dates.
-        >>> obb.news.company(symbol='AAPL', start_date='2024-02-01', end_date='2024-02-07', provider='intrinio')
-        >>> # Display the headlines of the news.
-        >>> obb.news.company(symbol='AAPL', display='headline', provider='benzinga')
-        >>> # Get news for multiple symbols.
-        >>> obb.news.company(symbol='aapl,tsla', provider='fmp')
-        >>> # Get news company's ISIN.
-        >>> obb.news.company(symbol='NVDA', isin='US0378331005', provider='benzinga')
         """  # noqa: E501
 
         return self._run(
@@ -345,20 +331,6 @@ class ROUTER_news(Container):
             Unique ID of the news article. (provider: tiingo)
         crawl_date : Optional[datetime]
             Date the news article was crawled. (provider: tiingo)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.news.world(provider='fmp')
-        >>> obb.news.world(limit=100, provider='intrinio')
-        >>> # Get news on the specified dates.
-        >>> obb.news.world(start_date='2024-02-01', end_date='2024-02-07', provider='intrinio')
-        >>> # Display the headlines of the news.
-        >>> obb.news.world(display='headline', provider='benzinga')
-        >>> # Get news by topics.
-        >>> obb.news.world(topics='finance', provider='benzinga')
-        >>> # Get news by source using 'tingo' as provider.
-        >>> obb.news.world(provider='tiingo', source='bloomberg')
         """  # noqa: E501
 
         return self._run(

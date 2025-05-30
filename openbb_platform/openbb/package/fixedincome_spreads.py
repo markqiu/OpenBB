@@ -2,13 +2,15 @@
 
 import datetime
 from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_fixedincome_spreads(Container):
@@ -23,6 +25,10 @@ class ROUTER_fixedincome_spreads(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def tcm(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -70,13 +76,10 @@ class ROUTER_fixedincome_spreads(Container):
             The date of the data.
         rate : Optional[float]
             TreasuryConstantMaturity Rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.spreads.tcm(provider='fred')
-        >>> obb.fixedincome.spreads.tcm(maturity='2y', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/spreads/tcm",
@@ -99,6 +102,10 @@ class ROUTER_fixedincome_spreads(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def tcm_effr(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -146,13 +153,10 @@ class ROUTER_fixedincome_spreads(Container):
             The date of the data.
         rate : Optional[float]
             Selected Treasury Constant Maturity Rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.spreads.tcm_effr(provider='fred')
-        >>> obb.fixedincome.spreads.tcm_effr(maturity='10y', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/spreads/tcm_effr",
@@ -175,6 +179,10 @@ class ROUTER_fixedincome_spreads(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def treasury_effr(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -223,13 +231,10 @@ class ROUTER_fixedincome_spreads(Container):
             The date of the data.
         rate : Optional[float]
             SelectedTreasuryBill Rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.spreads.treasury_effr(provider='fred')
-        >>> obb.fixedincome.spreads.treasury_effr(maturity='6m', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/spreads/treasury_effr",

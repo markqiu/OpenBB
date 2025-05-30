@@ -32,7 +32,7 @@ class ROUTER_equity_ownership(Container):
         symbol: Annotated[str, OpenBBField(description="Symbol to get data for. A CIK or Symbol can be used.")],
         date: Annotated[Union[datetime.date, None, str], OpenBBField(description="A specific date to get data for. The date represents the end of the reporting period. All form 13F-HR filings are based on the calendar year and are reported quarterly. If a date is not supplied, the most recent filing is returned. Submissions beginning 2013-06-30 are supported.")] = None,
         limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return. The number of previous filings to return. The date parameter takes priority over this parameter.")] = 1,
-        provider: Annotated[Optional[Literal["sec"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "sec"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, sec.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the form 13F.
@@ -48,7 +48,7 @@ class ROUTER_equity_ownership(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, sec.
         symbol : str
             Symbol to get data for. A CIK or Symbol can be used.
         date : Union[date, None, str]
@@ -96,19 +96,18 @@ class ROUTER_equity_ownership(Container):
             The total number of shares of the class of security or the principal amount of such class. Defined by the 'security_type'. Only long positions are reported
         value : int
             The fair market value of the holding of the particular class of security. The value reported for options is the fair market value of the underlying security with respect to the number of shares controlled. Values are rounded to the nearest US dollar and use the closing price of the last trading day of the calendar year or quarter.
+        symbol : Optional[str]
+            Symbol representing the entity requested in the data. (provider: fmp)
+        filling_date : Optional[date]
+            Date when the filing was submitted to the SEC. (provider: fmp)
+        accepted_date : Optional[date]
+            Date when the filing was accepted by the SEC. (provider: fmp)
+        link : Optional[str]
+            URL link to the SEC filing on the SEC website. (provider: fmp)
+        final_link : Optional[str]
+            URL link to the XML information table of the SEC filing. (provider: fmp)
         weight : Optional[float]
             The weight of the security relative to the market value of all securities in the filing , as a normalized percent. (provider: sec)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.ownership.form_13f(symbol='NVDA', provider='sec')
-        >>> # Enter a date (calendar quarter ending) for a specific report.
-        >>> obb.equity.ownership.form_13f(symbol='BRK-A', date='2016-09-30', provider='sec')
-        >>> # Example finding Michael Burry's filings.
-        >>> cik = obb.regulators.sec.institutions_search("Scion Asset Management").results[0].cik
-        >>> # Use the `limit` parameter to return N number of reports from the most recent.
-        >>> obb.equity.ownership.form_13f(cik, limit=2).to_df()
         """  # noqa: E501
 
         return self._run(
@@ -118,7 +117,7 @@ class ROUTER_equity_ownership(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.ownership.form_13f",
-                        ("sec",),
+                        ("fmp", "sec"),
                     )
                 },
                 standard_params={
@@ -134,24 +133,22 @@ class ROUTER_equity_ownership(Container):
     @validate
     def government_trades(
         self,
-        symbol: Annotated[Union[str, None, list[Optional[str]]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.")] = None,
-        chamber: Annotated[Literal["house", "senate", "all"], OpenBBField(description="Government Chamber.")] = "all",
+        chamber: Annotated[Literal["house", "senate", "all"], OpenBBField(description="Government Chamber.")],
+        symbol: Annotated[Optional[str], OpenBBField(description="Symbol to get data for.")] = None,
         limit: Annotated[Optional[Annotated[int, Ge(ge=0)]], OpenBBField(description="The number of data entries to return.")] = 100,
         provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
-        """Obtain government transaction data, including data from the Senate
-        and the House of Representatives.
-        
+        """Get data about trading by GovernmentTrades.
 
         Parameters
         ----------
         provider : str
             The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
-        symbol : Union[str, None, list[Optional[str]]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.
         chamber : Literal['house', 'senate', 'all']
             Government Chamber.
+        symbol : Optional[str]
+            Symbol to get data for.
         limit : Optional[Annotated[int, Ge(ge=0)]]
             The number of data entries to return.
 
@@ -171,7 +168,7 @@ class ROUTER_equity_ownership(Container):
 
         GovernmentTrades
         ----------------
-        symbol : Optional[str]
+        symbol : str
             Symbol representing the entity requested in the data.
         date : date
             The date of the data.
@@ -179,28 +176,20 @@ class ROUTER_equity_ownership(Container):
             Date of Transaction.
         representative : Optional[str]
             Name of Representative.
-        chamber : Optional[Literal['house', 'senate']]
-            Government Chamber - House or Senate. (provider: fmp)
+        link : Optional[str]
+            Link to the transaction document. (provider: fmp)
         owner : Optional[str]
             Ownership status (e.g., Spouse, Joint). (provider: fmp)
         asset_type : Optional[str]
             Type of asset involved in the transaction. (provider: fmp)
         asset_description : Optional[str]
             Description of the asset. (provider: fmp)
-        transaction_type : Optional[str]
+        type : Optional[str]
             Type of transaction (e.g., Sale, Purchase). (provider: fmp)
         amount : Optional[str]
             Transaction amount range. (provider: fmp)
         comment : Optional[str]
             Additional comments on the transaction. (provider: fmp)
-        url : Optional[str]
-            Link to the transaction document. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.ownership.government_trades(symbol='AAPL', chamber='all', provider='fmp')
-        >>> obb.equity.ownership.government_trades(limit=500, chamber='all', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -219,7 +208,6 @@ class ROUTER_equity_ownership(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -355,12 +343,6 @@ class ROUTER_equity_ownership(Container):
             Value of the securities owned after the transaction. (provider: sec)
         footnote : Optional[str]
             Footnote for the transaction. (provider: sec)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.ownership.insider_trading(symbol='AAPL', provider='fmp')
-        >>> obb.equity.ownership.insider_trading(symbol='AAPL', limit=500, provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -491,11 +473,6 @@ class ROUTER_equity_ownership(Container):
             Put-call ratio on the previous reporting date. (provider: fmp)
         put_call_ratio_change : Optional[float]
             Change in the put-call ratio between the current and previous reporting dates. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.ownership.institutional(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -632,12 +609,6 @@ class ROUTER_equity_ownership(Container):
             Change in performance of the stock ownership.
         is_counted_for_performance : bool
             Is the stock ownership counted for performance.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.ownership.major_holders(symbol='AAPL', provider='fmp')
-        >>> obb.equity.ownership.major_holders(symbol='AAPL', page=0, provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -728,11 +699,6 @@ class ROUTER_equity_ownership(Container):
             Percentage of float held by institutions, as a normalized percent. (provider: yfinance)
         institutions_count : Optional[int]
             Number of institutions holding shares. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.ownership.share_statistics(symbol='AAPL', provider='fmp')
         """  # noqa: E501
 
         return self._run(

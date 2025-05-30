@@ -62,11 +62,6 @@ class ROUTER_derivatives_futures(Container):
             Futures expiration month.
         price : Optional[float]
             The price of the futures contract.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.derivatives.futures.curve(symbol='NG', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -144,15 +139,6 @@ class ROUTER_derivatives_futures(Container):
             The close price.
         volume : float
             The trading volume.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.derivatives.futures.historical(symbol='ES', provider='yfinance')
-        >>> # Enter multiple symbols.
-        >>> obb.derivatives.futures.historical(symbol='ES,NQ', provider='yfinance')
-        >>> # Enter expiration dates as "YYYY-MM".
-        >>> obb.derivatives.futures.historical(symbol='ES', provider='yfinance', expiration='2025-12')
         """  # noqa: E501
 
         return self._run(

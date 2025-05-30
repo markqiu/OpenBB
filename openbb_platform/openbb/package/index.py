@@ -62,12 +62,6 @@ class ROUTER_index(Container):
             ID code for keying the index in the OpenBB Terminal. (provider: yfinance)
         symbol : Optional[str]
             Symbol for the index. (provider: yfinance)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.index.available(provider='fmp')
-        >>> obb.index.available(provider='yfinance')
         """  # noqa: E501
 
         return self._run(
@@ -135,11 +129,6 @@ class ROUTER_index(Container):
             Central Index Key (CIK) for the requested entity. (provider: fmp)
         founded : Optional[Union[date, str]]
             Founding year of the constituent company in the index. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.index.constituents(symbol='dowjones', provider='fmp')
         """  # noqa: E501
 
         return self._run(

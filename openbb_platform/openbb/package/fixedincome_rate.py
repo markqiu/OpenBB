@@ -2,13 +2,15 @@
 
 import datetime
 from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_fixedincome_rate(Container):
@@ -30,6 +32,10 @@ class ROUTER_fixedincome_rate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def ameribor(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -118,14 +124,10 @@ class ROUTER_fixedincome_rate(Container):
             Interest rate.
         title : Optional[str]
             Title of the series.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.ameribor(provider='fred')
-        >>> # The change from one year ago is applied with the transform parameter.
-        >>> obb.fixedincome.rate.ameribor(maturity='all', transform='pc1', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/rate/ameribor",
@@ -148,6 +150,10 @@ class ROUTER_fixedincome_rate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def dpcredit(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -194,13 +200,10 @@ class ROUTER_fixedincome_rate(Container):
             The date of the data.
         rate : Optional[float]
             Discount Window Primary Credit Rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.dpcredit(provider='fred')
-        >>> obb.fixedincome.rate.dpcredit(start_date='2023-02-01', end_date='2023-05-01', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/rate/dpcredit",
@@ -222,6 +225,10 @@ class ROUTER_fixedincome_rate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def ecb(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -271,13 +278,10 @@ class ROUTER_fixedincome_rate(Container):
             The date of the data.
         rate : Optional[float]
             European Central Bank Interest Rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.ecb(provider='fred')
-        >>> obb.fixedincome.rate.ecb(interest_rate_type='refinancing', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/rate/ecb",
@@ -403,12 +407,6 @@ class ROUTER_fixedincome_rate(Container):
             Standard deviation. This field is only present for data before 2016. (provider: federal_reserve)
         revision_indicator : Optional[str]
             Indicates a revision of the data for that date. (provider: federal_reserve)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.effr(provider='fred')
-        >>> obb.fixedincome.rate.effr(effr_only=True, provider='fred')
         """  # noqa: E501
 
         return self._run(
@@ -431,6 +429,10 @@ class ROUTER_fixedincome_rate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def effr_forecast(
         self,
         provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
@@ -483,13 +485,10 @@ class ROUTER_fixedincome_rate(Container):
             Low projection of rates.
         central_tendency_low : Optional[float]
             Central tendency of low projection of rates.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.effr_forecast(provider='fred')
-        >>> obb.fixedincome.rate.effr_forecast(long_run=True, provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/rate/effr_forecast",
@@ -509,6 +508,10 @@ class ROUTER_fixedincome_rate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def estr(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -626,13 +629,10 @@ class ROUTER_fixedincome_rate(Container):
             Number of active banks.
         large_bank_share_of_volume : Optional[float]
             The percent of volume attributable to the 5 largest active banks.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.estr(provider='fred')
-        >>> obb.fixedincome.rate.estr(transform='ch1', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/rate/estr",
@@ -654,6 +654,10 @@ class ROUTER_fixedincome_rate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def iorb(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -697,12 +701,10 @@ class ROUTER_fixedincome_rate(Container):
             The date of the data.
         rate : Optional[float]
             IORB rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.iorb(provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/rate/iorb",
@@ -816,11 +818,6 @@ class ROUTER_fixedincome_rate(Container):
             The trading volume.The notional volume of transactions (Billions of $).
         revision_indicator : Optional[str]
             Indicates a revision of the data for that date. (provider: federal_reserve)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.overnight_bank_funding(provider='fred')
         """  # noqa: E501
 
         return self._run(
@@ -940,11 +937,6 @@ class ROUTER_fixedincome_rate(Container):
             180-Day Average SOFR (provider: fred)
         index : Optional[float]
             SOFR index as 2018-04-02 = 1 (provider: fred)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.sofr(provider='fred')
         """  # noqa: E501
 
         return self._run(
@@ -967,6 +959,10 @@ class ROUTER_fixedincome_rate(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def sonia(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -1012,13 +1008,10 @@ class ROUTER_fixedincome_rate(Container):
             The date of the data.
         rate : Optional[float]
             SONIA rate.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.fixedincome.rate.sonia(provider='fred')
-        >>> obb.fixedincome.rate.sonia(parameter='total_nominal_value', provider='fred')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/fixedincome/rate/sonia",

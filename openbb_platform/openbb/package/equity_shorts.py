@@ -74,11 +74,6 @@ class ROUTER_equity_shorts(Container):
             The price at the previous closing price from the settlement date.
         description : Optional[str]
             The description of the Security.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.shorts.fails_to_deliver(symbol='AAPL', provider='sec')
         """  # noqa: E501
 
         return self._run(

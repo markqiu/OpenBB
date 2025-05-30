@@ -2,13 +2,15 @@
 
 import datetime
 from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_commodity_price(Container):
@@ -21,6 +23,10 @@ class ROUTER_commodity_price(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def spot(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -104,13 +110,10 @@ class ROUTER_commodity_price(Container):
             Price of the commodity.
         unit : Optional[str]
             Unit of the commodity price.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.commodity.price.spot(provider='fred')
-        >>> obb.commodity.price.spot(provider='fred', commodity='wti')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/commodity/price/spot",

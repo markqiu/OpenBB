@@ -97,15 +97,6 @@ class ROUTER_currency(Container):
             The date the reference data was last updated. (provider: polygon)
         delisted : Optional[date]
             The date the item was delisted. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.currency.search(provider='fmp')
-        >>> # Search for 'EUR' currency pair using 'intrinio' as provider.
-        >>> obb.currency.search(provider='intrinio', query='EUR')
-        >>> # Search for terms  using 'polygon' as provider.
-        >>> obb.currency.search(provider='polygon', query='EUR')
         """  # noqa: E501
 
         return self._run(
@@ -233,13 +224,6 @@ class ROUTER_currency(Container):
             The timestamp for the start of the most recent minute bar. (provider: polygon)
         last_updated : Optional[datetime]
             The last time the data was updated. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.currency.snapshots(provider='fmp')
-        >>> # Get exchange rates from USD and XAU to EUR, JPY, and GBP using 'fmp' as provider.
-        >>> obb.currency.snapshots(provider='fmp', base='USD,XAU', counter_currencies='EUR,JPY,GBP', quote_type='indirect')
         """  # noqa: E501
 
         return self._run(

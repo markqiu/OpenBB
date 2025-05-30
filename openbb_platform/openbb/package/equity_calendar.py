@@ -77,11 +77,6 @@ class ROUTER_equity_calendar(Container):
             The adjusted-dividend amount. (provider: fmp)
         label : Optional[str]
             Ex-dividend date formatted for display. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.calendar.dividend(provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -160,13 +155,6 @@ class ROUTER_equity_calendar(Container):
             The reporting time - e.g. after market close. (provider: fmp)
         updated_date : Optional[date]
             The date the data was updated last. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.calendar.earnings(provider='fmp')
-        >>> # Get earnings calendar for specific dates.
-        >>> obb.equity.calendar.earnings(start_date='2024-02-01', end_date='2024-02-07', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -239,13 +227,6 @@ class ROUTER_equity_calendar(Container):
             The URL to the press release for the announcement. (provider: fmp)
         announcement_date : Optional[date]
             The date when the event was announced. (provider: fmp)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.calendar.events(provider='fmp')
-        >>> # Get company events calendar for specific dates.
-        >>> obb.equity.calendar.events(start_date='2024-02-01', end_date='2024-02-07', provider='fmp')
         """  # noqa: E501
 
         return self._run(
@@ -358,13 +339,6 @@ class ROUTER_equity_calendar(Container):
             The company that is going public via the IPO. (provider: intrinio)
         security : Optional[IntrinioSecurity]
             The primary Security for the Company that is going public via the IPO (provider: intrinio)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.calendar.ipo(provider='intrinio')
-        >>> # Get all IPOs available.
-        >>> obb.equity.calendar.ipo(provider='intrinio')
         """  # noqa: E501
 
         return self._run(
@@ -433,13 +407,6 @@ class ROUTER_equity_calendar(Container):
             Numerator of the stock splits.
         denominator : float
             Denominator of the stock splits.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.calendar.splits(provider='fmp')
-        >>> # Get stock splits calendar for specific dates.
-        >>> obb.equity.calendar.splits(start_date='2024-02-01', end_date='2024-02-07', provider='fmp')
         """  # noqa: E501
 
         return self._run(

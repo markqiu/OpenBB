@@ -2,13 +2,15 @@
 
 import datetime
 from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
+from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.field import OpenBBField
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.static.container import Container
 from openbb_core.app.static.utils.decorators import exception_handler, validate
 from openbb_core.app.static.utils.filters import filter_inputs
-from typing_extensions import Annotated
+from typing_extensions import Annotated, deprecated
 
 
 class ROUTER_commodity(Container):
@@ -23,6 +25,10 @@ class ROUTER_commodity(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def petroleum_status_report(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -120,15 +126,10 @@ class ROUTER_commodity(Container):
             Value of the data.
         unit : Optional[str]
             Unit or scale of the data.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> # Get the EIA's Weekly Petroleum Status Report.
-        >>> obb.commodity.petroleum_status_report(provider='eia')
-        >>> # Select the category of data, and filter for a specific table within the report.
-        >>> obb.commodity.petroleum_status_report(category='weekly_estimates', table='imports', provider='eia')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/commodity/petroleum_status_report",
@@ -158,6 +159,10 @@ class ROUTER_commodity(Container):
 
     @exception_handler
     @validate
+    @deprecated(
+        "Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
+        category=OpenBBDeprecationWarning,
+    )
     def short_term_energy_outlook(
         self,
         start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
@@ -241,15 +246,10 @@ class ROUTER_commodity(Container):
             Value of the data.
         unit : Optional[str]
             Unit or scale of the data.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> # Get the EIA's Short Term Energy Outlook.
-        >>> obb.commodity.short_term_energy_outlook(provider='eia')
-        >>> # Select the specific table of data from the STEO. Table 03d is World Crude Oil Production.
-        >>> obb.commodity.short_term_energy_outlook(table='03d', provider='eia')
         """  # noqa: E501
+
+        simplefilter("always", DeprecationWarning)
+        warn("Xiao Yuan doesn't support this endpoint.Please ignore. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
             "/commodity/short_term_energy_outlook",

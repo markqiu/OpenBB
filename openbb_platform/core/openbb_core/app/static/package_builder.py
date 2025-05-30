@@ -203,7 +203,6 @@ class PackageBuilder:
                 "routers": ReferenceGenerator.get_routers(self.route_map),
             },
             indent=4,
-            cls=DateTimeEncoder,
         )
         self._write(code=code, name="reference", extension="json", folder="assets")
 

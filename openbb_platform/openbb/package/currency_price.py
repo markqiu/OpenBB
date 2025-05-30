@@ -95,15 +95,6 @@ class ROUTER_currency_price(Container):
             Change in the price from the previous close, as a normalized percent. (provider: fmp)
         transactions : Optional[Annotated[int, Gt(gt=0)]]
             Number of transactions for the symbol in the time period. (provider: polygon)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.currency.price.historical(symbol='EURUSD', provider='fmp')
-        >>> # Filter historical data with specific start and end date.
-        >>> obb.currency.price.historical(symbol='EURUSD', start_date='2023-01-01', end_date='2023-12-31', provider='fmp')
-        >>> # Get data with different granularity.
-        >>> obb.currency.price.historical(symbol='EURUSD', provider='polygon', interval='15m')
         """  # noqa: E501
 
         return self._run(

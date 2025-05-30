@@ -92,15 +92,6 @@ class ROUTER_crypto_price(Container):
             Number of transactions for the symbol in the time period. (provider: polygon, tiingo)
         volume_notional : Optional[float]
             The last size done for the asset on the specific date in the quote currency. The volume of the asset on the specific date in the quote currency. (provider: tiingo)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.crypto.price.historical(symbol='BTCUSD', provider='fmp')
-        >>> obb.crypto.price.historical(symbol='BTCUSD', start_date='2024-01-01', end_date='2024-01-31', provider='fmp')
-        >>> obb.crypto.price.historical(symbol='BTCUSD,ETHUSD', start_date='2024-01-01', end_date='2024-01-31', provider='polygon')
-        >>> # Get monthly historical prices from Yahoo Finance for Ethereum.
-        >>> obb.crypto.price.historical(symbol='ETH-USD', interval='1m', start_date='2024-01-01', end_date='2024-12-31', provider='yfinance')
         """  # noqa: E501
 
         return self._run(
