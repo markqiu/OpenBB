@@ -1,31 +1,8 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
+
 from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
-import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
 
-from openbb_core.app.static.utils.filters import filter_inputs
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
-
-from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
 
 class ROUTER_regulators(Container):
     """/regulators

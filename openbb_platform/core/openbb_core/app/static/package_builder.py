@@ -3,6 +3,7 @@
 # pylint: disable=too-many-lines,too-many-locals,too-many-nested-blocks,too-many-statements,too-many-branches,too-many-positional-arguments
 import builtins
 import inspect
+import json
 import re
 import shutil
 import sys
@@ -79,16 +80,6 @@ TAB = "    "
 def create_indent(n: int) -> str:
     """Create n indentation space."""
     return TAB * n
-
-
-class DateTimeEncoder(json.JSONEncoder):
-    """Custom JSON encoder for handling date and datetime objects."""
-
-    def default(self, obj: Any) -> Any:
-        """Convert date and datetime objects to ISO format strings."""
-        if isinstance(obj, (date, datetime)):
-            return obj.isoformat()
-        return super().default(obj)
 
 
 class PackageBuilder:

@@ -1,53 +1,17 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
 import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-
-from openbb_core.app.static.utils.filters import filter_inputs
+from typing import Literal, Optional, Union
+from warnings import simplefilter, warn
 
 from openbb_core.app.deprecation import OpenBBDeprecationWarning
-
 from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
-import openbb_core.app.deprecation
-import openbb_core.app.model.command_context
-import openbb_core.app.provider_interface
-import typing
+from openbb_core.app.model.obbject import OBBject
+from openbb_core.app.static.container import Container
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+from openbb_core.app.static.utils.filters import filter_inputs
+from typing_extensions import Annotated, deprecated
 
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
-from openbb_core.app.model.command_context import CommandContext
-from openbb_core.app.provider_interface import (
-    OBBject_CommercialPaper,
-    OBBject_HighQualityMarketCorporateBond,
-    OBBject_ICEBofA,
-    OBBject_MoodyCorporateBondIndex,
-    OBBject_SpotRate,
-)
-
-from typing import (
-    CommercialPaper,
-    HighQualityMarketCorporateBond,
-    ICEBofA,
-    MoodyCorporateBondIndex,
-    SpotRate,
-)
 
 class ROUTER_fixedincome_corporate(Container):
     """/fixedincome/corporate
@@ -65,9 +29,9 @@ class ROUTER_fixedincome_corporate(Container):
     @validate
     def commercial_paper(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Commercial Paper.
@@ -171,7 +135,7 @@ class ROUTER_fixedincome_corporate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.corporate.commercial_paper",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -179,7 +143,7 @@ class ROUTER_fixedincome_corporate(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={'maturity': {'fred': {'multiple_items_allowed': True, 'choices': ['all', 'overnight', '7d', '15d', '30d', '60d', '90d']}}, 'category': {'fred': {'multiple_items_allowed': True, 'choices': ['all', 'asset_backed', 'financial', 'nonfinancial', 'a2p2']}}},
+                info={"maturity": {"fred": {"multiple_items_allowed": True, "choices": ["all", "overnight", "7d", "15d", "30d", "60d", "90d"]}}, "category": {"fred": {"multiple_items_allowed": True, "choices": ["all", "asset_backed", "financial", "nonfinancial", "a2p2"]}}},
             )
         )
 
@@ -187,8 +151,8 @@ class ROUTER_fixedincome_corporate(Container):
     @validate
     def hqm(
         self,
-        date: Annotated[Union[str, datetime.date, None, list[Union[str, datetime.date, None]]], OpenBBField(description='A specific date to get data for. Multiple comma separated items allowed for provider(s): fred.')] = None,
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        date: Annotated[Union[datetime.date, str, None, list[Union[datetime.date, str, None]]], OpenBBField(description="A specific date to get data for. Multiple comma separated items allowed for provider(s): fred.")] = None,
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """High Quality Market Corporate Bond.
@@ -203,7 +167,7 @@ class ROUTER_fixedincome_corporate(Container):
         ----------
         provider : str
             The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.
-        date : Union[str, date, None, list[Union[str, date, None]]]
+        date : Union[date, str, None, list[Union[date, str, None]]]
             A specific date to get data for. Multiple comma separated items allowed for provider(s): fred.
         yield_curve : Literal['spot', 'par']
             The yield curve type. (provider: fred)
@@ -245,14 +209,14 @@ class ROUTER_fixedincome_corporate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.corporate.hqm",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
                     "date": date,
                 },
                 extra_params=kwargs,
-                info={'date': {'fred': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"date": {"fred": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -264,10 +228,10 @@ class ROUTER_fixedincome_corporate(Container):
     )
     def ice_bofa(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        index_type: Annotated[Literal['yield', 'yield_to_worst', 'total_return', 'spread'], OpenBBField(description='The type of series.')] = 'yield',
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        index_type: Annotated[Literal["yield", "yield_to_worst", "total_return", "spread"], OpenBBField(description="The type of series.")] = "yield",
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """ICE BofA US Corporate Bond Indices.
@@ -326,7 +290,7 @@ class ROUTER_fixedincome_corporate(Container):
         >>> obb.fixedincome.corporate.ice_bofa(index_type='yield_to_worst', provider='fred')
         """  # noqa: E501
 
-        simplefilter('always', DeprecationWarning)
+        simplefilter("always", DeprecationWarning)
         warn("This endpoint is deprecated; use `/fixedincome/bond_indices` instead. Deprecated in OpenBB Platform V4.2 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
@@ -336,7 +300,7 @@ class ROUTER_fixedincome_corporate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.corporate.ice_bofa",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -356,10 +320,10 @@ class ROUTER_fixedincome_corporate(Container):
     )
     def moody(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        index_type: Annotated[Literal['aaa', 'baa'], OpenBBField(description='The type of series.')] = 'aaa',
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        index_type: Annotated[Literal["aaa", "baa"], OpenBBField(description="The type of series.")] = "aaa",
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Moody Corporate Bond Index.
@@ -411,7 +375,7 @@ class ROUTER_fixedincome_corporate(Container):
         >>> obb.fixedincome.corporate.moody(index_type='baa', provider='fred')
         """  # noqa: E501
 
-        simplefilter('always', DeprecationWarning)
+        simplefilter("always", DeprecationWarning)
         warn("This endpoint is deprecated; use `/fixedincome/bond_indices` instead. Set `category` to `us` and `index` to `seasoned_corporate`. Deprecated in OpenBB Platform V4.2 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
 
         return self._run(
@@ -421,7 +385,7 @@ class ROUTER_fixedincome_corporate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.corporate.moody",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -437,11 +401,11 @@ class ROUTER_fixedincome_corporate(Container):
     @validate
     def spot_rates(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        maturity: Annotated[Union[float, str, list[Union[float, str]]], OpenBBField(description='Maturities in years. Multiple comma separated items allowed for provider(s): fred.')] = 10.0,
-        category: Annotated[Union[str, list[str]], OpenBBField(description="Rate category. Options: spot_rate, par_yield. Multiple comma separated items allowed for provider(s): fred.\nChoices for fred: 'par_yield', 'spot_rate'")] = 'spot_rate',
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        maturity: Annotated[Union[float, str, list[Union[float, str]]], OpenBBField(description="Maturities in years. Multiple comma separated items allowed for provider(s): fred.")] = 10.0,
+        category: Annotated[Union[str, list[str]], OpenBBField(description="Rate category. Options: spot_rate, par_yield. Multiple comma separated items allowed for provider(s): fred.\nChoices for fred: 'par_yield', 'spot_rate'")] = "spot_rate",
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Spot Rates.
@@ -501,7 +465,7 @@ class ROUTER_fixedincome_corporate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.corporate.spot_rates",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -511,6 +475,6 @@ class ROUTER_fixedincome_corporate(Container):
                     "category": category,
                 },
                 extra_params=kwargs,
-                info={'maturity': {'fred': {'multiple_items_allowed': True, 'choices': None}}, 'category': {'fred': {'multiple_items_allowed': True, 'choices': ['par_yield', 'spot_rate']}}},
+                info={"maturity": {"fred": {"multiple_items_allowed": True, "choices": None}}, "category": {"fred": {"multiple_items_allowed": True, "choices": ["par_yield", "spot_rate"]}}},
             )
         )

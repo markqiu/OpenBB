@@ -1,52 +1,18 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
-import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-
-from openbb_core.app.static.utils.filters import filter_inputs
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from typing import Literal, Optional, Union
 
 from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
-import openbb_core.app.model.command_context
-import openbb_core.app.provider_interface
-import typing
+from openbb_core.app.model.obbject import OBBject
+from openbb_core.app.static.container import Container
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+from openbb_core.app.static.utils.filters import filter_inputs
+from typing_extensions import Annotated
 
-from openbb_core.app.model.command_context import CommandContext
-from openbb_core.app.provider_interface import (
-    OBBject_CurrencyPairs,
-    OBBject_CurrencyReferenceRates,
-    OBBject_CurrencySnapshots,
-)
-
-from typing import (
-    CurrencyPairs,
-    CurrencyReferenceRates,
-    CurrencySnapshots,
-)
 
 class ROUTER_currency(Container):
     """/currency
     /price
-    reference_rates
     search
     snapshots
     """
@@ -63,136 +29,10 @@ class ROUTER_currency(Container):
 
     @exception_handler
     @validate
-    def reference_rates(
-        self,
-        provider: Annotated[Optional[Literal['ecb']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: ecb.')] = None,
-        **kwargs
-    ) -> OBBject:
-        """Get current, official, currency reference rates.
-
-        Foreign exchange reference rates are the exchange rates set by a major financial institution or regulatory body,
-        serving as a benchmark for the value of currencies around the world.
-        These rates are used as a standard to facilitate international trade and financial transactions,
-        ensuring consistency and reliability in currency conversion.
-        They are typically updated on a daily basis and reflect the market conditions at a specific time.
-        Central banks and financial institutions often use these rates to guide their own exchange rates,
-        impacting global trade, loans, and investments.
-        
-
-        Parameters
-        ----------
-        provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: ecb.
-
-        Returns
-        -------
-        OBBject
-            results : CurrencyReferenceRates
-                Serializable results.
-            provider : Optional[str]
-                Provider name.
-            warnings : Optional[list[Warning_]]
-                list of warnings.
-            chart : Optional[Chart]
-                Chart object.
-            extra : Dict[str, Any]
-                Extra info.
-
-        CurrencyReferenceRates
-        ----------------------
-        date : date
-            The date of the data.
-        EUR : Optional[float]
-            Euro.
-        USD : Optional[float]
-            US Dollar.
-        JPY : Optional[float]
-            Japanese Yen.
-        BGN : Optional[float]
-            Bulgarian Lev.
-        CZK : Optional[float]
-            Czech Koruna.
-        DKK : Optional[float]
-            Danish Krone.
-        GBP : Optional[float]
-            Pound Sterling.
-        HUF : Optional[float]
-            Hungarian Forint.
-        PLN : Optional[float]
-            Polish Zloty.
-        RON : Optional[float]
-            Romanian Leu.
-        SEK : Optional[float]
-            Swedish Krona.
-        CHF : Optional[float]
-            Swiss Franc.
-        ISK : Optional[float]
-            Icelandic Krona.
-        NOK : Optional[float]
-            Norwegian Krone.
-        TRY : Optional[float]
-            Turkish Lira.
-        AUD : Optional[float]
-            Australian Dollar.
-        BRL : Optional[float]
-            Brazilian Real.
-        CAD : Optional[float]
-            Canadian Dollar.
-        CNY : Optional[float]
-            Chinese Yuan.
-        HKD : Optional[float]
-            Hong Kong Dollar.
-        IDR : Optional[float]
-            Indonesian Rupiah.
-        ILS : Optional[float]
-            Israeli Shekel.
-        INR : Optional[float]
-            Indian Rupee.
-        KRW : Optional[float]
-            South Korean Won.
-        MXN : Optional[float]
-            Mexican Peso.
-        MYR : Optional[float]
-            Malaysian Ringgit.
-        NZD : Optional[float]
-            New Zealand Dollar.
-        PHP : Optional[float]
-            Philippine Peso.
-        SGD : Optional[float]
-            Singapore Dollar.
-        THB : Optional[float]
-            Thai Baht.
-        ZAR : Optional[float]
-            South African Rand.
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.currency.reference_rates(provider='ecb')
-        """  # noqa: E501
-
-        return self._run(
-            "/currency/reference_rates",
-            **filter_inputs(
-                provider_choices={
-                    "provider": self._get_provider(
-                        provider,
-                        "currency.reference_rates",
-                        ('ecb',),
-                    )
-                },
-                standard_params={
-                },
-                extra_params=kwargs,
-            )
-        )
-
-    @exception_handler
-    @validate
     def search(
         self,
-        query: Annotated[Optional[str], OpenBBField(description='Query to search for currency pairs.')] = None,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'polygon']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon.')] = None,
+        query: Annotated[Optional[str], OpenBBField(description="Query to search for currency pairs.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "polygon"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon.")] = None,
         **kwargs
     ) -> OBBject:
         """Currency Search.
@@ -275,7 +115,7 @@ class ROUTER_currency(Container):
                     "provider": self._get_provider(
                         provider,
                         "currency.search",
-                        ('fmp', 'intrinio', 'polygon'),
+                        ("fmp", "intrinio", "polygon"),
                     )
                 },
                 standard_params={
@@ -289,10 +129,10 @@ class ROUTER_currency(Container):
     @validate
     def snapshots(
         self,
-        base: Annotated[Union[str, list[str]], OpenBBField(description='The base currency symbol. Multiple comma separated items allowed for provider(s): fmp, polygon.')] = 'usd',
-        quote_type: Annotated[Literal['direct', 'indirect'], OpenBBField(description="Whether the quote is direct or indirect. Selecting 'direct' will return the exchange rate as the amount of domestic currency required to buy one unit of the foreign currency. Selecting 'indirect' (default) will return the exchange rate as the amount of foreign currency required to buy one unit of the domestic currency.")] = 'indirect',
-        counter_currencies: Annotated[Union[list[str], str, None], OpenBBField(description='An optional list of counter currency symbols to filter for. None returns all.')] = None,
-        provider: Annotated[Optional[Literal['fmp', 'polygon']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, polygon.')] = None,
+        base: Annotated[Union[str, list[str]], OpenBBField(description="The base currency symbol. Multiple comma separated items allowed for provider(s): fmp, polygon.")] = "usd",
+        quote_type: Annotated[Literal["direct", "indirect"], OpenBBField(description="Whether the quote is direct or indirect. Selecting 'direct' will return the exchange rate as the amount of domestic currency required to buy one unit of the foreign currency. Selecting 'indirect' (default) will return the exchange rate as the amount of foreign currency required to buy one unit of the domestic currency.")] = "indirect",
+        counter_currencies: Annotated[Union[str, list[str], None], OpenBBField(description="An optional list of counter currency symbols to filter for. None returns all.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "polygon"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, polygon.")] = None,
         **kwargs
     ) -> OBBject:
         """Snapshots of currency exchange rates from an indirect or direct perspective of a base currency.
@@ -305,7 +145,7 @@ class ROUTER_currency(Container):
             The base currency symbol. Multiple comma separated items allowed for provider(s): fmp, polygon.
         quote_type : Literal['direct', 'indirect']
             Whether the quote is direct or indirect. Selecting 'direct' will return the exchange rate as the amount of domestic currency required to buy one unit of the foreign currency. Selecting 'indirect' (default) will return the exchange rate as the amount of foreign currency required to buy one unit of the domestic currency.
-        counter_currencies : Union[list[str], str, None]
+        counter_currencies : Union[str, list[str], None]
             An optional list of counter currency symbols to filter for. None returns all.
 
         Returns
@@ -409,7 +249,7 @@ class ROUTER_currency(Container):
                     "provider": self._get_provider(
                         provider,
                         "currency.snapshots",
-                        ('fmp', 'polygon'),
+                        ("fmp", "polygon"),
                     )
                 },
                 standard_params={
@@ -418,6 +258,6 @@ class ROUTER_currency(Container):
                     "counter_currencies": counter_currencies,
                 },
                 extra_params=kwargs,
-                info={'base': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'polygon': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"base": {"fmp": {"multiple_items_allowed": True, "choices": None}, "polygon": {"multiple_items_allowed": True, "choices": None}}},
             )
         )

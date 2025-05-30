@@ -1,51 +1,15 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
 import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-
-from openbb_core.app.static.utils.filters import filter_inputs
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from typing import Literal, Optional, Union
 
 from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
-import openbb_core.app.deprecation
-import openbb_core.app.model.command_context
-import openbb_core.app.provider_interface
-import typing
+from openbb_core.app.model.obbject import OBBject
+from openbb_core.app.static.container import Container
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+from openbb_core.app.static.utils.filters import filter_inputs
+from typing_extensions import Annotated
 
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
-from openbb_core.app.model.command_context import CommandContext
-from openbb_core.app.provider_interface import (
-    OBBject_EquityHistorical,
-    OBBject_EquityNBBO,
-    OBBject_EquityQuote,
-    OBBject_PricePerformance,
-)
-
-from typing import (
-    EquityHistorical,
-    EquityNBBO,
-    EquityQuote,
-    PricePerformance,
-)
 
 class ROUTER_equity_price(Container):
     """/equity/price
@@ -62,10 +26,10 @@ class ROUTER_equity_price(Container):
     @validate
     def historical(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, xiaoyuan, yfinance.')],
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'polygon', 'tiingo', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, yfinance.")],
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "polygon", "tiingo", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, tiingo, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get historical price data for a given stock. This includes open, high, low, close, and volume.
@@ -73,18 +37,17 @@ class ROUTER_equity_price(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, tiingo, yfinance.
         symbol : Union[str, list[str]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, xiaoyuan, yfinance.
+            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, yfinance.
         start_date : Union[date, None, str]
             Start date of the data, in YYYY-MM-DD format.
         end_date : Union[date, None, str]
             End date of the data, in YYYY-MM-DD format.
         interval : str
-            Time interval of the data to return. (provider: fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance)
+            Time interval of the data to return. (provider: fmp, intrinio, polygon, tiingo, yfinance)
             Choices for fmp: '1m', '5m', '15m', '30m', '1h', '4h', '1d'
             Choices for intrinio: '1m', '5m', '10m', '15m', '30m', '60m', '1h', '1d', '1W', '1M', '1Q', '1Y'
-            Choices for xiaoyuan: '1d'
             Choices for yfinance: '1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1W', '1M', '1Q'
         start_time : Optional[datetime.time]
             Return intervals starting at the specified time on the `start_date` formatted as 'HH:MM:SS'. (provider: intrinio)
@@ -138,13 +101,15 @@ class ROUTER_equity_price(Container):
         vwap : Optional[float]
             Volume Weighted Average Price over the period.
         adj_close : Optional[float]
-            The adjusted close price. (provider: fmp, intrinio, tiingo, xiaoyuan)
+            The adjusted close price. (provider: fmp, intrinio, tiingo)
         unadjusted_volume : Optional[float]
             Unadjusted volume of the symbol. (provider: fmp)
         change : Optional[float]
-            Change in the price from the previous close. (provider: fmp, intrinio, xiaoyuan)
+            Change in the price from the previous close. (provider: fmp);
+            Change in the price of the symbol from the previous day. (provider: intrinio)
         change_percent : Optional[float]
-            Change in the price from the previous close, as a normalized percent. (provider: fmp, intrinio, xiaoyuan)
+            Change in the price from the previous close, as a normalized percent. (provider: fmp);
+            Percent change in the price of the symbol from the previous day. (provider: intrinio)
         average : Optional[float]
             Average trade price of an individual equity during the interval. (provider: intrinio)
         adj_open : Optional[float]
@@ -188,7 +153,7 @@ class ROUTER_equity_price(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.price.historical",
-                        ('fmp', 'intrinio', 'polygon', 'tiingo', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "polygon", "tiingo", "yfinance"),
                     )
                 },
                 standard_params={
@@ -197,20 +162,16 @@ class ROUTER_equity_price(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'polygon': {'multiple_items_allowed': True, 'choices': None}, 'tiingo': {'multiple_items_allowed': True, 'choices': None}, 'xiaoyuan': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': True, 'choices': None}}, 'interval': {'fmp': {'multiple_items_allowed': False, 'choices': ['1m', '5m', '15m', '30m', '1h', '4h', '1d']}, 'intrinio': {'multiple_items_allowed': False, 'choices': ['1m', '5m', '10m', '15m', '30m', '60m', '1h', '1d', '1W', '1M', '1Q', '1Y']}, 'tiingo': {'multiple_items_allowed': False, 'choices': ['1m', '5m', '15m', '30m', '90m', '1h', '2h', '4h', '1d', '1W', '1M', '1Y']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['1d']}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1W', '1M', '1Q']}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "polygon": {"multiple_items_allowed": True, "choices": None}, "tiingo": {"multiple_items_allowed": True, "choices": None}, "yfinance": {"multiple_items_allowed": True, "choices": None}}, "interval": {"fmp": {"multiple_items_allowed": False, "choices": ["1m", "5m", "15m", "30m", "1h", "4h", "1d"]}, "intrinio": {"multiple_items_allowed": False, "choices": ["1m", "5m", "10m", "15m", "30m", "60m", "1h", "1d", "1W", "1M", "1Q", "1Y"]}, "tiingo": {"multiple_items_allowed": False, "choices": ["1m", "5m", "15m", "30m", "90m", "1h", "2h", "4h", "1d", "1W", "1M", "1Y"]}, "yfinance": {"multiple_items_allowed": False, "choices": ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1W", "1M", "1Q"]}}},
             )
         )
 
     @exception_handler
     @validate
-    @deprecated(
-        "There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.",
-        category=OpenBBDeprecationWarning,
-    )
     def nbbo(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        provider: Annotated[Optional[Literal['polygon']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: polygon.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        provider: Annotated[Optional[Literal["polygon"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: polygon.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the National Best Bid and Offer for a given stock.
@@ -285,9 +246,6 @@ class ROUTER_equity_price(Container):
         >>> obb.equity.price.nbbo(symbol='AAPL', provider='polygon')
         """  # noqa: E501
 
-        simplefilter('always', DeprecationWarning)
-        warn("There are no available providers, so we don't support this endpoint. Please ignore it. Deprecated in OpenBB Platform V4.3 to be removed in V4.5.", category=DeprecationWarning, stacklevel=2)
-
         return self._run(
             "/equity/price/nbbo",
             **filter_inputs(
@@ -295,7 +253,7 @@ class ROUTER_equity_price(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.price.nbbo",
-                        ('polygon',),
+                        ("polygon",),
                     )
                 },
                 standard_params={
@@ -309,8 +267,8 @@ class ROUTER_equity_price(Container):
     @validate
     def performance(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get price performance data for a given stock. This includes price changes for different time periods.
@@ -386,14 +344,14 @@ class ROUTER_equity_price(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.price.performance",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -401,8 +359,8 @@ class ROUTER_equity_price(Container):
     @validate
     def quote(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, yfinance.')],
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, yfinance.")],
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the latest quote for a given stock. Quote includes price, volume, and other data.
@@ -546,13 +504,13 @@ class ROUTER_equity_price(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.price.quote",
-                        ('fmp', 'intrinio', 'yfinance'),
+                        ("fmp", "intrinio", "yfinance"),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'intrinio': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "intrinio": {"multiple_items_allowed": True, "choices": None}, "yfinance": {"multiple_items_allowed": True, "choices": None}}},
             )
         )

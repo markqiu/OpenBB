@@ -1,51 +1,15 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
 import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-
-from openbb_core.app.static.utils.filters import filter_inputs
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from typing import Literal, Optional, Union
 
 from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
-import openbb_core.app.model.command_context
-import openbb_core.app.provider_interface
-import typing
+from openbb_core.app.model.obbject import OBBject
+from openbb_core.app.static.container import Container
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+from openbb_core.app.static.utils.filters import filter_inputs
+from typing_extensions import Annotated
 
-from openbb_core.app.model.command_context import CommandContext
-from openbb_core.app.provider_interface import (
-    OBBject_EquityInfo,
-    OBBject_EquityScreener,
-    OBBject_EquitySearch,
-    OBBject_HistoricalMarketCap,
-    OBBject_MarketSnapshots,
-)
-
-from typing import (
-    EquityInfo,
-    EquityScreener,
-    EquitySearch,
-    HistoricalMarketCap,
-    MarketSnapshots,
-)
 
 class ROUTER_equity(Container):
     """/equity
@@ -106,10 +70,10 @@ class ROUTER_equity(Container):
     @validate
     def historical_market_cap(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, xiaoyuan.')],
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio.")],
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the historical market cap of a ticker symbol.
@@ -117,9 +81,9 @@ class ROUTER_equity(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio.
         symbol : Union[str, list[str]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, xiaoyuan.
+            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio.
         start_date : Union[date, None, str]
             Start date of the data, in YYYY-MM-DD format.
         end_date : Union[date, None, str]
@@ -163,7 +127,7 @@ class ROUTER_equity(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.historical_market_cap",
-                        ('fmp', 'intrinio', 'xiaoyuan'),
+                        ("fmp", "intrinio"),
                     )
                 },
                 standard_params={
@@ -172,7 +136,7 @@ class ROUTER_equity(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'intrinio': {'multiple_items_allowed': True, 'choices': None}, 'xiaoyuan': {'multiple_items_allowed': True, 'choices': None}}, 'interval': {'intrinio': {'multiple_items_allowed': False, 'choices': ['day', 'week', 'month', 'quarter', 'year']}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "intrinio": {"multiple_items_allowed": True, "choices": None}}, "interval": {"intrinio": {"multiple_items_allowed": False, "choices": ["day", "week", "month", "quarter", "year"]}}},
             )
         )
 
@@ -180,7 +144,7 @@ class ROUTER_equity(Container):
     @validate
     def market_snapshots(
         self,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'polygon']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon.')] = None,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "polygon"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon.")] = None,
         **kwargs
     ) -> OBBject:
         """Get an updated equity market snapshot. This includes price data for thousands of stocks.
@@ -320,13 +284,13 @@ class ROUTER_equity(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.market_snapshots",
-                        ('fmp', 'intrinio', 'polygon'),
+                        ("fmp", "intrinio", "polygon"),
                     )
                 },
                 standard_params={
                 },
                 extra_params=kwargs,
-                info={'market': {'fmp': {'multiple_items_allowed': False, 'choices': ['amex', 'ams', 'ase', 'asx', 'ath', 'bme', 'bru', 'bud', 'bue', 'cai', 'cnq', 'cph', 'dfm', 'doh', 'etf', 'euronext', 'hel', 'hkse', 'ice', 'iob', 'ist', 'jkt', 'jnb', 'jpx', 'kls', 'koe', 'ksc', 'kuw', 'lse', 'mex', 'mutual_fund', 'nasdaq', 'neo', 'nse', 'nyse', 'nze', 'osl', 'otc', 'pnk', 'pra', 'ris', 'sao', 'sau', 'set', 'sgo', 'shh', 'shz', 'six', 'sto', 'tai', 'tlv', 'tsx', 'two', 'vie', 'wse', 'xetra']}}},
+                info={"market": {"fmp": {"multiple_items_allowed": False, "choices": ["amex", "ams", "ase", "asx", "ath", "bme", "bru", "bud", "bue", "cai", "cnq", "cph", "dfm", "doh", "etf", "euronext", "hel", "hkse", "ice", "iob", "ist", "jkt", "jnb", "jpx", "kls", "koe", "ksc", "kuw", "lse", "mex", "mutual_fund", "nasdaq", "neo", "nse", "nyse", "nze", "osl", "otc", "pnk", "pra", "ris", "sao", "sau", "set", "sgo", "shh", "shz", "six", "sto", "tai", "tlv", "tsx", "two", "vie", "wse", "xetra"]}}},
             )
         )
 
@@ -348,8 +312,8 @@ class ROUTER_equity(Container):
     @validate
     def profile(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, xiaoyuan, yfinance.')],
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, yfinance.")],
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get general information about a company. This includes company name, industry, sector and price data.
@@ -357,9 +321,9 @@ class ROUTER_equity(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.
         symbol : Union[str, list[str]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, xiaoyuan, yfinance.
+            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, yfinance.
 
         Returns
         -------
@@ -456,7 +420,7 @@ class ROUTER_equity(Container):
         is_etf : Optional[bool]
             If the symbol is an ETF. (provider: fmp)
         is_actively_trading : Optional[bool]
-            If the company is actively trading. (provider: fmp, xiaoyuan)
+            If the company is actively trading. (provider: fmp)
         is_adr : Optional[bool]
             If the stock is an ADR. (provider: fmp)
         is_fund : Optional[bool]
@@ -466,17 +430,16 @@ class ROUTER_equity(Container):
         currency : Optional[str]
             Currency in which the stock is traded. (provider: fmp, yfinance)
         market_cap : Optional[int]
-            Market capitalization of the company. (provider: fmp, xiaoyuan);
+            Market capitalization of the company. (provider: fmp);
             The market capitalization of the asset. (provider: yfinance)
         last_price : Optional[float]
-            The last traded price. (provider: fmp, xiaoyuan)
+            The last traded price. (provider: fmp)
         year_high : Optional[float]
-            The one-year high of the price. (provider: fmp, xiaoyuan)
+            The one-year high of the price. (provider: fmp)
         year_low : Optional[float]
-            The one-year low of the price. (provider: fmp, xiaoyuan)
+            The one-year low of the price. (provider: fmp)
         volume_avg : Optional[int]
-            Average daily trading volume. (provider: fmp);
-            The one-year average daily trading volume (provider: xiaoyuan)
+            Average daily trading volume. (provider: fmp)
         annualized_dividend_amount : Optional[float]
             The annualized dividend payment based on the most recent regular dividend payment. (provider: fmp)
         beta : Optional[float]
@@ -485,20 +448,6 @@ class ROUTER_equity(Container):
             Intrinio ID for the company. (provider: intrinio)
         thea_enabled : Optional[bool]
             Whether the company has been enabled for Thea. (provider: intrinio)
-        listed_date : Optional[date]
-            The date the company was listed. (provider: xiaoyuan)
-        industries : Optional[str]
-            The industrie the company operates in. (provider: xiaoyuan)
-        price : Optional[float]
-            The price of the company. (provider: xiaoyuan)
-        issues : Optional[str]
-            The number of shares outstanding. (provider: xiaoyuan)
-        area_indices : Optional[str]
-            The area indices of the company. (provider: xiaoyuan)
-        register_capital : Optional[str]
-            The register capital of the company. (provider: xiaoyuan)
-        profile : Optional[str]
-            The profile of the company. (provider: xiaoyuan)
         exchange_timezone : Optional[str]
             The timezone of the exchange. (provider: yfinance)
         issue_type : Optional[str]
@@ -527,14 +476,14 @@ class ROUTER_equity(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.profile",
-                        ('fmp', 'intrinio', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "yfinance"),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'intrinio': {'multiple_items_allowed': True, 'choices': None}, 'xiaoyuan': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "intrinio": {"multiple_items_allowed": True, "choices": None}, "yfinance": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -542,7 +491,7 @@ class ROUTER_equity(Container):
     @validate
     def screener(
         self,
-        provider: Annotated[Optional[Literal['fmp', 'nasdaq', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, nasdaq, yfinance.')] = None,
+        provider: Annotated[Optional[Literal["fmp", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Screen for companies meeting various criteria.
@@ -553,7 +502,7 @@ class ROUTER_equity(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, nasdaq, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, yfinance.
         mktcap_min : Optional[int]
             Filter by market cap greater than this value. (provider: fmp, yfinance)
         mktcap_max : Optional[int]
@@ -579,35 +528,15 @@ class ROUTER_equity(Container):
         is_active : Optional[bool]
             If false, returns only inactive tickers. (provider: fmp)
         sector : str
-            Filter by sector. (provider: fmp, nasdaq, yfinance)
+            Filter by sector. (provider: fmp, yfinance)
         industry : Optional[str]
             Filter by industry. (provider: fmp, yfinance)
-        country : Union[str, None, Literal['all', 'argentina', 'armenia', 'australia', 'austria', 'belgium', 'bermuda', 'brazil', 'canada', 'cayman_islands', 'chile', 'colombia', 'costa_rica', 'curacao', 'cyprus', 'denmark', 'finland', 'france', 'germany', 'greece', 'guernsey', 'hong_kong', 'india', 'indonesia', 'ireland', 'isle_of_man', 'israel', 'italy', 'japan', 'jersey', 'luxembourg', 'macau', 'mexico', 'monaco', 'netherlands', 'norway', 'panama', 'peru', 'philippines', 'puerto_rico', 'russia', 'singapore', 'south_africa', 'south_korea', 'spain', 'sweden', 'switzerland', 'taiwan', 'turkey', 'united_kingdom', 'united_states', 'usa']]
-            Filter by country, as a two-letter country code. (provider: fmp);
-            Default is, 'us'. Use, 'all', for all countries. (provider: yfinance)
+        country : Optional[str]
+            Filter by country, as a two-letter country code. (provider: fmp)
         exchange : str
-            Filter by exchange. (provider: fmp, nasdaq, yfinance)
+            Filter by exchange. (provider: fmp, yfinance)
         limit : Optional[int]
-            Limit the number of results to return. (provider: fmp, nasdaq)
-        exsubcategory : Union[Literal['all', 'ngs', 'ngm', 'ncm', 'adr'], str]
-            Filter by exchange subcategory.
-                NGS - Nasdaq Global Select Market
-                NGM - Nasdaq Global Market
-                NCM - Nasdaq Capital Market
-                ADR - American Depository Receipt
-             Multiple comma separated items allowed. (provider: nasdaq)
-        mktcap : Union[Literal['all', 'mega', 'large', 'mid', 'small', 'micro'], str]
-            Filter by market cap.
-                Mega - > 200B
-                Large - 10B - 200B
-                Mid - 2B - 10B
-                Small - 300M - 2B
-                Micro - 50M - 300M
-             Multiple comma separated items allowed. (provider: nasdaq)
-        recommendation : Union[Literal['all', 'strong_buy', 'buy', 'hold', 'sell', 'strong_sell'], str]
-            Filter by consensus analyst action. Multiple comma separated items allowed. (provider: nasdaq)
-        region : Union[Literal['all', 'africa', 'asia', 'australia_and_south_pacific', 'caribbean', 'europe', 'middle_east', 'north_america', 'south_america'], str]
-            Filter by region. Multiple comma separated items allowed. (provider: nasdaq)
+            Limit the number of results to return. (provider: fmp)
 
         Returns
         -------
@@ -631,7 +560,6 @@ class ROUTER_equity(Container):
             Name of the company.
         market_cap : Optional[Union[int, float]]
             The market cap of ticker. (provider: fmp);
-            Market cap. (provider: nasdaq);
             Market Cap. (provider: yfinance)
         sector : Optional[str]
             The sector the ticker belongs to. (provider: fmp)
@@ -656,12 +584,6 @@ class ROUTER_equity(Container):
             Whether the ticker is an ETF. (provider: fmp)
         actively_trading : Optional[Literal[True, False]]
             Whether the ETF is actively trading. (provider: fmp)
-        last_price : Optional[float]
-            Last sale price. (provider: nasdaq)
-        change : Optional[float]
-            1-day change in price. (provider: nasdaq)
-        change_percent : Optional[float]
-            1-day percent change in price. (provider: nasdaq)
         open : Optional[float]
             Open price for the day. (provider: yfinance)
         high : Optional[float]
@@ -712,13 +634,13 @@ class ROUTER_equity(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.screener",
-                        ('fmp', 'nasdaq', 'yfinance'),
+                        ("fmp", "yfinance"),
                     )
                 },
                 standard_params={
                 },
                 extra_params=kwargs,
-                info={'sector': {'fmp': {'multiple_items_allowed': False, 'choices': ['consumer_cyclical', 'energy', 'technology', 'industrials', 'financial_services', 'basic_materials', 'communication_services', 'consumer_defensive', 'healthcare', 'real_estate', 'utilities', 'industrial_goods', 'financial', 'services']}, 'nasdaq': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['basic_materials', 'communication_services', 'consumer_cyclical', 'consumer_defensive', 'energy', 'financial_services', 'healthcare', 'industrials', 'real_estate', 'technology', 'utilities']}}, 'industry': {'yfinance': {'multiple_items_allowed': False, 'choices': ['advertising_agencies', 'aerospace_defense', 'agricultural_inputs', 'airlines', 'airports_air_services', 'aluminum', 'apparel_manufacturing', 'apparel_retail', 'asset_management', 'auto_components', 'auto_manufacturers', 'auto_parts', 'auto_truck_dealerships', 'automobiles', 'banks', 'biotechnology', 'broadcasting', 'building_materials', 'building_products', 'building_products_equipment', 'business_equipment_supplies', 'capital_markets', 'chemicals', 'coking_coal', 'commercial_services', 'communication_equipment', 'computer_hardware', 'confectioners', 'construction_engineering', 'construction_materials', 'consulting_services', 'consumer_durables', 'consumer_electronics', 'consumer_services', 'copper', 'credit_services', 'department_stores', 'diagnostics_research', 'discount_stores', 'diversified_financials', 'education_training_services', 'electrical_equipment', 'electrical_equipment_parts', 'electronic_components', 'electronic_gaming_multimedia', 'electronics_computer_distribution', 'energy_services', 'engineering_construction', 'entertainment', 'farm_heavy_construction_machinery', 'farm_products', 'financial_conglomerates', 'financial_data_stock_exchanges', 'food_distribution', 'footwear_accessories', 'furnishings_fixtures_appliances', 'gambling', 'gold', 'grocery_stores', 'health_information_services', 'healthcare_plans', 'home_builders', 'home_improvement_retail', 'household_products', 'household_personal_products', 'industrial_conglomerates', 'industrial_distribution', 'information_technology_services', 'infrastructure_operations', 'insurance', 'integrated_freight_logistics', 'internet_content_information', 'internet_retail', 'leisure', 'lodging', 'lumber_wood_production', 'luxury_goods', 'machinery', 'marine_shipping', 'media', 'medical_care_facilities', 'medical_devices', 'medical_distribution', 'medical_instruments_supplies', 'metal_fabrication', 'mortgage_finance', 'oil_gas_drilling', 'oil_gas_e_p', 'oil_gas_equipment_services', 'oil_gas_integrated', 'oil_gas_midstream', 'oil_gas_producers', 'oil_gas_refining_marketing', 'other_industrial_metals_mining', 'other_precious_metals_mining', 'packaged_foods', 'packaging_containers', 'paper_forestry', 'paper_paper_products', 'personal_services', 'pharmaceuticals', 'pharmaceutical_retailers', 'pollution_treatment_controls', 'precious_metals', 'publishing', 'railroads', 'real_estate', 'recreational_vehicles', 'refiners_pipelines', 'rental_leasing_services', 'residential_construction', 'resorts_casinos', 'restaurants', 'retailing', 'scientific_technical_instruments', 'security_protection_services', 'semiconductor_equipment_materials', 'semiconductors', 'shell_companies', 'silver', 'software_and_services', 'solar', 'specialty_business_services', 'specialty_chemicals', 'specialty_industrial_machinery', 'specialty_retail', 'staffing_employment_services', 'steel', 'technology_hardware', 'telecom_services', 'textiles_apparel', 'textile_manufacturing', 'thermal_coal', 'tobacco', 'tools_accessories', 'traders_distributors', 'transportation', 'transportation_infrastructure', 'travel_services', 'trucking', 'uranium', 'utilities', 'waste_management']}}, 'country': {'nasdaq': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['all', 'ar', 'at', 'au', 'be', 'br', 'ca', 'ch', 'cl', 'cn', 'cz', 'de', 'dk', 'ee', 'eg', 'es', 'fi', 'fr', 'gb', 'gr', 'hk', 'hu', 'id', 'ie', 'il', 'in', 'is', 'it', 'jp', 'kr', 'kw', 'lk', 'lt', 'lv', 'mx', 'my', 'nl', 'no', 'nz', 'pe', 'ph', 'pk', 'pl', 'pt', 'qa', 'ro', 'ru', 'sa', 'se', 'sg', 'sr', 'th', 'tr', 'tw', 'us', 've', 'vn', 'za']}}, 'exchange': {'fmp': {'multiple_items_allowed': False, 'choices': ['amex', 'ams', 'ase', 'asx', 'ath', 'bme', 'bru', 'bud', 'bue', 'cai', 'cnq', 'cph', 'dfm', 'doh', 'etf', 'euronext', 'hel', 'hkse', 'ice', 'iob', 'ist', 'jkt', 'jnb', 'jpx', 'kls', 'koe', 'ksc', 'kuw', 'lse', 'mex', 'mutual_fund', 'nasdaq', 'neo', 'nse', 'nyse', 'nze', 'osl', 'otc', 'pnk', 'pra', 'ris', 'sao', 'sau', 'set', 'sgo', 'shh', 'shz', 'six', 'sto', 'tai', 'tlv', 'tsx', 'two', 'vie', 'wse', 'xetra']}, 'nasdaq': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['ams', 'aqs', 'ase', 'asx', 'ath', 'ber', 'bru', 'bse', 'bts', 'bud', 'bue', 'bvb', 'bvc', 'ccs', 'cnq', 'cph', 'cxe', 'dfm', 'doh', 'dus', 'ebs', 'fka', 'fra', 'ger', 'ham', 'han', 'hel', 'hkg', 'ice', 'iob', 'ise', 'ist', 'jkt', 'jnb', 'jpx', 'kls', 'kuw', 'lis', 'lit', 'lse', 'mce', 'mex', 'mil', 'mun', 'ncm', 'neo', 'ngm', 'nms', 'nsi', 'nyq', 'nze', 'oem', 'oqb', 'oqx', 'osl', 'par', 'pnk', 'pra', 'ris', 'sau', 'ses', 'set', 'sgo', 'shh', 'shz', 'sto', 'stu', 'tai', 'tal', 'tlv', 'tor', 'two', 'van', 'vie', 'vse', 'wse']}}, 'exsubcategory': {'nasdaq': {'multiple_items_allowed': True, 'choices': None}}, 'mktcap': {'nasdaq': {'multiple_items_allowed': True, 'choices': None}}, 'recommendation': {'nasdaq': {'multiple_items_allowed': True, 'choices': None}}, 'region': {'nasdaq': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"sector": {"fmp": {"multiple_items_allowed": False, "choices": ["consumer_cyclical", "energy", "technology", "industrials", "financial_services", "basic_materials", "communication_services", "consumer_defensive", "healthcare", "real_estate", "utilities", "industrial_goods", "financial", "services"]}, "yfinance": {"multiple_items_allowed": False, "choices": ["basic_materials", "communication_services", "consumer_cyclical", "consumer_defensive", "energy", "financial_services", "healthcare", "industrials", "real_estate", "technology", "utilities"]}}, "industry": {"yfinance": {"multiple_items_allowed": False, "choices": ["advertising_agencies", "aerospace_defense", "agricultural_inputs", "airlines", "airports_air_services", "aluminum", "apparel_manufacturing", "apparel_retail", "asset_management", "auto_components", "auto_manufacturers", "auto_parts", "auto_truck_dealerships", "automobiles", "banks", "biotechnology", "broadcasting", "building_materials", "building_products", "building_products_equipment", "business_equipment_supplies", "capital_markets", "chemicals", "coking_coal", "commercial_services", "communication_equipment", "computer_hardware", "confectioners", "construction_engineering", "construction_materials", "consulting_services", "consumer_durables", "consumer_electronics", "consumer_services", "copper", "credit_services", "department_stores", "diagnostics_research", "discount_stores", "diversified_financials", "education_training_services", "electrical_equipment", "electrical_equipment_parts", "electronic_components", "electronic_gaming_multimedia", "electronics_computer_distribution", "energy_services", "engineering_construction", "entertainment", "farm_heavy_construction_machinery", "farm_products", "financial_conglomerates", "financial_data_stock_exchanges", "food_distribution", "footwear_accessories", "furnishings_fixtures_appliances", "gambling", "gold", "grocery_stores", "health_information_services", "healthcare_plans", "home_builders", "home_improvement_retail", "household_products", "household_personal_products", "industrial_conglomerates", "industrial_distribution", "information_technology_services", "infrastructure_operations", "insurance", "integrated_freight_logistics", "internet_content_information", "internet_retail", "leisure", "lodging", "lumber_wood_production", "luxury_goods", "machinery", "marine_shipping", "media", "medical_care_facilities", "medical_devices", "medical_distribution", "medical_instruments_supplies", "metal_fabrication", "mortgage_finance", "oil_gas_drilling", "oil_gas_e_p", "oil_gas_equipment_services", "oil_gas_integrated", "oil_gas_midstream", "oil_gas_producers", "oil_gas_refining_marketing", "other_industrial_metals_mining", "other_precious_metals_mining", "packaged_foods", "packaging_containers", "paper_forestry", "paper_paper_products", "personal_services", "pharmaceuticals", "pharmaceutical_retailers", "pollution_treatment_controls", "precious_metals", "publishing", "railroads", "real_estate", "recreational_vehicles", "refiners_pipelines", "rental_leasing_services", "residential_construction", "resorts_casinos", "restaurants", "retailing", "scientific_technical_instruments", "security_protection_services", "semiconductor_equipment_materials", "semiconductors", "shell_companies", "silver", "software_and_services", "solar", "specialty_business_services", "specialty_chemicals", "specialty_industrial_machinery", "specialty_retail", "staffing_employment_services", "steel", "technology_hardware", "telecom_services", "textiles_apparel", "textile_manufacturing", "thermal_coal", "tobacco", "tools_accessories", "traders_distributors", "transportation", "transportation_infrastructure", "travel_services", "trucking", "uranium", "utilities", "waste_management"]}}, "country": {"yfinance": {"multiple_items_allowed": False, "choices": ["all", "ar", "at", "au", "be", "br", "ca", "ch", "cl", "cn", "cz", "de", "dk", "ee", "eg", "es", "fi", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "is", "it", "jp", "kr", "kw", "lk", "lt", "lv", "mx", "my", "nl", "no", "nz", "pe", "ph", "pk", "pl", "pt", "qa", "ro", "ru", "sa", "se", "sg", "sr", "th", "tr", "tw", "us", "ve", "vn", "za"]}}, "exchange": {"fmp": {"multiple_items_allowed": False, "choices": ["amex", "ams", "ase", "asx", "ath", "bme", "bru", "bud", "bue", "cai", "cnq", "cph", "dfm", "doh", "etf", "euronext", "hel", "hkse", "ice", "iob", "ist", "jkt", "jnb", "jpx", "kls", "koe", "ksc", "kuw", "lse", "mex", "mutual_fund", "nasdaq", "neo", "nse", "nyse", "nze", "osl", "otc", "pnk", "pra", "ris", "sao", "sau", "set", "sgo", "shh", "shz", "six", "sto", "tai", "tlv", "tsx", "two", "vie", "wse", "xetra"]}, "yfinance": {"multiple_items_allowed": False, "choices": ["ams", "aqs", "ase", "asx", "ath", "ber", "bru", "bse", "bts", "bud", "bue", "bvb", "bvc", "ccs", "cnq", "cph", "cxe", "dfm", "doh", "dus", "ebs", "fka", "fra", "ger", "ham", "han", "hel", "hkg", "ice", "iob", "ise", "ist", "jkt", "jnb", "jpx", "kls", "kuw", "lis", "lit", "lse", "mce", "mex", "mil", "mun", "ncm", "neo", "ngm", "nms", "nsi", "nyq", "nze", "oem", "oqb", "oqx", "osl", "par", "pnk", "pra", "ris", "sau", "ses", "set", "sgo", "shh", "shz", "sto", "stu", "tai", "tal", "tlv", "tor", "two", "van", "vie", "vse", "wse"]}}},
             )
         )
 
@@ -726,9 +648,9 @@ class ROUTER_equity(Container):
     @validate
     def search(
         self,
-        query: Annotated[str, OpenBBField(description='Search query.')] = '',
-        is_symbol: Annotated[bool, OpenBBField(description='Whether to search by ticker symbol.')] = False,
-        provider: Annotated[Optional[Literal['intrinio', 'nasdaq', 'sec', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio, nasdaq, sec, xiaoyuan.')] = None,
+        query: Annotated[str, OpenBBField(description="Search query.")] = "",
+        is_symbol: Annotated[bool, OpenBBField(description="Whether to search by ticker symbol.")] = False,
+        provider: Annotated[Optional[Literal["intrinio", "sec"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio, sec.")] = None,
         **kwargs
     ) -> OBBject:
         """Search for stock symbol, CIK, LEI, or company name.
@@ -736,7 +658,7 @@ class ROUTER_equity(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio, nasdaq, sec, xiaoyuan.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio, sec.
         query : str
             Search query.
         is_symbol : bool
@@ -745,8 +667,6 @@ class ROUTER_equity(Container):
             When true, return companies that are actively traded (having stock prices within the past 14 days). When false, return companies that are not actively traded or never have been traded. (provider: intrinio)
         limit : Optional[int]
             The number of data entries to return. (provider: intrinio)
-        is_etf : Optional[bool]
-            If True, returns ETFs. (provider: nasdaq)
         use_cache : bool
             Whether to use the cache or not. (provider: sec)
         is_fund : bool
@@ -779,33 +699,11 @@ class ROUTER_equity(Container):
             The Legal Entity Identifier (LEI) of the company. (provider: intrinio)
         intrinio_id : Optional[str]
             The Intrinio ID of the company. (provider: intrinio)
-        nasdaq_traded : Optional[str]
-            Is Nasdaq traded? (provider: nasdaq)
-        exchange : Optional[str]
-            Primary Exchange (provider: nasdaq);
-            The exchange on which the stock is listed. (provider: xiaoyuan)
-        market_category : Optional[str]
-            Market Category (provider: nasdaq)
-        etf : Optional[str]
-            Is ETF? (provider: nasdaq)
-        round_lot_size : Optional[float]
-            Round Lot Size (provider: nasdaq)
-        test_issue : Optional[str]
-            Is test Issue? (provider: nasdaq)
-        financial_status : Optional[str]
-            Financial Status (provider: nasdaq)
-        cqs_symbol : Optional[str]
-            CQS Symbol (provider: nasdaq)
-        nasdaq_symbol : Optional[str]
-            NASDAQ Symbol (provider: nasdaq)
-        next_shares : Optional[str]
-            Is NextShares? (provider: nasdaq)
 
         Examples
         --------
         >>> from openbb import obb
         >>> obb.equity.search(provider='intrinio')
-        >>> obb.equity.search(query='AAPL', is_symbol=False, use_cache=True, provider='nasdaq')
         """  # noqa: E501
 
         return self._run(
@@ -815,7 +713,7 @@ class ROUTER_equity(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.search",
-                        ('intrinio', 'nasdaq', 'sec', 'xiaoyuan'),
+                        ("intrinio", "sec"),
                     )
                 },
                 standard_params={

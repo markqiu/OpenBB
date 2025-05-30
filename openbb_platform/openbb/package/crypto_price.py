@@ -1,38 +1,16 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
 import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-
-from openbb_core.app.static.utils.filters import filter_inputs
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from typing import Literal, Optional, Union
 
 from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
-import openbb_core.app.model.command_context
-import openbb_core.app.provider_interface
-import typing
+from openbb_core.app.model.obbject import OBBject
+from openbb_core.app.static.container import Container
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+from openbb_core.app.static.utils.filters import filter_inputs
+from typing_extensions import Annotated
 
-from openbb_core.app.model.command_context import CommandContext
-from openbb_core.app.provider_interface import OBBject_CryptoHistorical
-from typing import CryptoHistorical
+
 class ROUTER_crypto_price(Container):
     """/crypto/price
     historical
@@ -45,10 +23,10 @@ class ROUTER_crypto_price(Container):
     @validate
     def historical(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Can use CURR1-CURR2 or CURR1CURR2 format. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, yfinance.')],
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fmp', 'polygon', 'tiingo', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, polygon, tiingo, yfinance.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Can use CURR1-CURR2 or CURR1CURR2 format. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, yfinance.")],
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "polygon", "tiingo", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, polygon, tiingo, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get historical price data for cryptocurrency pair(s) within a provider.
@@ -132,7 +110,7 @@ class ROUTER_crypto_price(Container):
                     "provider": self._get_provider(
                         provider,
                         "crypto.price.historical",
-                        ('fmp', 'polygon', 'tiingo', 'yfinance'),
+                        ("fmp", "polygon", "tiingo", "yfinance"),
                     )
                 },
                 standard_params={
@@ -141,6 +119,6 @@ class ROUTER_crypto_price(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'polygon': {'multiple_items_allowed': True, 'choices': None}, 'tiingo': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': True, 'choices': None}}, 'interval': {'fmp': {'multiple_items_allowed': False, 'choices': ['1m', '5m', '15m', '30m', '1h', '4h', '1d']}, 'tiingo': {'multiple_items_allowed': False, 'choices': ['1m', '5m', '15m', '30m', '90m', '1h', '2h', '4h', '1d', '7d', '30d']}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1W', '1M', '1Q']}}, 'exchanges': {'tiingo': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "polygon": {"multiple_items_allowed": True, "choices": None}, "tiingo": {"multiple_items_allowed": True, "choices": None}, "yfinance": {"multiple_items_allowed": True, "choices": None}}, "interval": {"fmp": {"multiple_items_allowed": False, "choices": ["1m", "5m", "15m", "30m", "1h", "4h", "1d"]}, "tiingo": {"multiple_items_allowed": False, "choices": ["1m", "5m", "15m", "30m", "90m", "1h", "2h", "4h", "1d", "7d", "30d"]}, "yfinance": {"multiple_items_allowed": False, "choices": ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1W", "1M", "1Q"]}}, "exchanges": {"tiingo": {"multiple_items_allowed": True, "choices": None}}},
             )
         )

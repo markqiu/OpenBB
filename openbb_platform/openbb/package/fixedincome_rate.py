@@ -1,61 +1,15 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
 import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-
-from openbb_core.app.static.utils.filters import filter_inputs
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from typing import Literal, Optional, Union
 
 from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
-import openbb_core.app.model.command_context
-import openbb_core.app.provider_interface
-import typing
+from openbb_core.app.model.obbject import OBBject
+from openbb_core.app.static.container import Container
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+from openbb_core.app.static.utils.filters import filter_inputs
+from typing_extensions import Annotated
 
-from openbb_core.app.model.command_context import CommandContext
-from openbb_core.app.provider_interface import (
-    OBBject_Ameribor,
-    OBBject_DiscountWindowPrimaryCreditRate,
-    OBBject_EuroShortTermRate,
-    OBBject_EuropeanCentralBankInterestRates,
-    OBBject_FederalFundsRate,
-    OBBject_IORB,
-    OBBject_OvernightBankFundingRate,
-    OBBject_PROJECTIONS,
-    OBBject_SOFR,
-    OBBject_SONIA,
-)
-
-from typing import (
-    Ameribor,
-    DiscountWindowPrimaryCreditRate,
-    EuroShortTermRate,
-    EuropeanCentralBankInterestRates,
-    FederalFundsRate,
-    IORB,
-    OvernightBankFundingRate,
-    PROJECTIONS,
-    SOFR,
-    SONIA,
-)
 
 class ROUTER_fixedincome_rate(Container):
     """/fixedincome/rate
@@ -78,9 +32,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def ameribor(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """AMERIBOR.
@@ -180,7 +134,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.ameribor",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -188,7 +142,7 @@ class ROUTER_fixedincome_rate(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={'maturity': {'fred': {'multiple_items_allowed': True, 'choices': ['all', 'overnight', 'average_30d', 'average_90d', 'term_30d', 'term_90d']}}},
+                info={"maturity": {"fred": {"multiple_items_allowed": True, "choices": ["all", "overnight", "average_30d", "average_90d", "term_30d", "term_90d"]}}},
             )
         )
 
@@ -196,9 +150,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def dpcredit(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Discount Window Primary Credit Rate.
@@ -255,7 +209,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.dpcredit",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -270,10 +224,10 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def ecb(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        interest_rate_type: Annotated[Literal['deposit', 'lending', 'refinancing'], OpenBBField(description='The type of interest rate.')] = 'lending',
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        interest_rate_type: Annotated[Literal["deposit", "lending", "refinancing"], OpenBBField(description="The type of interest rate.")] = "lending",
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """European Central Bank Interest Rates.
@@ -332,7 +286,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.ecb",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -348,9 +302,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def effr(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['federal_reserve', 'fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["federal_reserve", "fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Fed Funds Rate.
@@ -464,7 +418,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.effr",
-                        ('federal_reserve', 'fred'),
+                        ("federal_reserve", "fred"),
                     )
                 },
                 standard_params={
@@ -479,7 +433,7 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def effr_forecast(
         self,
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Fed Funds Rate Projections.
@@ -544,7 +498,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.effr_forecast",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -557,9 +511,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def estr(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Euro Short-Term Rate.
@@ -687,7 +641,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.estr",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -702,9 +656,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def iorb(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Interest on Reserve Balances.
@@ -757,7 +711,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.iorb",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={
@@ -772,9 +726,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def overnight_bank_funding(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['federal_reserve', 'fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["federal_reserve", "fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Overnight Bank Funding.
@@ -876,7 +830,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.overnight_bank_funding",
-                        ('federal_reserve', 'fred'),
+                        ("federal_reserve", "fred"),
                     )
                 },
                 standard_params={
@@ -891,9 +845,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def sofr(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['federal_reserve', 'fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["federal_reserve", "fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: federal_reserve, fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Secured Overnight Financing Rate.
@@ -1000,7 +954,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.sofr",
-                        ('federal_reserve', 'fred'),
+                        ("federal_reserve", "fred"),
                     )
                 },
                 standard_params={
@@ -1015,9 +969,9 @@ class ROUTER_fixedincome_rate(Container):
     @validate
     def sonia(
         self,
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fred']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.')] = None,
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fred"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fred.")] = None,
         **kwargs
     ) -> OBBject:
         """Sterling Overnight Index Average.
@@ -1073,7 +1027,7 @@ class ROUTER_fixedincome_rate(Container):
                     "provider": self._get_provider(
                         provider,
                         "fixedincome.rate.sonia",
-                        ('fred',),
+                        ("fred",),
                     )
                 },
                 standard_params={

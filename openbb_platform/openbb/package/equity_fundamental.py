@@ -1,109 +1,23 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
 import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
+from typing import Literal, Optional, Union
 
-from openbb_core.app.static.utils.filters import filter_inputs
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
-
+from annotated_types import Ge
 from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
-import openbb_core.app.model.command_context
-import openbb_core.app.provider_interface
-import typing
+from openbb_core.app.model.obbject import OBBject
+from openbb_core.app.static.container import Container
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+from openbb_core.app.static.utils.filters import filter_inputs
+from typing_extensions import Annotated
 
-from openbb_core.app.model.command_context import CommandContext
-from openbb_core.app.provider_interface import (
-    OBBject_BalanceSheet,
-    OBBject_BalanceSheetGrowth,
-    OBBject_BusinessAnalysis,
-    OBBject_BusinessScope,
-    OBBject_CashFlowStatement,
-    OBBject_CashFlowStatementGrowth,
-    OBBject_CompanyFilings,
-    OBBject_ConceptIndices,
-    OBBject_EarningsCallTranscript,
-    OBBject_EquityValuationMultiples,
-    OBBject_ExecutiveCompensation,
-    OBBject_FinancialRatios,
-    OBBject_HistoricalAttributes,
-    OBBject_HistoricalDividends,
-    OBBject_HistoricalEmployees,
-    OBBject_HistoricalEps,
-    OBBject_HistoricalSplits,
-    OBBject_IncomeStatement,
-    OBBject_IncomeStatementGrowth,
-    OBBject_KeyExecutives,
-    OBBject_KeyMetrics,
-    OBBject_LatestAttributes,
-    OBBject_ManagementDiscussionAnalysis,
-    OBBject_ReportedFinancials,
-    OBBject_RevenueBusinessLine,
-    OBBject_RevenueGeographic,
-    OBBject_SearchAttributes,
-    OBBject_SwSectors,
-    OBBject_TrailingDividendYield,
-)
-
-from typing import (
-    BalanceSheet,
-    BalanceSheetGrowth,
-    BusinessAnalysis,
-    BusinessScope,
-    CashFlowStatement,
-    CashFlowStatementGrowth,
-    CompanyFilings,
-    ConceptIndices,
-    EarningsCallTranscript,
-    EquityValuationMultiples,
-    ExecutiveCompensation,
-    FinancialRatios,
-    HistoricalAttributes,
-    HistoricalDividends,
-    HistoricalEmployees,
-    HistoricalEps,
-    HistoricalSplits,
-    IncomeStatement,
-    IncomeStatementGrowth,
-    KeyExecutives,
-    KeyMetrics,
-    LatestAttributes,
-    ManagementDiscussionAnalysis,
-    ReportedFinancials,
-    RevenueBusinessLine,
-    RevenueGeographic,
-    SearchAttributes,
-    SwSectors,
-    TrailingDividendYield,
-)
 
 class ROUTER_equity_fundamental(Container):
     """/equity/fundamental
     balance
     balance_growth
-    business_analysis
-    business_scope
     cash
     cash_growth
-    concept_indices
     dividends
     employee_count
     filings
@@ -123,7 +37,6 @@ class ROUTER_equity_fundamental(Container):
     revenue_per_geography
     revenue_per_segment
     search_attributes
-    sw_sectors
     trailing_dividend_yield
     transcript
     """
@@ -135,9 +48,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def balance(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        limit: Annotated[Optional[Annotated[int, Ge(ge=0)]], OpenBBField(description='The number of data entries to return.')] = 5,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'polygon', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        limit: Annotated[Optional[Annotated[int, Ge(ge=0)]], OpenBBField(description="The number of data entries to return.")] = 5,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "polygon", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the balance sheet for a given company.
@@ -145,18 +58,13 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, xiaoyuan, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, yfinance.
         symbol : str
             Symbol to get data for.
         limit : Optional[Annotated[int, Ge(ge=0)]]
             The number of data entries to return.
-        period : str
-            Time period of the data to return. (provider: fmp, intrinio, polygon, xiaoyuan, yfinance)
-            Choices for fmp: 'annual', 'quarter'
-            Choices for intrinio: 'annual', 'quarter'
-            Choices for polygon: 'annual', 'quarter'
-            Choices for xiaoyuan: 'annual', 'ytd'
-            Choices for yfinance: 'annual', 'quarter'
+        period : Literal['annual', 'quarter']
+            Time period of the data to return. (provider: fmp, intrinio, polygon, yfinance)
         fiscal_year : Optional[int]
             The specific fiscal year.  Reports do not go beyond 2008. (provider: intrinio)
         filing_date : Optional[date]
@@ -185,8 +93,6 @@ class ROUTER_equity_fundamental(Container):
             Order of the financial statement. (provider: polygon)
         sort : Optional[Literal['filing_date', 'period_of_report_date']]
             Sort of the financial statement. (provider: polygon)
-        use_cache : Optional[bool]
-            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
 
         Returns
         -------
@@ -225,17 +131,17 @@ class ROUTER_equity_fundamental(Container):
         net_receivables : Optional[float]
             Net receivables. (provider: fmp)
         inventory : Optional[float]
-            Inventory. (provider: fmp, polygon, xiaoyuan)
+            Inventory. (provider: fmp, polygon)
         other_current_assets : Optional[float]
-            Other current assets. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Other current assets. (provider: fmp, intrinio, polygon)
         total_current_assets : Optional[float]
-            Total current assets. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Total current assets. (provider: fmp, intrinio, polygon)
         plant_property_equipment_net : Optional[float]
             Plant property equipment net. (provider: fmp, intrinio)
         goodwill : Optional[float]
-            Goodwill. (provider: fmp, intrinio, xiaoyuan)
+            Goodwill. (provider: fmp, intrinio)
         intangible_assets : Optional[float]
-            Intangible assets. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Intangible assets. (provider: fmp, intrinio, polygon)
         goodwill_and_intangible_assets : Optional[float]
             Goodwill and intangible assets. (provider: fmp)
         long_term_investments : Optional[float]
@@ -243,15 +149,15 @@ class ROUTER_equity_fundamental(Container):
         tax_assets : Optional[float]
             Tax assets. (provider: fmp)
         other_non_current_assets : Optional[float]
-            Other non current assets. (provider: fmp, polygon, xiaoyuan)
+            Other non current assets. (provider: fmp, polygon)
         non_current_assets : Optional[float]
             Total non current assets. (provider: fmp)
         other_assets : Optional[float]
             Other assets. (provider: fmp, intrinio)
         total_assets : Optional[float]
-            Total assets. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Total assets. (provider: fmp, intrinio, polygon)
         accounts_payable : Optional[float]
-            Accounts payable. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Accounts payable. (provider: fmp, intrinio, polygon)
         short_term_debt : Optional[float]
             Short term debt. (provider: fmp, intrinio)
         tax_payables : Optional[float]
@@ -259,9 +165,9 @@ class ROUTER_equity_fundamental(Container):
         current_deferred_revenue : Optional[float]
             Current deferred revenue. (provider: fmp, intrinio)
         other_current_liabilities : Optional[float]
-            Other current liabilities. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Other current liabilities. (provider: fmp, intrinio, polygon)
         total_current_liabilities : Optional[float]
-            Total current liabilities. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Total current liabilities. (provider: fmp, intrinio, polygon)
         long_term_debt : Optional[float]
             Long term debt. (provider: fmp, intrinio, polygon)
         deferred_revenue_non_current : Optional[float]
@@ -269,15 +175,15 @@ class ROUTER_equity_fundamental(Container):
         deferred_tax_liabilities_non_current : Optional[float]
             Deferred tax liabilities non current. (provider: fmp)
         other_non_current_liabilities : Optional[float]
-            Other non current liabilities. (provider: fmp, polygon, xiaoyuan)
+            Other non current liabilities. (provider: fmp, polygon)
         total_non_current_liabilities : Optional[float]
-            Total non current liabilities. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Total non current liabilities. (provider: fmp, intrinio, polygon)
         other_liabilities : Optional[float]
             Other liabilities. (provider: fmp)
         capital_lease_obligations : Optional[float]
             Capital lease obligations. (provider: fmp, intrinio)
         total_liabilities : Optional[float]
-            Total liabilities. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Total liabilities. (provider: fmp, intrinio, polygon)
         preferred_stock : Optional[float]
             Preferred stock. (provider: fmp, intrinio, polygon)
         common_stock : Optional[float]
@@ -285,7 +191,7 @@ class ROUTER_equity_fundamental(Container):
         retained_earnings : Optional[float]
             Retained earnings. (provider: fmp, intrinio)
         accumulated_other_comprehensive_income : Optional[float]
-            Accumulated other comprehensive income (loss). (provider: fmp, intrinio, xiaoyuan)
+            Accumulated other comprehensive income (loss). (provider: fmp, intrinio)
         other_shareholders_equity : Optional[float]
             Other shareholders equity. (provider: fmp)
         other_total_shareholders_equity : Optional[float]
@@ -295,9 +201,9 @@ class ROUTER_equity_fundamental(Container):
         total_equity_non_controlling_interests : Optional[float]
             Total equity non controlling interests. (provider: fmp, intrinio)
         total_liabilities_and_shareholders_equity : Optional[float]
-            Total liabilities and shareholders equity. (provider: fmp, polygon, xiaoyuan)
+            Total liabilities and shareholders equity. (provider: fmp, polygon)
         minority_interest : Optional[float]
-            Minority interest. (provider: fmp, polygon, xiaoyuan)
+            Minority interest. (provider: fmp, polygon)
         total_liabilities_and_total_equity : Optional[float]
             Total liabilities and total equity. (provider: fmp)
         total_investments : Optional[float]
@@ -305,7 +211,7 @@ class ROUTER_equity_fundamental(Container):
         total_debt : Optional[float]
             Total debt. (provider: fmp)
         net_debt : Optional[float]
-            Net debt. (provider: fmp, xiaoyuan)
+            Net debt. (provider: fmp)
         link : Optional[str]
             Link to the filing. (provider: fmp)
         final_link : Optional[str]
@@ -317,7 +223,7 @@ class ROUTER_equity_fundamental(Container):
         federal_funds_sold : Optional[float]
             Federal funds sold. (provider: intrinio)
         accounts_receivable : Optional[float]
-            Accounts receivable. (provider: intrinio, polygon, xiaoyuan)
+            Accounts receivable. (provider: intrinio, polygon)
         note_and_lease_receivable : Optional[float]
             Note and lease receivable. (Vendor non-trade receivables) (provider: intrinio)
         inventories : Optional[float]
@@ -345,9 +251,9 @@ class ROUTER_equity_fundamental(Container):
         loans_held_for_sale : Optional[float]
             Loans held for sale. (provider: intrinio)
         prepaid_expenses : Optional[float]
-            Prepaid expenses. (provider: intrinio, polygon, xiaoyuan)
+            Prepaid expenses. (provider: intrinio, polygon)
         plant_property_equipment_gross : Optional[float]
-            Plant property equipment gross. (provider: intrinio, xiaoyuan)
+            Plant property equipment gross. (provider: intrinio)
         accumulated_depreciation : Optional[float]
             Accumulated depreciation. (provider: intrinio)
         premises_and_equipment_net : Optional[float]
@@ -373,7 +279,7 @@ class ROUTER_equity_fundamental(Container):
         interest_bearing_deposits : Optional[float]
             Interest bearing deposits. (provider: intrinio)
         total_non_current_assets : Optional[float]
-            Total noncurrent assets. (provider: intrinio, polygon, xiaoyuan)
+            Total noncurrent assets. (provider: intrinio, polygon)
         non_interest_bearing_deposits : Optional[float]
             Non interest bearing deposits. (provider: intrinio)
         federal_funds_purchased_and_securities_sold : Optional[float]
@@ -383,7 +289,7 @@ class ROUTER_equity_fundamental(Container):
         current_deferred_payable_income_tax_liabilities : Optional[float]
             Current deferred payable income tax liabilities. (provider: intrinio)
         accrued_interest_payable : Optional[float]
-            Accrued interest payable. (provider: intrinio, xiaoyuan)
+            Accrued interest payable. (provider: intrinio)
         accrued_expenses : Optional[float]
             Accrued expenses. (provider: intrinio)
         other_short_term_payables : Optional[float]
@@ -391,7 +297,7 @@ class ROUTER_equity_fundamental(Container):
         customer_deposits : Optional[float]
             Customer deposits. (provider: intrinio)
         dividends_payable : Optional[float]
-            Dividends payable. (provider: intrinio, xiaoyuan)
+            Dividends payable. (provider: intrinio)
         claims_and_claim_expense : Optional[float]
             Claims and claim expense. (provider: intrinio)
         future_policy_benefits : Optional[float]
@@ -427,7 +333,7 @@ class ROUTER_equity_fundamental(Container):
         redeemable_non_controlling_interest : Optional[float]
             Redeemable non-controlling interest. (provider: intrinio, polygon)
         treasury_stock : Optional[float]
-            Treasury stock. (provider: intrinio, xiaoyuan)
+            Treasury stock. (provider: intrinio)
         participating_policy_holder_equity : Optional[float]
             Participating policy holder equity. (provider: intrinio)
         other_equity_adjustments : Optional[float]
@@ -453,11 +359,9 @@ class ROUTER_equity_fundamental(Container):
         redeemable_non_controlling_interest_other : Optional[float]
             Redeemable non-controlling interest other (provider: polygon)
         total_shareholders_equity : Optional[float]
-            Total stock holders equity (provider: polygon, xiaoyuan)
+            Total stock holders equity (provider: polygon)
         total_equity : Optional[float]
             Total equity (provider: polygon)
-        symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: xiaoyuan)
 
         Examples
         --------
@@ -473,7 +377,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.balance",
-                        ('fmp', 'intrinio', 'polygon', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "polygon", "yfinance"),
                     )
                 },
                 standard_params={
@@ -481,7 +385,7 @@ class ROUTER_equity_fundamental(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'intrinio': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'polygon': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['annual', 'ytd']}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}}},
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}, "intrinio": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}, "polygon": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}, "yfinance": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}}},
             )
         )
 
@@ -489,9 +393,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def balance_growth(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        limit: Annotated[Optional[int], OpenBBField(description='The number of data entries to return.')] = 10,
-        provider: Annotated[Optional[Literal['fmp', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, xiaoyuan.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return.")] = 10,
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the growth of a company's balance sheet items over time.
@@ -499,15 +403,13 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, xiaoyuan.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
         symbol : str
             Symbol to get data for.
         limit : Optional[int]
             The number of data entries to return.
-        period : str
-            Time period of the data to return. (provider: fmp, xiaoyuan)
-            Choices for fmp: 'annual', 'quarter'
-            Choices for xiaoyuan: 'annual', 'ytd'
+        period : Literal['annual', 'quarter']
+            Time period of the data to return. (provider: fmp)
 
         Returns
         -------
@@ -532,85 +434,85 @@ class ROUTER_equity_fundamental(Container):
         fiscal_year : Optional[int]
             The fiscal year of the fiscal period.
         symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: fmp, xiaoyuan)
+            Symbol representing the entity requested in the data. (provider: fmp)
         growth_cash_and_cash_equivalents : Optional[float]
-            Growth rate of cash and cash equivalents. (provider: fmp, xiaoyuan)
+            Growth rate of cash and cash equivalents. (provider: fmp)
         growth_short_term_investments : Optional[float]
-            Growth rate of short-term investments. (provider: fmp, xiaoyuan)
+            Growth rate of short-term investments. (provider: fmp)
         growth_cash_and_short_term_investments : Optional[float]
-            Growth rate of cash and short-term investments. (provider: fmp, xiaoyuan)
+            Growth rate of cash and short-term investments. (provider: fmp)
         growth_net_receivables : Optional[float]
-            Growth rate of net receivables. (provider: fmp, xiaoyuan)
+            Growth rate of net receivables. (provider: fmp)
         growth_inventory : Optional[float]
-            Growth rate of inventory. (provider: fmp, xiaoyuan)
+            Growth rate of inventory. (provider: fmp)
         growth_other_current_assets : Optional[float]
-            Growth rate of other current assets. (provider: fmp, xiaoyuan)
+            Growth rate of other current assets. (provider: fmp)
         growth_total_current_assets : Optional[float]
-            Growth rate of total current assets. (provider: fmp, xiaoyuan)
+            Growth rate of total current assets. (provider: fmp)
         growth_property_plant_equipment_net : Optional[float]
-            Growth rate of net property, plant, and equipment. (provider: fmp, xiaoyuan)
+            Growth rate of net property, plant, and equipment. (provider: fmp)
         growth_goodwill : Optional[float]
-            Growth rate of goodwill. (provider: fmp, xiaoyuan)
+            Growth rate of goodwill. (provider: fmp)
         growth_intangible_assets : Optional[float]
-            Growth rate of intangible assets. (provider: fmp, xiaoyuan)
+            Growth rate of intangible assets. (provider: fmp)
         growth_goodwill_and_intangible_assets : Optional[float]
-            Growth rate of goodwill and intangible assets. (provider: fmp, xiaoyuan)
+            Growth rate of goodwill and intangible assets. (provider: fmp)
         growth_long_term_investments : Optional[float]
-            Growth rate of long-term investments. (provider: fmp, xiaoyuan)
+            Growth rate of long-term investments. (provider: fmp)
         growth_tax_assets : Optional[float]
-            Growth rate of tax assets. (provider: fmp, xiaoyuan)
+            Growth rate of tax assets. (provider: fmp)
         growth_other_non_current_assets : Optional[float]
-            Growth rate of other non-current assets. (provider: fmp, xiaoyuan)
+            Growth rate of other non-current assets. (provider: fmp)
         growth_total_non_current_assets : Optional[float]
-            Growth rate of total non-current assets. (provider: fmp, xiaoyuan)
+            Growth rate of total non-current assets. (provider: fmp)
         growth_other_assets : Optional[float]
-            Growth rate of other assets. (provider: fmp, xiaoyuan)
+            Growth rate of other assets. (provider: fmp)
         growth_total_assets : Optional[float]
-            Growth rate of total assets. (provider: fmp, xiaoyuan)
+            Growth rate of total assets. (provider: fmp)
         growth_account_payables : Optional[float]
-            Growth rate of accounts payable. (provider: fmp, xiaoyuan)
+            Growth rate of accounts payable. (provider: fmp)
         growth_short_term_debt : Optional[float]
-            Growth rate of short-term debt. (provider: fmp, xiaoyuan)
+            Growth rate of short-term debt. (provider: fmp)
         growth_tax_payables : Optional[float]
-            Growth rate of tax payables. (provider: fmp, xiaoyuan)
+            Growth rate of tax payables. (provider: fmp)
         growth_deferred_revenue : Optional[float]
-            Growth rate of deferred revenue. (provider: fmp, xiaoyuan)
+            Growth rate of deferred revenue. (provider: fmp)
         growth_other_current_liabilities : Optional[float]
-            Growth rate of other current liabilities. (provider: fmp, xiaoyuan)
+            Growth rate of other current liabilities. (provider: fmp)
         growth_total_current_liabilities : Optional[float]
-            Growth rate of total current liabilities. (provider: fmp, xiaoyuan)
+            Growth rate of total current liabilities. (provider: fmp)
         growth_long_term_debt : Optional[float]
-            Growth rate of long-term debt. (provider: fmp, xiaoyuan)
+            Growth rate of long-term debt. (provider: fmp)
         growth_deferred_revenue_non_current : Optional[float]
-            Growth rate of non-current deferred revenue. (provider: fmp, xiaoyuan)
+            Growth rate of non-current deferred revenue. (provider: fmp)
         growth_deferrred_tax_liabilities_non_current : Optional[float]
-            Growth rate of non-current deferred tax liabilities. (provider: fmp, xiaoyuan)
+            Growth rate of non-current deferred tax liabilities. (provider: fmp)
         growth_other_non_current_liabilities : Optional[float]
-            Growth rate of other non-current liabilities. (provider: fmp, xiaoyuan)
+            Growth rate of other non-current liabilities. (provider: fmp)
         growth_total_non_current_liabilities : Optional[float]
-            Growth rate of total non-current liabilities. (provider: fmp, xiaoyuan)
+            Growth rate of total non-current liabilities. (provider: fmp)
         growth_other_liabilities : Optional[float]
-            Growth rate of other liabilities. (provider: fmp, xiaoyuan)
+            Growth rate of other liabilities. (provider: fmp)
         growth_total_liabilities : Optional[float]
-            Growth rate of total liabilities. (provider: fmp, xiaoyuan)
+            Growth rate of total liabilities. (provider: fmp)
         growth_common_stock : Optional[float]
-            Growth rate of common stock. (provider: fmp, xiaoyuan)
+            Growth rate of common stock. (provider: fmp)
         growth_retained_earnings : Optional[float]
-            Growth rate of retained earnings. (provider: fmp, xiaoyuan)
+            Growth rate of retained earnings. (provider: fmp)
         growth_accumulated_other_comprehensive_income : Optional[float]
-            Growth rate of accumulated other comprehensive income/loss. (provider: fmp, xiaoyuan)
+            Growth rate of accumulated other comprehensive income/loss. (provider: fmp)
         growth_other_total_shareholders_equity : Optional[float]
-            Growth rate of other total stockholders' equity. (provider: fmp, xiaoyuan)
+            Growth rate of other total stockholders' equity. (provider: fmp)
         growth_total_shareholders_equity : Optional[float]
-            Growth rate of total stockholders' equity. (provider: fmp, xiaoyuan)
+            Growth rate of total stockholders' equity. (provider: fmp)
         growth_total_liabilities_and_shareholders_equity : Optional[float]
-            Growth rate of total liabilities and stockholders' equity. (provider: fmp, xiaoyuan)
+            Growth rate of total liabilities and stockholders' equity. (provider: fmp)
         growth_total_investments : Optional[float]
-            Growth rate of total investments. (provider: fmp, xiaoyuan)
+            Growth rate of total investments. (provider: fmp)
         growth_total_debt : Optional[float]
-            Growth rate of total debt. (provider: fmp, xiaoyuan)
+            Growth rate of total debt. (provider: fmp)
         growth_net_debt : Optional[float]
-            Growth rate of net debt. (provider: fmp, xiaoyuan)
+            Growth rate of net debt. (provider: fmp)
 
         Examples
         --------
@@ -626,7 +528,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.balance_growth",
-                        ('fmp', 'xiaoyuan'),
+                        ("fmp",),
                     )
                 },
                 standard_params={
@@ -634,147 +536,7 @@ class ROUTER_equity_fundamental(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['annual', 'ytd']}}},
-            )
-        )
-
-    @exception_handler
-    @validate
-    def business_analysis(
-        self,
-        provider: Annotated[Optional[Literal['akshare', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: akshare, xiaoyuan.')] = None,
-        **kwargs
-    ) -> OBBject:
-        """Get the business analysis data for a given company over time.
-
-        Parameters
-        ----------
-        provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: akshare, xiaoyuan.
-        symbol : Optional[str]
-            Symbol to get data for. (provider: akshare, xiaoyuan)
-        report_date : Optional[str]
-            The end date of the reporting period. The same as the period in the balance_sheet_growth model. (provider: xiaoyuan)
-
-        Returns
-        -------
-        OBBject
-            results : list[BusinessAnalysis]
-                Serializable results.
-            provider : Optional[str]
-                Provider name.
-            warnings : Optional[list[Warning_]]
-                list of warnings.
-            chart : Optional[Chart]
-                Chart object.
-            extra : Dict[str, Any]
-                Extra info.
-
-        BusinessAnalysis
-        ----------------
-        category_type : Optional[str]
-            The category or classification type of the financial data, e.g., '按产品分类' (By product classification). (provider: akshare)
-        main_revenue : Optional[float]
-            The main revenue for the financial period, e.g., 101126021100.0. (provider: akshare)
-        revenue_ratio : Optional[float]
-            The ratio of main revenue to total revenue, e.g., 0.837301. (provider: akshare)
-        main_cost : Optional[float]
-            The main cost associated with the product or business, e.g., NaN (Not available). (provider: akshare)
-        cost_ratio : Optional[float]
-            The ratio of main cost to total cost, e.g., NaN (Not available). (provider: akshare)
-        main_profit : Optional[float]
-            The main profit for the financial period, e.g., NaN (Not available). (provider: akshare)
-        profit_ratio : Optional[float]
-            The ratio of main profit to total profit, e.g., NaN (Not available). (provider: akshare)
-        gross_margin : Optional[float]
-            The gross margin for the financial period, e.g., NaN (Not available). (provider: akshare)
-        symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: akshare, xiaoyuan)
-        report_date : Optional[datetime]
-            The report date for the financial data, e.g., '2024-09-30'. (provider: akshare, xiaoyuan)
-        main_composition : Optional[str]
-            The main composition or product of the financial data, e.g., '茅台酒' (Moutai liquor). (provider: akshare, xiaoyuan)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.business_analysis(symbol='600519.SS', provider='akshare')
-        """  # noqa: E501
-
-        return self._run(
-            "/equity/fundamental/business_analysis",
-            **filter_inputs(
-                provider_choices={
-                    "provider": self._get_provider(
-                        provider,
-                        "equity.fundamental.business_analysis",
-                        ('akshare', 'xiaoyuan'),
-                    )
-                },
-                standard_params={
-                },
-                extra_params=kwargs,
-            )
-        )
-
-    @exception_handler
-    @validate
-    def business_scope(
-        self,
-        provider: Annotated[Optional[Literal['xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan.')] = None,
-        **kwargs
-    ) -> OBBject:
-        """Get the business scope data for a given company over time.
-
-        Parameters
-        ----------
-        provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan.
-        symbol : Optional[str]
-            Symbol to get data for. (provider: xiaoyuan)
-
-        Returns
-        -------
-        OBBject
-            results : list[BusinessScope]
-                Serializable results.
-            provider : Optional[str]
-                Provider name.
-            warnings : Optional[list[Warning_]]
-                list of warnings.
-            chart : Optional[Chart]
-                Chart object.
-            extra : Dict[str, Any]
-                Extra info.
-
-        BusinessScope
-        -------------
-        symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: xiaoyuan)
-        name : Optional[str]
-            The name of the stock. (provider: xiaoyuan)
-        business_scope : Optional[str]
-            The business scope of the stock. (provider: xiaoyuan)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.business_scope(symbol='600519.SS', provider='xiaoyuan')
-        """  # noqa: E501
-
-        return self._run(
-            "/equity/fundamental/business_scope",
-            **filter_inputs(
-                provider_choices={
-                    "provider": self._get_provider(
-                        provider,
-                        "equity.fundamental.business_scope",
-                        ('xiaoyuan',),
-                    )
-                },
-                standard_params={
-                },
-                extra_params=kwargs,
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}}},
             )
         )
 
@@ -782,9 +544,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def cash(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        limit: Annotated[Optional[Annotated[int, Ge(ge=0)]], OpenBBField(description='The number of data entries to return.')] = 5,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'polygon', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        limit: Annotated[Optional[Annotated[int, Ge(ge=0)]], OpenBBField(description="The number of data entries to return.")] = 5,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "polygon", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the cash flow statement for a given company.
@@ -792,17 +554,16 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, xiaoyuan, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, yfinance.
         symbol : str
             Symbol to get data for.
         limit : Optional[Annotated[int, Ge(ge=0)]]
             The number of data entries to return.
         period : str
-            Time period of the data to return. (provider: fmp, intrinio, polygon, xiaoyuan, yfinance)
+            Time period of the data to return. (provider: fmp, intrinio, polygon, yfinance)
             Choices for fmp: 'annual', 'quarter'
             Choices for intrinio: 'annual', 'quarter', 'ttm', 'ytd'
             Choices for polygon: 'annual', 'quarter', 'ttm'
-            Choices for xiaoyuan: 'annual', 'quarter', 'ytd'
             Choices for yfinance: 'annual', 'quarter'
         fiscal_year : Optional[int]
             The specific fiscal year.  Reports do not go beyond 2008. (provider: intrinio)
@@ -832,8 +593,6 @@ class ROUTER_equity_fundamental(Container):
             Order of the financial statement. (provider: polygon)
         sort : Optional[Literal['filing_date', 'period_of_report_date']]
             Sort of the financial statement. (provider: polygon)
-        use_cache : Optional[bool]
-            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
 
         Returns
         -------
@@ -865,9 +624,10 @@ class ROUTER_equity_fundamental(Container):
             The currency in which the cash flow statement was reported. (provider: fmp);
             The currency in which the balance sheet is reported. (provider: intrinio)
         net_income : Optional[float]
-            Net income. (provider: fmp, intrinio, xiaoyuan)
+            Net income. (provider: fmp);
+            Consolidated Net Income. (provider: intrinio)
         depreciation_and_amortization : Optional[float]
-            Depreciation and amortization. (provider: fmp, xiaoyuan)
+            Depreciation and amortization. (provider: fmp)
         deferred_income_tax : Optional[float]
             Deferred income tax. (provider: fmp)
         stock_based_compensation : Optional[float]
@@ -885,21 +645,21 @@ class ROUTER_equity_fundamental(Container):
         change_in_other_non_cash_items : Optional[float]
             Change in other non-cash items. (provider: fmp)
         net_cash_from_operating_activities : Optional[float]
-            Net cash from operating activities. (provider: fmp, intrinio, xiaoyuan)
+            Net cash from operating activities. (provider: fmp, intrinio)
         purchase_of_property_plant_and_equipment : Optional[float]
             Purchase of property, plant and equipment. (provider: fmp, intrinio)
         acquisitions : Optional[float]
-            Acquisitions. (provider: fmp, intrinio, xiaoyuan)
+            Acquisitions. (provider: fmp, intrinio)
         purchase_of_investment_securities : Optional[float]
-            Purchase of investment securities. (provider: fmp, intrinio, xiaoyuan)
+            Purchase of investment securities. (provider: fmp, intrinio)
         sale_and_maturity_of_investments : Optional[float]
             Sale and maturity of investments. (provider: fmp, intrinio)
         other_investing_activities : Optional[float]
             Other investing activities. (provider: fmp, intrinio)
         net_cash_from_investing_activities : Optional[float]
-            Net cash from investing activities. (provider: fmp, intrinio, xiaoyuan)
+            Net cash from investing activities. (provider: fmp, intrinio)
         repayment_of_debt : Optional[float]
-            Repayment of debt. (provider: fmp, intrinio, xiaoyuan)
+            Repayment of debt. (provider: fmp, intrinio)
         issuance_of_common_equity : Optional[float]
             Issuance of common equity. (provider: fmp, intrinio)
         repurchase_of_common_equity : Optional[float]
@@ -909,15 +669,15 @@ class ROUTER_equity_fundamental(Container):
         other_financing_activities : Optional[float]
             Other financing activities. (provider: fmp, intrinio)
         net_cash_from_financing_activities : Optional[float]
-            Net cash from financing activities. (provider: fmp, intrinio, xiaoyuan)
+            Net cash from financing activities. (provider: fmp, intrinio)
         effect_of_exchange_rate_changes_on_cash : Optional[float]
-            Effect of exchange rate changes on cash. (provider: fmp, xiaoyuan)
+            Effect of exchange rate changes on cash. (provider: fmp)
         net_change_in_cash_and_equivalents : Optional[float]
-            Net change in cash and equivalents. (provider: fmp, intrinio, xiaoyuan)
+            Net change in cash and equivalents. (provider: fmp, intrinio)
         cash_at_beginning_of_period : Optional[float]
-            Cash at beginning of period. (provider: fmp, xiaoyuan)
+            Cash at beginning of period. (provider: fmp)
         cash_at_end_of_period : Optional[float]
-            Cash at end of period. (provider: fmp, xiaoyuan)
+            Cash at end of period. (provider: fmp)
         operating_cash_flow : Optional[float]
             Operating cash flow. (provider: fmp)
         capital_expenditure : Optional[float]
@@ -967,7 +727,7 @@ class ROUTER_equity_fundamental(Container):
         issuance_of_preferred_equity : Optional[float]
             Issuance of Preferred Equity (provider: intrinio)
         issuance_of_debt : Optional[float]
-            Issuance of Debt (provider: intrinio, xiaoyuan)
+            Issuance of Debt (provider: intrinio)
         cash_interest_received : Optional[float]
             Cash Interest Received (provider: intrinio)
         net_change_in_deposits : Optional[float]
@@ -1012,8 +772,6 @@ class ROUTER_equity_fundamental(Container):
             Exchange gains losses. (provider: polygon)
         net_cash_flow : Optional[float]
             Net cash flow. (provider: polygon)
-        symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: xiaoyuan)
 
         Examples
         --------
@@ -1029,7 +787,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.cash",
-                        ('fmp', 'intrinio', 'polygon', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "polygon", "yfinance"),
                     )
                 },
                 standard_params={
@@ -1037,7 +795,7 @@ class ROUTER_equity_fundamental(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'intrinio': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ttm', 'ytd']}, 'polygon': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ttm']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ytd']}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}}},
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}, "intrinio": {"multiple_items_allowed": False, "choices": ["annual", "quarter", "ttm", "ytd"]}, "polygon": {"multiple_items_allowed": False, "choices": ["annual", "quarter", "ttm"]}, "yfinance": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}}},
             )
         )
 
@@ -1045,9 +803,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def cash_growth(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        limit: Annotated[Optional[int], OpenBBField(description='The number of data entries to return.')] = 10,
-        provider: Annotated[Optional[Literal['fmp', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, xiaoyuan.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return.")] = 10,
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the growth of a company's cash flow statement items over time.
@@ -1055,15 +813,13 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, xiaoyuan.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
         symbol : str
             Symbol to get data for.
         limit : Optional[int]
             The number of data entries to return.
-        period : str
-            Time period of the data to return. (provider: fmp, xiaoyuan)
-            Choices for fmp: 'annual', 'quarter'
-            Choices for xiaoyuan: 'annual', 'quarter', 'ytd'
+        period : Literal['annual', 'quarter']
+            Time period of the data to return. (provider: fmp)
 
         Returns
         -------
@@ -1088,11 +844,11 @@ class ROUTER_equity_fundamental(Container):
         fiscal_year : Optional[int]
             The fiscal year of the fiscal period.
         symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: fmp, xiaoyuan)
+            Symbol representing the entity requested in the data. (provider: fmp)
         growth_net_income : Optional[float]
-            Growth rate of net income. (provider: fmp, xiaoyuan)
+            Growth rate of net income. (provider: fmp)
         growth_depreciation_and_amortization : Optional[float]
-            Growth rate of depreciation and amortization. (provider: fmp, xiaoyuan)
+            Growth rate of depreciation and amortization. (provider: fmp)
         growth_deferred_income_tax : Optional[float]
             Growth rate of deferred income tax. (provider: fmp)
         growth_stock_based_compensation : Optional[float]
@@ -1100,17 +856,17 @@ class ROUTER_equity_fundamental(Container):
         growth_change_in_working_capital : Optional[float]
             Growth rate of change in working capital. (provider: fmp)
         growth_account_receivables : Optional[float]
-            Growth rate of accounts receivables. (provider: fmp, xiaoyuan)
+            Growth rate of accounts receivables. (provider: fmp)
         growth_inventory : Optional[float]
-            Growth rate of inventory. (provider: fmp, xiaoyuan)
+            Growth rate of inventory. (provider: fmp)
         growth_account_payable : Optional[float]
-            Growth rate of account payable. (provider: fmp, xiaoyuan)
+            Growth rate of account payable. (provider: fmp)
         growth_other_working_capital : Optional[float]
             Growth rate of other working capital. (provider: fmp)
         growth_other_non_cash_items : Optional[float]
             Growth rate of other non-cash items. (provider: fmp)
         growth_net_cash_from_operating_activities : Optional[float]
-            Growth rate of net cash provided by operating activities. (provider: fmp, xiaoyuan)
+            Growth rate of net cash provided by operating activities. (provider: fmp)
         growth_purchase_of_property_plant_and_equipment : Optional[float]
             Growth rate of investments in property, plant, and equipment. (provider: fmp)
         growth_acquisitions : Optional[float]
@@ -1136,13 +892,13 @@ class ROUTER_equity_fundamental(Container):
         growth_net_cash_from_financing_activities : Optional[float]
             Growth rate of net cash used/provided by financing activities. (provider: fmp)
         growth_effect_of_exchange_rate_changes_on_cash : Optional[float]
-            Growth rate of the effect of foreign exchange changes on cash. (provider: fmp, xiaoyuan)
+            Growth rate of the effect of foreign exchange changes on cash. (provider: fmp)
         growth_net_change_in_cash_and_equivalents : Optional[float]
-            Growth rate of net change in cash. (provider: fmp, xiaoyuan)
+            Growth rate of net change in cash. (provider: fmp)
         growth_cash_at_beginning_of_period : Optional[float]
-            Growth rate of cash at the beginning of the period. (provider: fmp, xiaoyuan)
+            Growth rate of cash at the beginning of the period. (provider: fmp)
         growth_cash_at_end_of_period : Optional[float]
-            Growth rate of cash at the end of the period. (provider: fmp, xiaoyuan)
+            Growth rate of cash at the end of the period. (provider: fmp)
         growth_operating_cash_flow : Optional[float]
             Growth rate of operating cash flow. (provider: fmp)
         growth_capital_expenditure : Optional[float]
@@ -1164,7 +920,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.cash_growth",
-                        ('fmp', 'xiaoyuan'),
+                        ("fmp",),
                     )
                 },
                 standard_params={
@@ -1172,68 +928,7 @@ class ROUTER_equity_fundamental(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ytd']}}},
-            )
-        )
-
-    @exception_handler
-    @validate
-    def concept_indices(
-        self,
-        provider: Annotated[Optional[Literal['xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan.')] = None,
-        **kwargs
-    ) -> OBBject:
-        """Get the sw sectors data for a given company over time.
-
-        Parameters
-        ----------
-        provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan.
-        symbol : Optional[str]
-            Symbol to get data for. (provider: xiaoyuan)
-
-        Returns
-        -------
-        OBBject
-            results : list[ConceptIndices]
-                Serializable results.
-            provider : Optional[str]
-                Provider name.
-            warnings : Optional[list[Warning_]]
-                list of warnings.
-            chart : Optional[Chart]
-                Chart object.
-            extra : Dict[str, Any]
-                Extra info.
-
-        ConceptIndices
-        --------------
-        symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: xiaoyuan)
-        name : Optional[str]
-            The name of the stock. (provider: xiaoyuan)
-        concept_indices : Optional[str]
-            The business scope of the stock. (provider: xiaoyuan)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.concept_indices(symbol='600519.SS', provider='xiaoyuan')
-        """  # noqa: E501
-
-        return self._run(
-            "/equity/fundamental/concept_indices",
-            **filter_inputs(
-                provider_choices={
-                    "provider": self._get_provider(
-                        provider,
-                        "equity.fundamental.concept_indices",
-                        ('xiaoyuan',),
-                    )
-                },
-                standard_params={
-                },
-                extra_params=kwargs,
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}}},
             )
         )
 
@@ -1241,10 +936,10 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def dividends(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): nasdaq.')],
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'nasdaq', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, nasdaq, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get historical dividend data for a given company.
@@ -1252,17 +947,15 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, nasdaq, xiaoyuan, yfinance.
-        symbol : Union[str, list[str]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): nasdaq.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.
+        symbol : str
+            Symbol to get data for.
         start_date : Union[date, None, str]
             Start date of the data, in YYYY-MM-DD format.
         end_date : Union[date, None, str]
             End date of the data, in YYYY-MM-DD format.
         limit : Optional[int]
             The number of data entries to return. (provider: intrinio)
-        use_cache : Optional[bool]
-            Whether or not to use cache. If True, cache will store for two days. (provider: nasdaq)
 
         Returns
         -------
@@ -1289,19 +982,17 @@ class ROUTER_equity_fundamental(Container):
         adj_dividend : Optional[float]
             Adjusted dividend of the historical dividends. (provider: fmp)
         record_date : Optional[date]
-            Record date of the historical dividends. (provider: fmp, nasdaq, xiaoyuan)
+            Record date of the historical dividends. (provider: fmp)
         payment_date : Optional[date]
-            Payment date of the historical dividends. (provider: fmp, nasdaq, xiaoyuan)
+            Payment date of the historical dividends. (provider: fmp)
         declaration_date : Optional[date]
-            Declaration date of the historical dividends. (provider: fmp, nasdaq)
+            Declaration date of the historical dividends. (provider: fmp)
         factor : Optional[float]
             factor by which to multiply stock prices before this date, in order to calculate historically-adjusted stock prices. (provider: intrinio)
         currency : Optional[str]
-            The currency in which the dividend is paid. (provider: intrinio, nasdaq)
+            The currency in which the dividend is paid. (provider: intrinio)
         split_ratio : Optional[float]
             The ratio of the stock split, if a stock split occurred. (provider: intrinio)
-        dividend_type : Optional[str]
-            The type of dividend - i.e., cash, stock. (provider: nasdaq)
 
         Examples
         --------
@@ -1316,7 +1007,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.dividends",
-                        ('fmp', 'intrinio', 'nasdaq', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "yfinance"),
                     )
                 },
                 standard_params={
@@ -1325,7 +1016,6 @@ class ROUTER_equity_fundamental(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'nasdaq': {'multiple_items_allowed': True, 'choices': None}}},
             )
         )
 
@@ -1333,8 +1023,8 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def employee_count(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get historical employee count data for a given company.
@@ -1394,7 +1084,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.employee_count",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
@@ -1408,22 +1098,16 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def filings(
         self,
-        symbol: Annotated[Optional[str], OpenBBField(description='Symbol to get data for.')] = None,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'nasdaq', 'sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, nasdaq, sec.')] = None,
+        symbol: Annotated[Optional[str], OpenBBField(description="Symbol to get data for.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "sec"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, sec.")] = None,
         **kwargs
     ) -> OBBject:
-        """Get the URLs to SEC filings reported to EDGAR database, such as 10-K, 10-Q, 8-K, and more.
-
-        SEC filings include Form 10-K, Form 10-Q, Form 8-K, the proxy statement, Forms 3, 4, and 5, Schedule 13, Form 114,
-        Foreign Investment Disclosures and others. The annual 10-K report is required to be
-        filed annually and includes the company's financial statements, management discussion and analysis,
-        and audited financial statements.
-        
+        """Get public company filings.
 
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, nasdaq, sec.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, sec.
         symbol : Optional[str]
             Symbol to get data for.
         form_type : Optional[str]
@@ -1437,11 +1121,7 @@ class ROUTER_equity_fundamental(Container):
             End date of the data, in YYYY-MM-DD format. (provider: intrinio, sec)
         thea_enabled : Optional[bool]
             Return filings that have been read by Intrinio's Thea NLP. (provider: intrinio)
-        year : Optional[int]
-            Calendar year of the data, default is current year. The earliest year available is 1994, for all companies and form types. (provider: nasdaq)
-        form_group : Literal['annual', 'quarterly', 'proxy', 'insider', '8k', 'registration', 'comment']
-            The form group to fetch, default is 8k. (provider: nasdaq)
-        cik : Union[str, int, None]
+        cik : Union[int, str, None]
             Lookup filings by Central Index Key (CIK) instead of by symbol. (provider: sec)
         use_cache : bool
             Whether or not to use cache.  If True, cache will store for one day. (provider: sec)
@@ -1490,23 +1170,9 @@ class ROUTER_equity_fundamental(Container):
             Industry category of the company. (provider: intrinio)
         word_count : Optional[int]
             Number of words in the filing, if available. (provider: intrinio)
-        period_ending : Optional[date]
-            The ending date for the reporting period, if available. (provider: nasdaq)
-        name : Optional[str]
-            The name of the company, if available. (provider: nasdaq)
-        reporting_owner : Optional[str]
-            The name of the reporting owner, if applicable. (provider: nasdaq)
-        pdf_url : Optional[str]
-            The URL to the PDF document, if available. (provider: nasdaq)
-        xls_url : Optional[str]
-            The URL to the XLS document, if available. (provider: nasdaq)
-        xbr_url : Optional[str]
-            The URL to the XBR document, if available. (provider: nasdaq)
-        doc_link : Optional[str]
-            The URL to the DOC document, if available. (provider: nasdaq)
         report_date : Optional[date]
             The date of the filing. (provider: sec)
-        act : Optional[Union[str, int]]
+        act : Optional[Union[int, str]]
             The SEC Act number. (provider: sec)
         items : Optional[Union[str, float]]
             The SEC Item numbers. (provider: sec)
@@ -1514,17 +1180,17 @@ class ROUTER_equity_fundamental(Container):
             The description of the primary document. (provider: sec)
         primary_doc : Optional[str]
             The filename of the primary document. (provider: sec)
-        accession_number : Optional[Union[str, int]]
+        accession_number : Optional[Union[int, str]]
             The accession number. (provider: sec)
-        file_number : Optional[Union[str, int]]
+        file_number : Optional[Union[int, str]]
             The file number. (provider: sec)
-        film_number : Optional[Union[str, int]]
+        film_number : Optional[Union[int, str]]
             The film number. (provider: sec)
-        is_inline_xbrl : Optional[Union[str, int]]
+        is_inline_xbrl : Optional[Union[int, str]]
             Whether the filing is an inline XBRL filing. (provider: sec)
-        is_xbrl : Optional[Union[str, int]]
+        is_xbrl : Optional[Union[int, str]]
             Whether the filing is an XBRL filing. (provider: sec)
-        size : Optional[Union[str, int]]
+        size : Optional[Union[int, str]]
             The size of the filing. (provider: sec)
         complete_submission_url : Optional[str]
             The URL to the complete filing submission. (provider: sec)
@@ -1545,14 +1211,14 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.filings",
-                        ('fmp', 'intrinio', 'nasdaq', 'sec'),
+                        ("fmp", "intrinio", "sec"),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'nasdaq': {'x-widget_config': {'value': 'AAPL'}}}, 'form_type': {'sec': {'multiple_items_allowed': True, 'choices': ['1', '1-A', '1-A_POS', '1-A-W', '1-E', '1-E_AD', '1-K', '1-SA', '1-U', '1-Z', '1-Z-W', '10-12B', '10-12G', '10-D', '10-K', '10-KT', '10-Q', '10-QT', '11-K', '11-KT', '13F-HR', '13F-NT', '13FCONP', '144', '15-12B', '15-12G', '15-15D', '15F-12B', '15F-12G', '15F-15D', '18-12B', '18-K', '19B-4E', '2-A', '2-AF', '2-E', '20-F', '20FR12B', '20FR12G', '24F-2NT', '25', '25-NSE', '253G1', '253G2', '253G3', '253G4', '3', '305B2', '34-12H', '4', '40-17F1', '40-17F2', '40-17G', '40-17GCS', '40-202A', '40-203A', '40-206A', '40-24B2', '40-33', '40-6B', '40-8B25', '40-8F-2', '40-APP', '40-F', '40-OIP', '40FR12B', '40FR12G', '424A', '424B1', '424B2', '424B3', '424B4', '424B5', '424B7', '424B8', '424H', '425', '485APOS', '485BPOS', '485BXT', '486APOS', '486BPOS', '486BXT', '487', '497', '497AD', '497H2', '497J', '497K', '497VPI', '497VPU', '5', '6-K', '6B_NTC', '6B_ORDR', '8-A12B', '8-A12G', '8-K', '8-K12B', '8-K12G3', '8-K15D5', '8-M', '8F-2_NTC', '8F-2_ORDR', '9-M', 'ABS-15G', 'ABS-EE', 'ADN-MTL', 'ADV-E', 'ADV-H-C', 'ADV-H-T', 'ADV-NR', 'ANNLRPT', 'APP_NTC', 'APP_ORDR', 'APP_WD', 'APP_WDG', 'ARS', 'ATS-N', 'ATS-N-C', 'ATS-N/UA', 'AW', 'AW_WD', 'C', 'C-AR', 'C-AR-W', 'C-TR', 'C-TR-W', 'C-U', 'C-U-W', 'C-W', 'CB', 'CERT', 'CERTARCA', 'CERTBATS', 'CERTCBO', 'CERTNAS', 'CERTNYS', 'CERTPAC', 'CFPORTAL', 'CFPORTAL-W', 'CORRESP', 'CT_ORDER', 'D', 'DEF_14A', 'DEF_14C', 'DEFA14A', 'DEFA14C', 'DEFC14A', 'DEFC14C', 'DEFM14A', 'DEFM14C', 'DEFN14A', 'DEFR14A', 'DEFR14C', 'DEL_AM', 'DFAN14A', 'DFRN14A', 'DOS', 'DOSLTR', 'DRS', 'DRSLTR', 'DSTRBRPT', 'EFFECT', 'F-1', 'F-10', 'F-10EF', 'F-10POS', 'F-1MEF', 'F-3', 'F-3ASR', 'F-3D', 'F-3DPOS', 'F-3MEF', 'F-4', 'F-4_POS', 'F-4MEF', 'F-6', 'F-6_POS', 'F-6EF', 'F-7', 'F-7_POS', 'F-8', 'F-8_POS', 'F-80', 'F-80POS', 'F-9', 'F-9_POS', 'F-N', 'F-X', 'FOCUSN', 'FWP', 'G-405', 'G-405N', 'G-FIN', 'G-FINW', 'IRANNOTICE', 'MA', 'MA-A', 'MA-I', 'MA-W', 'MSD', 'MSDCO', 'MSDW', 'N-1', 'N-14', 'N-14_8C', 'N-14MEF', 'N-18F1', 'N-1A', 'N-2', 'N-2_POSASR', 'N-23C-2', 'N-23C3A', 'N-23C3B', 'N-23C3C', 'N-2ASR', 'N-2MEF', 'N-30B-2', 'N-30D', 'N-4', 'N-5', 'N-54A', 'N-54C', 'N-6', 'N-6F', 'N-8A', 'N-8B-2', 'N-8F', 'N-8F_NTC', 'N-8F_ORDR', 'N-CEN', 'N-CR', 'N-CSR', 'N-CSRS', 'N-MFP', 'N-MFP1', 'N-MFP2', 'N-PX', 'N-Q', 'N-VP', 'N-VPFS', 'NO_ACT', 'NPORT-EX', 'NPORT-NP', 'NPORT-P', 'NRSRO-CE', 'NRSRO-UPD', 'NSAR-A', 'NSAR-AT', 'NSAR-B', 'NSAR-BT', 'NSAR-U', 'NT_10-D', 'NT_10-K', 'NT_10-Q', 'NT_11-K', 'NT_20-F', 'NT_N-CEN', 'NT_N-MFP', 'NT_N-MFP1', 'NT_N-MFP2', 'NT_NPORT-EX', 'NT_NPORT-P', 'NT-NCEN', 'NT-NCSR', 'NT-NSAR', 'NTFNCEN', 'NTFNCSR', 'NTFNSAR', 'NTN_10D', 'NTN_10K', 'NTN_10Q', 'NTN_20F', 'OIP_NTC', 'OIP_ORDR', 'POS_8C', 'POS_AM', 'POS_AMI', 'POS_EX', 'POS462B', 'POS462C', 'POSASR', 'PRE_14A', 'PRE_14C', 'PREC14A', 'PREC14C', 'PREM14A', 'PREM14C', 'PREN14A', 'PRER14A', 'PRER14C', 'PRRN14A', 'PX14A6G', 'PX14A6N', 'QRTLYRPT', 'QUALIF', 'REG-NR', 'REVOKED', 'RW', 'RW_WD', 'S-1', 'S-11', 'S-11MEF', 'S-1MEF', 'S-20', 'S-3', 'S-3ASR', 'S-3D', 'S-3DPOS', 'S-3MEF', 'S-4', 'S-4_POS', 'S-4EF', 'S-4MEF', 'S-6', 'S-8', 'S-8_POS', 'S-B', 'S-BMEF', 'SBSE', 'SBSE-A', 'SBSE-BD', 'SBSE-C', 'SBSE-W', 'SC_13D', 'SC_13E1', 'SC_13E3', 'SC_13G', 'SC_14D9', 'SC_14F1', 'SC_14N', 'SC_TO-C', 'SC_TO-I', 'SC_TO-T', 'SC13E4F', 'SC14D1F', 'SC14D9C', 'SC14D9F', 'SD', 'SDR', 'SE', 'SEC_ACTION', 'SEC_STAFF_ACTION', 'SEC_STAFF_LETTER', 'SF-1', 'SF-3', 'SL', 'SP_15D2', 'STOP_ORDER', 'SUPPL', 'T-3', 'TA-1', 'TA-2', 'TA-W', 'TACO', 'TH', 'TTW', 'UNDER', 'UPLOAD', 'WDL-REQ', 'X-17A-5']}}, 'year': {'nasdaq': {'x-widget_config': {'options': [{'label': '2025', 'value': 2025}, {'label': '2024', 'value': 2024}, {'label': '2023', 'value': 2023}, {'label': '2022', 'value': 2022}, {'label': '2021', 'value': 2021}, {'label': '2020', 'value': 2020}, {'label': '2019', 'value': 2019}, {'label': '2018', 'value': 2018}, {'label': '2017', 'value': 2017}, {'label': '2016', 'value': 2016}, {'label': '2015', 'value': 2015}, {'label': '2014', 'value': 2014}, {'label': '2013', 'value': 2013}, {'label': '2012', 'value': 2012}, {'label': '2011', 'value': 2011}, {'label': '2010', 'value': 2010}, {'label': '2009', 'value': 2009}, {'label': '2008', 'value': 2008}, {'label': '2007', 'value': 2007}, {'label': '2006', 'value': 2006}, {'label': '2005', 'value': 2005}, {'label': '2004', 'value': 2004}, {'label': '2003', 'value': 2003}, {'label': '2002', 'value': 2002}, {'label': '2001', 'value': 2001}, {'label': '2000', 'value': 2000}, {'label': '1999', 'value': 1999}, {'label': '1998', 'value': 1998}, {'label': '1997', 'value': 1997}, {'label': '1996', 'value': 1996}, {'label': '1995', 'value': 1995}, {'label': '1994', 'value': 1994}], 'value': 2025}}}, 'form_group': {'nasdaq': {'multiple_items_allowed': False, 'choices': ['annual', 'quarterly', 'proxy', 'insider', '8k', 'registration', 'comment']}}},
+                info={"form_type": {"sec": {"multiple_items_allowed": True, "choices": ["1", "1-A", "1-A_POS", "1-A-W", "1-E", "1-E_AD", "1-K", "1-SA", "1-U", "1-Z", "1-Z-W", "10-12B", "10-12G", "10-D", "10-K", "10-KT", "10-Q", "10-QT", "11-K", "11-KT", "13F-HR", "13F-NT", "13FCONP", "144", "15-12B", "15-12G", "15-15D", "15F-12B", "15F-12G", "15F-15D", "18-12B", "18-K", "19B-4E", "2-A", "2-AF", "2-E", "20-F", "20FR12B", "20FR12G", "24F-2NT", "25", "25-NSE", "253G1", "253G2", "253G3", "253G4", "3", "305B2", "34-12H", "4", "40-17F1", "40-17F2", "40-17G", "40-17GCS", "40-202A", "40-203A", "40-206A", "40-24B2", "40-33", "40-6B", "40-8B25", "40-8F-2", "40-APP", "40-F", "40-OIP", "40FR12B", "40FR12G", "424A", "424B1", "424B2", "424B3", "424B4", "424B5", "424B7", "424B8", "424H", "425", "485APOS", "485BPOS", "485BXT", "486APOS", "486BPOS", "486BXT", "487", "497", "497AD", "497H2", "497J", "497K", "497VPI", "497VPU", "5", "6-K", "6B_NTC", "6B_ORDR", "8-A12B", "8-A12G", "8-K", "8-K12B", "8-K12G3", "8-K15D5", "8-M", "8F-2_NTC", "8F-2_ORDR", "9-M", "ABS-15G", "ABS-EE", "ADN-MTL", "ADV-E", "ADV-H-C", "ADV-H-T", "ADV-NR", "ANNLRPT", "APP_NTC", "APP_ORDR", "APP_WD", "APP_WDG", "ARS", "ATS-N", "ATS-N-C", "ATS-N/UA", "AW", "AW_WD", "C", "C-AR", "C-AR-W", "C-TR", "C-TR-W", "C-U", "C-U-W", "C-W", "CB", "CERT", "CERTARCA", "CERTBATS", "CERTCBO", "CERTNAS", "CERTNYS", "CERTPAC", "CFPORTAL", "CFPORTAL-W", "CORRESP", "CT_ORDER", "D", "DEF_14A", "DEF_14C", "DEFA14A", "DEFA14C", "DEFC14A", "DEFC14C", "DEFM14A", "DEFM14C", "DEFN14A", "DEFR14A", "DEFR14C", "DEL_AM", "DFAN14A", "DFRN14A", "DOS", "DOSLTR", "DRS", "DRSLTR", "DSTRBRPT", "EFFECT", "F-1", "F-10", "F-10EF", "F-10POS", "F-1MEF", "F-3", "F-3ASR", "F-3D", "F-3DPOS", "F-3MEF", "F-4", "F-4_POS", "F-4MEF", "F-6", "F-6_POS", "F-6EF", "F-7", "F-7_POS", "F-8", "F-8_POS", "F-80", "F-80POS", "F-9", "F-9_POS", "F-N", "F-X", "FOCUSN", "FWP", "G-405", "G-405N", "G-FIN", "G-FINW", "IRANNOTICE", "MA", "MA-A", "MA-I", "MA-W", "MSD", "MSDCO", "MSDW", "N-1", "N-14", "N-14_8C", "N-14MEF", "N-18F1", "N-1A", "N-2", "N-2_POSASR", "N-23C-2", "N-23C3A", "N-23C3B", "N-23C3C", "N-2ASR", "N-2MEF", "N-30B-2", "N-30D", "N-4", "N-5", "N-54A", "N-54C", "N-6", "N-6F", "N-8A", "N-8B-2", "N-8F", "N-8F_NTC", "N-8F_ORDR", "N-CEN", "N-CR", "N-CSR", "N-CSRS", "N-MFP", "N-MFP1", "N-MFP2", "N-PX", "N-Q", "N-VP", "N-VPFS", "NO_ACT", "NPORT-EX", "NPORT-NP", "NPORT-P", "NRSRO-CE", "NRSRO-UPD", "NSAR-A", "NSAR-AT", "NSAR-B", "NSAR-BT", "NSAR-U", "NT_10-D", "NT_10-K", "NT_10-Q", "NT_11-K", "NT_20-F", "NT_N-CEN", "NT_N-MFP", "NT_N-MFP1", "NT_N-MFP2", "NT_NPORT-EX", "NT_NPORT-P", "NT-NCEN", "NT-NCSR", "NT-NSAR", "NTFNCEN", "NTFNCSR", "NTFNSAR", "NTN_10D", "NTN_10K", "NTN_10Q", "NTN_20F", "OIP_NTC", "OIP_ORDR", "POS_8C", "POS_AM", "POS_AMI", "POS_EX", "POS462B", "POS462C", "POSASR", "PRE_14A", "PRE_14C", "PREC14A", "PREC14C", "PREM14A", "PREM14C", "PREN14A", "PRER14A", "PRER14C", "PRRN14A", "PX14A6G", "PX14A6N", "QRTLYRPT", "QUALIF", "REG-NR", "REVOKED", "RW", "RW_WD", "S-1", "S-11", "S-11MEF", "S-1MEF", "S-20", "S-3", "S-3ASR", "S-3D", "S-3DPOS", "S-3MEF", "S-4", "S-4_POS", "S-4EF", "S-4MEF", "S-6", "S-8", "S-8_POS", "S-B", "S-BMEF", "SBSE", "SBSE-A", "SBSE-BD", "SBSE-C", "SBSE-W", "SC_13D", "SC_13E1", "SC_13E3", "SC_13G", "SC_14D9", "SC_14F1", "SC_14N", "SC_TO-C", "SC_TO-I", "SC_TO-T", "SC13E4F", "SC14D1F", "SC14D9C", "SC14D9F", "SD", "SDR", "SE", "SEC_ACTION", "SEC_STAFF_ACTION", "SEC_STAFF_LETTER", "SF-1", "SF-3", "SL", "SP_15D2", "STOP_ORDER", "SUPPL", "T-3", "TA-1", "TA-2", "TA-W", "TACO", "TH", "TTW", "UNDER", "UPLOAD", "WDL-REQ", "X-17A-5"]}}},
             )
         )
 
@@ -1560,15 +1226,15 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def historical_attributes(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): intrinio.')],
-        tag: Annotated[Union[str, list[str]], OpenBBField(description='Intrinio data tag ID or code. Multiple comma separated items allowed for provider(s): intrinio.')],
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        frequency: Annotated[Optional[Literal['daily', 'weekly', 'monthly', 'quarterly', 'yearly']], OpenBBField(description='The frequency of the data.')] = 'yearly',
-        limit: Annotated[Optional[int], OpenBBField(description='The number of data entries to return.')] = 1000,
-        tag_type: Annotated[Optional[str], OpenBBField(description='Filter by type, when applicable.')] = None,
-        sort: Annotated[Optional[Literal['asc', 'desc']], OpenBBField(description='Sort order.')] = 'desc',
-        provider: Annotated[Optional[Literal['intrinio']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): intrinio.")],
+        tag: Annotated[Union[str, list[str]], OpenBBField(description="Intrinio data tag ID or code. Multiple comma separated items allowed for provider(s): intrinio.")],
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        frequency: Annotated[Optional[Literal["daily", "weekly", "monthly", "quarterly", "yearly"]], OpenBBField(description="The frequency of the data.")] = "yearly",
+        limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return.")] = 1000,
+        tag_type: Annotated[Optional[str], OpenBBField(description="Filter by type, when applicable.")] = None,
+        sort: Annotated[Optional[Literal["asc", "desc"]], OpenBBField(description="Sort order.")] = "desc",
+        provider: Annotated[Optional[Literal["intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the historical values of a data tag from Intrinio.
@@ -1632,7 +1298,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.historical_attributes",
-                        ('intrinio',),
+                        ("intrinio",),
                     )
                 },
                 standard_params={
@@ -1646,7 +1312,7 @@ class ROUTER_equity_fundamental(Container):
                     "sort": sort,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'intrinio': {'multiple_items_allowed': True, 'choices': None}}, 'tag': {'intrinio': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"intrinio": {"multiple_items_allowed": True, "choices": None}}, "tag": {"intrinio": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -1654,8 +1320,8 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def historical_eps(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get historical earnings per share data for a given company.
@@ -1719,7 +1385,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.historical_eps",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
@@ -1733,8 +1399,8 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def historical_splits(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get historical stock splits for a given company.
@@ -1784,7 +1450,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.historical_splits",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
@@ -1798,9 +1464,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def income(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        limit: Annotated[Optional[Annotated[int, Ge(ge=0)]], OpenBBField(description='The number of data entries to return.')] = 5,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'polygon', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        limit: Annotated[Optional[Annotated[int, Ge(ge=0)]], OpenBBField(description="The number of data entries to return.")] = 5,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "polygon", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the income statement for a given company.
@@ -1808,17 +1474,16 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, xiaoyuan, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, yfinance.
         symbol : str
             Symbol to get data for.
         limit : Optional[Annotated[int, Ge(ge=0)]]
             The number of data entries to return.
         period : str
-            Time period of the data to return. (provider: fmp, intrinio, polygon, xiaoyuan, yfinance)
+            Time period of the data to return. (provider: fmp, intrinio, polygon, yfinance)
             Choices for fmp: 'annual', 'quarter'
             Choices for intrinio: 'annual', 'quarter', 'ttm', 'ytd'
             Choices for polygon: 'annual', 'quarter', 'ttm'
-            Choices for xiaoyuan: 'annual', 'quarter', 'ytd'
             Choices for yfinance: 'annual', 'quarter'
         fiscal_year : Optional[int]
             The specific fiscal year.  Reports do not go beyond 2008. (provider: intrinio)
@@ -1848,8 +1513,6 @@ class ROUTER_equity_fundamental(Container):
             Order of the financial statement. (provider: polygon)
         sort : Optional[Literal['filing_date', 'period_of_report_date']]
             Sort of the financial statement. (provider: polygon)
-        use_cache : Optional[bool]
-            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
 
         Returns
         -------
@@ -1886,11 +1549,12 @@ class ROUTER_equity_fundamental(Container):
         gross_profit : Optional[float]
             Gross profit. (provider: fmp, intrinio, polygon)
         gross_profit_margin : Optional[float]
-            Gross profit margin. (provider: fmp, intrinio, xiaoyuan)
+            Gross profit margin. (provider: fmp);
+            Gross margin ratio. (provider: intrinio)
         general_and_admin_expense : Optional[float]
             General and administrative expenses. (provider: fmp)
         research_and_development_expense : Optional[float]
-            Research and development expenses. (provider: fmp, intrinio, xiaoyuan)
+            Research and development expenses. (provider: fmp, intrinio)
         selling_and_marketing_expense : Optional[float]
             Selling and marketing expenses. (provider: fmp)
         selling_general_and_admin_expense : Optional[float]
@@ -1898,24 +1562,24 @@ class ROUTER_equity_fundamental(Container):
         other_expenses : Optional[float]
             Other expenses. (provider: fmp)
         total_operating_expenses : Optional[float]
-            Total operating expenses. (provider: fmp, intrinio, xiaoyuan)
+            Total operating expenses. (provider: fmp, intrinio)
         cost_and_expenses : Optional[float]
             Cost and expenses. (provider: fmp)
         interest_income : Optional[float]
-            Interest income. (provider: fmp, xiaoyuan)
+            Interest income. (provider: fmp)
         total_interest_expense : Optional[float]
-            Total interest expenses. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Total interest expenses. (provider: fmp, intrinio);
+            Interest Expense (provider: polygon)
         depreciation_and_amortization : Optional[float]
-            Depreciation and amortization. (provider: fmp, polygon, xiaoyuan)
+            Depreciation and amortization. (provider: fmp, polygon)
         ebitda : Optional[float]
             EBITDA. (provider: fmp);
-            Earnings Before Interest, Taxes, Depreciation and Amortization. (provider: intrinio);
-            Earnings before interest, taxes, depreciation, and amortization. (provider: xiaoyuan)
+            Earnings Before Interest, Taxes, Depreciation and Amortization. (provider: intrinio)
         ebitda_margin : Optional[float]
             EBITDA margin. (provider: fmp);
             Margin on Earnings Before Interest, Taxes, Depreciation and Amortization. (provider: intrinio)
         total_operating_income : Optional[float]
-            Total operating income. (provider: fmp, intrinio, xiaoyuan)
+            Total operating income. (provider: fmp, intrinio)
         operating_income_margin : Optional[float]
             Operating income margin. (provider: fmp)
         total_other_income_expenses : Optional[float]
@@ -1931,11 +1595,12 @@ class ROUTER_equity_fundamental(Container):
             Consolidated net income. (provider: fmp, intrinio);
             Net Income/Loss (provider: polygon)
         net_income_margin : Optional[float]
-            Net income margin. (provider: fmp, xiaoyuan)
+            Net income margin. (provider: fmp)
         basic_earnings_per_share : Optional[float]
-            Basic earnings per share. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Basic earnings per share. (provider: fmp, intrinio);
+            Earnings Per Share (provider: polygon)
         diluted_earnings_per_share : Optional[float]
-            Diluted earnings per share. (provider: fmp, intrinio, polygon, xiaoyuan)
+            Diluted earnings per share. (provider: fmp, intrinio, polygon)
         weighted_average_basic_shares_outstanding : Optional[float]
             Weighted average basic shares outstanding. (provider: fmp, intrinio);
             Basic Average Shares (provider: polygon)
@@ -1949,7 +1614,7 @@ class ROUTER_equity_fundamental(Container):
         operating_revenue : Optional[float]
             Total operating revenue (provider: intrinio)
         operating_cost_of_revenue : Optional[float]
-            Total operating cost of revenue (provider: intrinio, xiaoyuan)
+            Total operating cost of revenue (provider: intrinio)
         provision_for_credit_losses : Optional[float]
             Provision for credit losses (provider: intrinio)
         salaries_and_employee_benefits : Optional[float]
@@ -2025,7 +1690,7 @@ class ROUTER_equity_fundamental(Container):
             Non-operating income (provider: intrinio);
             Non Operating Income/Loss (provider: polygon)
         other_income : Optional[float]
-            Other income (provider: intrinio, xiaoyuan)
+            Other income (provider: intrinio)
         other_revenue : Optional[float]
             Other revenue (provider: intrinio)
         extraordinary_income : Optional[float]
@@ -2047,9 +1712,9 @@ class ROUTER_equity_fundamental(Container):
         other_cost_of_revenue : Optional[float]
             Other cost of revenue (provider: intrinio)
         net_income_continuing_operations : Optional[float]
-            Net income (continuing operations) (provider: intrinio, xiaoyuan)
+            Net income (continuing operations) (provider: intrinio)
         net_income_discontinued_operations : Optional[float]
-            Net income (discontinued operations) (provider: intrinio, xiaoyuan)
+            Net income (discontinued operations) (provider: intrinio)
         other_adjustments_to_consolidated_net_income : Optional[float]
             Other adjustments to consolidated net income (provider: intrinio)
         other_adjustment_to_net_income_attributable_to_common_shareholders : Optional[float]
@@ -2121,10 +1786,6 @@ class ROUTER_equity_fundamental(Container):
             Common Stock Dividends (provider: polygon)
         preferred_stock_dividends_and_other_adjustments : Optional[float]
             Preferred stock dividends and other adjustments (provider: polygon)
-        symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: xiaoyuan)
-        total_comprehensive_income : Optional[float]
-            Total comprehensive income. (provider: xiaoyuan)
 
         Examples
         --------
@@ -2140,7 +1801,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.income",
-                        ('fmp', 'intrinio', 'polygon', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "polygon", "yfinance"),
                     )
                 },
                 standard_params={
@@ -2148,7 +1809,7 @@ class ROUTER_equity_fundamental(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'intrinio': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ttm', 'ytd']}, 'polygon': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ttm']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ytd']}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}}},
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}, "intrinio": {"multiple_items_allowed": False, "choices": ["annual", "quarter", "ttm", "ytd"]}, "polygon": {"multiple_items_allowed": False, "choices": ["annual", "quarter", "ttm"]}, "yfinance": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}}},
             )
         )
 
@@ -2156,9 +1817,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def income_growth(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        limit: Annotated[Optional[int], OpenBBField(description='The number of data entries to return.')] = 10,
-        provider: Annotated[Optional[Literal['fmp', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, xiaoyuan.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return.")] = 10,
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the growth of a company's income statement items over time.
@@ -2166,15 +1827,13 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, xiaoyuan.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
         symbol : str
             Symbol to get data for.
         limit : Optional[int]
             The number of data entries to return.
-        period : str
-            Time period of the data to return. (provider: fmp, xiaoyuan)
-            Choices for fmp: 'annual', 'quarter'
-            Choices for xiaoyuan: 'annual', 'ytd', 'quarter'
+        period : Literal['annual', 'quarter']
+            Time period of the data to return. (provider: fmp)
 
         Returns
         -------
@@ -2199,19 +1858,19 @@ class ROUTER_equity_fundamental(Container):
         fiscal_year : Optional[int]
             The fiscal year of the fiscal period.
         symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: fmp, xiaoyuan)
+            Symbol representing the entity requested in the data. (provider: fmp)
         growth_revenue : Optional[float]
-            Growth rate of total revenue. (provider: fmp, xiaoyuan)
+            Growth rate of total revenue. (provider: fmp)
         growth_cost_of_revenue : Optional[float]
-            Growth rate of cost of goods sold. (provider: fmp, xiaoyuan)
+            Growth rate of cost of goods sold. (provider: fmp)
         growth_gross_profit : Optional[float]
-            Growth rate of gross profit. (provider: fmp, xiaoyuan)
+            Growth rate of gross profit. (provider: fmp)
         growth_gross_profit_margin : Optional[float]
             Growth rate of gross profit as a percentage of revenue. (provider: fmp)
         growth_general_and_admin_expense : Optional[float]
             Growth rate of general and administrative expenses. (provider: fmp)
         growth_research_and_development_expense : Optional[float]
-            Growth rate of expenses on research and development. (provider: fmp, xiaoyuan)
+            Growth rate of expenses on research and development. (provider: fmp)
         growth_selling_and_marketing_expense : Optional[float]
             Growth rate of expenses on selling and marketing activities. (provider: fmp)
         growth_other_expenses : Optional[float]
@@ -2223,35 +1882,35 @@ class ROUTER_equity_fundamental(Container):
         growth_interest_expense : Optional[float]
             Growth rate of interest expenses. (provider: fmp)
         growth_depreciation_and_amortization : Optional[float]
-            Growth rate of depreciation and amortization expenses. (provider: fmp, xiaoyuan)
+            Growth rate of depreciation and amortization expenses. (provider: fmp)
         growth_ebitda : Optional[float]
-            Growth rate of Earnings Before Interest, Taxes, Depreciation, and Amortization. (provider: fmp, xiaoyuan)
+            Growth rate of Earnings Before Interest, Taxes, Depreciation, and Amortization. (provider: fmp)
         growth_ebitda_margin : Optional[float]
             Growth rate of EBITDA as a percentage of revenue. (provider: fmp)
         growth_operating_income : Optional[float]
-            Growth rate of operating income. (provider: fmp, xiaoyuan)
+            Growth rate of operating income. (provider: fmp)
         growth_operating_income_margin : Optional[float]
             Growth rate of operating income as a percentage of revenue. (provider: fmp)
         growth_total_other_income_expenses_net : Optional[float]
             Growth rate of net total other income and expenses. (provider: fmp)
         growth_income_before_tax : Optional[float]
-            Growth rate of income before taxes. (provider: fmp, xiaoyuan)
+            Growth rate of income before taxes. (provider: fmp)
         growth_income_before_tax_margin : Optional[float]
             Growth rate of income before taxes as a percentage of revenue. (provider: fmp)
         growth_income_tax_expense : Optional[float]
-            Growth rate of income tax expenses. (provider: fmp, xiaoyuan)
+            Growth rate of income tax expenses. (provider: fmp)
         growth_consolidated_net_income : Optional[float]
             Growth rate of net income. (provider: fmp)
         growth_net_income_margin : Optional[float]
             Growth rate of net income as a percentage of revenue. (provider: fmp)
         growth_basic_earings_per_share : Optional[float]
-            Growth rate of Earnings Per Share (EPS). (provider: fmp, xiaoyuan)
+            Growth rate of Earnings Per Share (EPS). (provider: fmp)
         growth_diluted_earnings_per_share : Optional[float]
-            Growth rate of diluted Earnings Per Share (EPS). (provider: fmp, xiaoyuan)
+            Growth rate of diluted Earnings Per Share (EPS). (provider: fmp)
         growth_weighted_average_basic_shares_outstanding : Optional[float]
-            Growth rate of weighted average shares outstanding. (provider: fmp, xiaoyuan)
+            Growth rate of weighted average shares outstanding. (provider: fmp)
         growth_weighted_average_diluted_shares_outstanding : Optional[float]
-            Growth rate of diluted weighted average shares outstanding. (provider: fmp, xiaoyuan)
+            Growth rate of diluted weighted average shares outstanding. (provider: fmp)
 
         Examples
         --------
@@ -2267,7 +1926,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.income_growth",
-                        ('fmp', 'xiaoyuan'),
+                        ("fmp",),
                     )
                 },
                 standard_params={
@@ -2275,7 +1934,7 @@ class ROUTER_equity_fundamental(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['annual', 'ytd', 'quarter']}}},
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}}},
             )
         )
 
@@ -2283,9 +1942,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def latest_attributes(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): intrinio.')],
-        tag: Annotated[Union[str, list[str]], OpenBBField(description='Intrinio data tag ID or code. Multiple comma separated items allowed for provider(s): intrinio.')],
-        provider: Annotated[Optional[Literal['intrinio']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): intrinio.")],
+        tag: Annotated[Union[str, list[str]], OpenBBField(description="Intrinio data tag ID or code. Multiple comma separated items allowed for provider(s): intrinio.")],
+        provider: Annotated[Optional[Literal["intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the latest value of a data tag from Intrinio.
@@ -2335,7 +1994,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.latest_attributes",
-                        ('intrinio',),
+                        ("intrinio",),
                     )
                 },
                 standard_params={
@@ -2343,7 +2002,7 @@ class ROUTER_equity_fundamental(Container):
                     "tag": tag,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'intrinio': {'multiple_items_allowed': True, 'choices': None}}, 'tag': {'intrinio': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"intrinio": {"multiple_items_allowed": True, "choices": None}}, "tag": {"intrinio": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -2351,8 +2010,8 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def management(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        provider: Annotated[Optional[Literal['fmp', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, yfinance.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        provider: Annotated[Optional[Literal["fmp", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get executive management team data for a given company.
@@ -2414,7 +2073,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.management",
-                        ('fmp', 'yfinance'),
+                        ("fmp", "yfinance"),
                     )
                 },
                 standard_params={
@@ -2428,8 +2087,8 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def management_compensation(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get executive management team compensation for a given company over time.
@@ -2503,14 +2162,14 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.management_compensation",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -2518,10 +2177,10 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def management_discussion_analysis(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        calendar_year: Annotated[Optional[int], OpenBBField(description='Calendar year of the report. By default, is the current year. If the calendar period is not provided, but the calendar year is, it will return the annual report.')] = None,
-        calendar_period: Annotated[Optional[Literal['Q1', 'Q2', 'Q3', 'Q4']], OpenBBField(description='Calendar period of the report. By default, is the most recent report available for the symbol. If no calendar year and no calendar period are provided, it will return the most recent report.')] = None,
-        provider: Annotated[Optional[Literal['sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        calendar_year: Annotated[Optional[int], OpenBBField(description="Calendar year of the report. By default, is the current year. If the calendar period is not provided, but the calendar year is, it will return the annual report.")] = None,
+        calendar_period: Annotated[Optional[Literal["Q1", "Q2", "Q3", "Q4"]], OpenBBField(description="Calendar period of the report. By default, is the most recent report available for the symbol. If no calendar year and no calendar period are provided, it will return the most recent report.")] = None,
+        provider: Annotated[Optional[Literal["sec"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: sec.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the Management Discussion & Analysis section from the financial statements for a given company.
@@ -2595,7 +2254,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.management_discussion_analysis",
-                        ('sec',),
+                        ("sec",),
                     )
                 },
                 standard_params={
@@ -2611,9 +2270,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def metrics(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, xiaoyuan, yfinance.')],
-        limit: Annotated[Optional[int], OpenBBField(description='The number of data entries to return.')] = 100,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, yfinance.")],
+        limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return.")] = 100,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """Get fundamental metrics for a given company.
@@ -2621,19 +2280,15 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.
         symbol : Union[str, list[str]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, xiaoyuan, yfinance.
+            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio, yfinance.
         limit : Optional[int]
             The number of data entries to return.
-        period : str
-            Time period of the data to return. (provider: fmp, xiaoyuan)
-            Choices for fmp: 'annual', 'quarter'
-            Choices for xiaoyuan: 'annual', 'ytd'
+        period : Literal['annual', 'quarter']
+            Time period of the data to return. (provider: fmp)
         with_ttm : bool
             Include trailing twelve months (TTM) data. (provider: fmp)
-        use_cache : Optional[bool]
-            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
 
         Returns
         -------
@@ -2690,7 +2345,7 @@ class ROUTER_equity_fundamental(Container):
         price_to_free_cash_flow : Optional[float]
             Price-to-free cash flow ratio (provider: fmp)
         price_to_book : Optional[float]
-            Price-to-book ratio (provider: fmp, intrinio, xiaoyuan, yfinance)
+            Price-to-book ratio (provider: fmp, intrinio, yfinance)
         price_to_tangible_book : Optional[float]
             Price-to-tangible book ratio (provider: fmp, intrinio)
         ev_to_sales : Optional[float]
@@ -2715,7 +2370,7 @@ class ROUTER_equity_fundamental(Container):
         net_debt_to_ebitda : Optional[float]
             Net debt-to-EBITDA ratio (provider: fmp)
         current_ratio : Optional[float]
-            Current ratio (provider: fmp, xiaoyuan, yfinance)
+            Current ratio (provider: fmp, yfinance)
         interest_coverage : Optional[float]
             Interest coverage (provider: fmp)
         income_quality : Optional[float]
@@ -2737,7 +2392,7 @@ class ROUTER_equity_fundamental(Container):
         stock_based_compensation_to_revenue : Optional[float]
             Stock-based compensation-to-revenue ratio (provider: fmp)
         working_capital : Optional[float]
-            Working capital (provider: fmp, xiaoyuan)
+            Working capital (provider: fmp)
         tangible_asset_value : Optional[float]
             Tangible asset value (provider: fmp)
         net_current_asset_value : Optional[float]
@@ -2753,26 +2408,28 @@ class ROUTER_equity_fundamental(Container):
         average_inventory : Optional[float]
             Average inventory (provider: fmp)
         days_sales_outstanding : Optional[float]
-            Days sales outstanding (provider: fmp, xiaoyuan)
+            Days sales outstanding (provider: fmp)
         days_payables_outstanding : Optional[float]
-            Days payables outstanding (provider: fmp, xiaoyuan)
+            Days payables outstanding (provider: fmp)
         days_of_inventory_on_hand : Optional[float]
-            Days of inventory on hand (provider: fmp, xiaoyuan)
+            Days of inventory on hand (provider: fmp)
         receivables_turnover : Optional[float]
-            Receivables turnover (provider: fmp, xiaoyuan)
+            Receivables turnover (provider: fmp)
         payables_turnover : Optional[float]
-            Payables turnover (provider: fmp, xiaoyuan)
+            Payables turnover (provider: fmp)
         inventory_turnover : Optional[float]
-            Inventory turnover (provider: fmp, xiaoyuan)
+            Inventory turnover (provider: fmp)
         return_on_equity : Optional[float]
-            Return on equity (provider: fmp, intrinio, xiaoyuan);
+            Return on equity (provider: fmp);
+            Return on equity, as a normalized percent. (provider: intrinio);
             Return on equity, as a normalized percent. (provider: yfinance)
         return_on_invested_capital : Optional[float]
-            Return on invested capital (provider: fmp, intrinio, xiaoyuan)
+            Return on invested capital (provider: fmp);
+            Return on invested capital, as a normalized percent. (provider: intrinio)
         return_on_tangible_assets : Optional[float]
             Return on tangible assets (provider: fmp)
         dividend_yield : Optional[float]
-            Dividend yield, as a normalized percent. (provider: fmp, intrinio, xiaoyuan, yfinance)
+            Dividend yield, as a normalized percent. (provider: fmp, intrinio, yfinance)
         graham_number : Optional[float]
             Graham number (provider: fmp)
         graham_net_net : Optional[float]
@@ -2780,16 +2437,15 @@ class ROUTER_equity_fundamental(Container):
         price_to_revenue : Optional[float]
             Price to revenue ratio. (provider: intrinio)
         quick_ratio : Optional[float]
-            Quick ratio. (provider: intrinio, xiaoyuan, yfinance)
+            Quick ratio. (provider: intrinio, yfinance)
         gross_margin : Optional[float]
-            Gross margin, as a normalized percent. (provider: intrinio, xiaoyuan, yfinance)
+            Gross margin, as a normalized percent. (provider: intrinio, yfinance)
         ebit_margin : Optional[float]
             EBIT margin, as a normalized percent. (provider: intrinio)
         profit_margin : Optional[float]
             Profit margin, as a normalized percent. (provider: intrinio, yfinance)
         eps : Optional[float]
-            Basic earnings per share. (provider: intrinio);
-            Eps. (provider: xiaoyuan)
+            Basic earnings per share. (provider: intrinio)
         eps_growth : Optional[float]
             EPS growth, as a normalized percent. (provider: intrinio)
         revenue_growth : Optional[float]
@@ -2805,13 +2461,11 @@ class ROUTER_equity_fundamental(Container):
         invested_capital_growth : Optional[float]
             Invested capital growth, as a normalized percent. (provider: intrinio)
         return_on_assets : Optional[float]
-            Return on assets, as a normalized percent. (provider: intrinio, xiaoyuan, yfinance)
+            Return on assets, as a normalized percent. (provider: intrinio, yfinance)
         ebitda : Optional[int]
-            Earnings before interest, taxes, depreciation, and amortization. (provider: intrinio);
-            Ebitda. (provider: xiaoyuan)
+            Earnings before interest, taxes, depreciation, and amortization. (provider: intrinio)
         ebit : Optional[int]
-            Earnings before interest and taxes. (provider: intrinio);
-            Ebit. (provider: xiaoyuan)
+            Earnings before interest and taxes. (provider: intrinio)
         long_term_debt : Optional[int]
             Long-term debt. (provider: intrinio)
         total_debt : Optional[int]
@@ -2819,7 +2473,7 @@ class ROUTER_equity_fundamental(Container):
         total_capital : Optional[int]
             The sum of long-term debt and total shareholder equity. (provider: intrinio)
         free_cash_flow_to_firm : Optional[int]
-            Free cash flow to firm. (provider: intrinio, xiaoyuan)
+            Free cash flow to firm. (provider: intrinio)
         altman_z_score : Optional[float]
             Altman Z-score. (provider: intrinio)
         beta : Optional[float]
@@ -2839,15 +2493,14 @@ class ROUTER_equity_fundamental(Container):
             Weighted average shares outstanding (TTM). (provider: intrinio)
         days_to_cover : Optional[float]
             Days to cover short interest, based on average daily volume. (provider: intrinio)
-        eps_ttm : Optional[float]
-            Eps ttm. (provider: xiaoyuan);
-            Earnings per share (TTM). (provider: yfinance)
         forward_pe : Optional[float]
             Forward price-to-earnings ratio. (provider: yfinance)
         peg_ratio : Optional[float]
             PEG ratio (5-year expected). (provider: yfinance)
         peg_ratio_ttm : Optional[float]
             PEG ratio (TTM). (provider: yfinance)
+        eps_ttm : Optional[float]
+            Earnings per share (TTM). (provider: yfinance)
         eps_forward : Optional[float]
             Forward earnings per share. (provider: yfinance)
         enterprise_to_ebitda : Optional[float]
@@ -2895,7 +2548,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.metrics",
-                        ('fmp', 'intrinio', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "yfinance"),
                     )
                 },
                 standard_params={
@@ -2903,7 +2556,7 @@ class ROUTER_equity_fundamental(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'intrinio': {'multiple_items_allowed': True, 'choices': None}, 'xiaoyuan': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': True, 'choices': None}}, 'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['annual', 'ytd']}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "intrinio": {"multiple_items_allowed": True, "choices": None}, "yfinance": {"multiple_items_allowed": True, "choices": None}}, "period": {"fmp": {"multiple_items_allowed": False, "choices": ["annual", "quarter"]}}},
             )
         )
 
@@ -2911,8 +2564,8 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def multiples(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, xiaoyuan.')],
-        provider: Annotated[Optional[Literal['fmp', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, xiaoyuan.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get equity valuation multiples for a given company.
@@ -2920,11 +2573,9 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, xiaoyuan.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.
         symbol : Union[str, list[str]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, xiaoyuan.
-        use_cache : Optional[bool]
-            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
+            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.
 
         Returns
         -------
@@ -3078,14 +2729,14 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.multiples",
-                        ('fmp', 'xiaoyuan'),
+                        ("fmp",),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'xiaoyuan': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -3093,9 +2744,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def ratios(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        limit: Annotated[int, OpenBBField(description='The number of data entries to return.')] = 12,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        limit: Annotated[int, OpenBBField(description="The number of data entries to return.")] = 12,
+        provider: Annotated[Optional[Literal["fmp", "intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio.")] = None,
         **kwargs
     ) -> OBBject:
         """Get an extensive set of financial and accounting ratios for a given company over time.
@@ -3103,16 +2754,15 @@ class ROUTER_equity_fundamental(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio.
         symbol : str
             Symbol to get data for.
         limit : int
             The number of data entries to return.
         period : str
-            Time period of the data to return. (provider: fmp, intrinio, xiaoyuan)
+            Time period of the data to return. (provider: fmp, intrinio)
             Choices for fmp: 'annual', 'quarter', 'ttm'
             Choices for intrinio: 'annual', 'quarter', 'ttm', 'ytd'
-            Choices for xiaoyuan: 'annual', 'ytd'
         fiscal_year : Optional[int]
             The specific fiscal year.  Reports do not go beyond 2008. (provider: intrinio)
 
@@ -3139,117 +2789,117 @@ class ROUTER_equity_fundamental(Container):
         fiscal_year : Optional[int]
             Fiscal year.
         current_ratio : Optional[float]
-            Current ratio. (provider: fmp, xiaoyuan)
+            Current ratio. (provider: fmp)
         quick_ratio : Optional[float]
-            Quick ratio. (provider: fmp, xiaoyuan)
+            Quick ratio. (provider: fmp)
         cash_ratio : Optional[float]
-            Cash ratio. (provider: fmp, xiaoyuan)
+            Cash ratio. (provider: fmp)
         days_of_sales_outstanding : Optional[float]
-            Days of sales outstanding. (provider: fmp, xiaoyuan)
+            Days of sales outstanding. (provider: fmp)
         days_of_inventory_outstanding : Optional[float]
-            Days of inventory outstanding. (provider: fmp, xiaoyuan)
+            Days of inventory outstanding. (provider: fmp)
         operating_cycle : Optional[float]
-            Operating cycle. (provider: fmp, xiaoyuan)
+            Operating cycle. (provider: fmp)
         days_of_payables_outstanding : Optional[float]
-            Days of payables outstanding. (provider: fmp, xiaoyuan)
+            Days of payables outstanding. (provider: fmp)
         cash_conversion_cycle : Optional[float]
-            Cash conversion cycle. (provider: fmp, xiaoyuan)
+            Cash conversion cycle. (provider: fmp)
         gross_profit_margin : Optional[float]
-            Gross profit margin. (provider: fmp, xiaoyuan)
+            Gross profit margin. (provider: fmp)
         operating_profit_margin : Optional[float]
-            Operating profit margin. (provider: fmp, xiaoyuan)
+            Operating profit margin. (provider: fmp)
         pretax_profit_margin : Optional[float]
-            Pretax profit margin. (provider: fmp, xiaoyuan)
+            Pretax profit margin. (provider: fmp)
         net_profit_margin : Optional[float]
-            Net profit margin. (provider: fmp, xiaoyuan)
+            Net profit margin. (provider: fmp)
         effective_tax_rate : Optional[float]
-            Effective tax rate. (provider: fmp, xiaoyuan)
+            Effective tax rate. (provider: fmp)
         return_on_assets : Optional[float]
-            Return on assets. (provider: fmp, xiaoyuan)
+            Return on assets. (provider: fmp)
         return_on_equity : Optional[float]
-            Return on equity. (provider: fmp, xiaoyuan)
+            Return on equity. (provider: fmp)
         return_on_capital_employed : Optional[float]
-            Return on capital employed. (provider: fmp, xiaoyuan)
+            Return on capital employed. (provider: fmp)
         net_income_per_ebt : Optional[float]
-            Net income per EBT. (provider: fmp, xiaoyuan)
+            Net income per EBT. (provider: fmp)
         ebt_per_ebit : Optional[float]
-            EBT per EBIT. (provider: fmp, xiaoyuan)
+            EBT per EBIT. (provider: fmp)
         ebit_per_revenue : Optional[float]
-            EBIT per revenue. (provider: fmp, xiaoyuan)
+            EBIT per revenue. (provider: fmp)
         debt_ratio : Optional[float]
-            Debt ratio. (provider: fmp, xiaoyuan)
+            Debt ratio. (provider: fmp)
         debt_equity_ratio : Optional[float]
-            Debt equity ratio. (provider: fmp, xiaoyuan)
+            Debt equity ratio. (provider: fmp)
         long_term_debt_to_capitalization : Optional[float]
-            Long term debt to capitalization. (provider: fmp, xiaoyuan)
+            Long term debt to capitalization. (provider: fmp)
         total_debt_to_capitalization : Optional[float]
-            Total debt to capitalization. (provider: fmp, xiaoyuan)
+            Total debt to capitalization. (provider: fmp)
         interest_coverage : Optional[float]
-            Interest coverage. (provider: fmp, xiaoyuan)
+            Interest coverage. (provider: fmp)
         cash_flow_to_debt_ratio : Optional[float]
-            Cash flow to debt ratio. (provider: fmp, xiaoyuan)
+            Cash flow to debt ratio. (provider: fmp)
         company_equity_multiplier : Optional[float]
-            Company equity multiplier. (provider: fmp, xiaoyuan)
+            Company equity multiplier. (provider: fmp)
         receivables_turnover : Optional[float]
-            Receivables turnover. (provider: fmp, xiaoyuan)
+            Receivables turnover. (provider: fmp)
         payables_turnover : Optional[float]
-            Payables turnover. (provider: fmp, xiaoyuan)
+            Payables turnover. (provider: fmp)
         inventory_turnover : Optional[float]
-            Inventory turnover. (provider: fmp, xiaoyuan)
+            Inventory turnover. (provider: fmp)
         fixed_asset_turnover : Optional[float]
-            Fixed asset turnover. (provider: fmp, xiaoyuan)
+            Fixed asset turnover. (provider: fmp)
         asset_turnover : Optional[float]
-            Asset turnover. (provider: fmp, xiaoyuan)
+            Asset turnover. (provider: fmp)
         operating_cash_flow_per_share : Optional[float]
-            Operating cash flow per share. (provider: fmp, xiaoyuan)
+            Operating cash flow per share. (provider: fmp)
         free_cash_flow_per_share : Optional[float]
-            Free cash flow per share. (provider: fmp, xiaoyuan)
+            Free cash flow per share. (provider: fmp)
         cash_per_share : Optional[float]
-            Cash per share. (provider: fmp, xiaoyuan)
+            Cash per share. (provider: fmp)
         payout_ratio : Optional[float]
-            Payout ratio. (provider: fmp, xiaoyuan)
+            Payout ratio. (provider: fmp)
         operating_cash_flow_sales_ratio : Optional[float]
-            Operating cash flow sales ratio. (provider: fmp, xiaoyuan)
+            Operating cash flow sales ratio. (provider: fmp)
         free_cash_flow_operating_cash_flow_ratio : Optional[float]
-            Free cash flow operating cash flow ratio. (provider: fmp, xiaoyuan)
+            Free cash flow operating cash flow ratio. (provider: fmp)
         cash_flow_coverage_ratios : Optional[float]
-            Cash flow coverage ratios. (provider: fmp, xiaoyuan)
+            Cash flow coverage ratios. (provider: fmp)
         short_term_coverage_ratios : Optional[float]
-            Short term coverage ratios. (provider: fmp, xiaoyuan)
+            Short term coverage ratios. (provider: fmp)
         capital_expenditure_coverage_ratio : Optional[float]
-            Capital expenditure coverage ratio. (provider: fmp, xiaoyuan)
+            Capital expenditure coverage ratio. (provider: fmp)
         dividend_paid_and_capex_coverage_ratio : Optional[float]
-            Dividend paid and capex coverage ratio. (provider: fmp, xiaoyuan)
+            Dividend paid and capex coverage ratio. (provider: fmp)
         dividend_payout_ratio : Optional[float]
-            Dividend payout ratio. (provider: fmp, xiaoyuan)
+            Dividend payout ratio. (provider: fmp)
         price_book_value_ratio : Optional[float]
-            Price book value ratio. (provider: fmp, xiaoyuan)
+            Price book value ratio. (provider: fmp)
         price_to_book_ratio : Optional[float]
-            Price to book ratio. (provider: fmp, xiaoyuan)
+            Price to book ratio. (provider: fmp)
         price_to_sales_ratio : Optional[float]
-            Price to sales ratio. (provider: fmp, xiaoyuan)
+            Price to sales ratio. (provider: fmp)
         price_earnings_ratio : Optional[float]
-            Price earnings ratio. (provider: fmp, xiaoyuan)
+            Price earnings ratio. (provider: fmp)
         price_to_free_cash_flows_ratio : Optional[float]
-            Price to free cash flows ratio. (provider: fmp, xiaoyuan)
+            Price to free cash flows ratio. (provider: fmp)
         price_to_operating_cash_flows_ratio : Optional[float]
-            Price to operating cash flows ratio. (provider: fmp, xiaoyuan)
+            Price to operating cash flows ratio. (provider: fmp)
         price_cash_flow_ratio : Optional[float]
-            Price cash flow ratio. (provider: fmp, xiaoyuan)
+            Price cash flow ratio. (provider: fmp)
         price_earnings_to_growth_ratio : Optional[float]
-            Price earnings to growth ratio. (provider: fmp, xiaoyuan)
+            Price earnings to growth ratio. (provider: fmp)
         price_sales_ratio : Optional[float]
-            Price sales ratio. (provider: fmp, xiaoyuan)
+            Price sales ratio. (provider: fmp)
         dividend_yield : Optional[float]
-            Dividend yield. (provider: fmp, xiaoyuan)
+            Dividend yield. (provider: fmp)
         dividend_yield_percentage : Optional[float]
-            Dividend yield percentage. (provider: fmp, xiaoyuan)
+            Dividend yield percentage. (provider: fmp)
         dividend_per_share : Optional[float]
-            Dividend per share. (provider: fmp, xiaoyuan)
+            Dividend per share. (provider: fmp)
         enterprise_value_multiple : Optional[float]
-            Enterprise value multiple. (provider: fmp, xiaoyuan)
+            Enterprise value multiple. (provider: fmp)
         price_fair_value : Optional[float]
-            Price fair value. (provider: fmp, xiaoyuan)
+            Price fair value. (provider: fmp)
 
         Examples
         --------
@@ -3265,7 +2915,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.ratios",
-                        ('fmp', 'intrinio', 'xiaoyuan'),
+                        ("fmp", "intrinio"),
                     )
                 },
                 standard_params={
@@ -3273,7 +2923,7 @@ class ROUTER_equity_fundamental(Container):
                     "limit": limit,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ttm']}, 'intrinio': {'multiple_items_allowed': False, 'choices': ['annual', 'quarter', 'ttm', 'ytd']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['annual', 'ytd']}}},
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["annual", "quarter", "ttm"]}, "intrinio": {"multiple_items_allowed": False, "choices": ["annual", "quarter", "ttm", "ytd"]}}},
             )
         )
 
@@ -3281,11 +2931,11 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def reported_financials(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        period: Annotated[str, OpenBBField(description='Time period of the data to return.')] = 'annual',
-        statement_type: Annotated[str, OpenBBField(description='The type of financial statement - i.e, balance, income, cash.')] = 'balance',
-        limit: Annotated[Optional[int], OpenBBField(description='The number of data entries to return. Although the response object contains multiple results, because of the variance in the fields, year-to-year and quarter-to-quarter, it is recommended to view results in small chunks.')] = 100,
-        provider: Annotated[Optional[Literal['intrinio']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        period: Annotated[str, OpenBBField(description="Time period of the data to return.")] = "annual",
+        statement_type: Annotated[str, OpenBBField(description="The type of financial statement - i.e, balance, income, cash.")] = "balance",
+        limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return. Although the response object contains multiple results, because of the variance in the fields, year-to-year and quarter-to-quarter, it is recommended to view results in small chunks.")] = 100,
+        provider: Annotated[Optional[Literal["intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.")] = None,
         **kwargs
     ) -> OBBject:
         """Get financial statements as reported by the company.
@@ -3347,7 +2997,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.reported_financials",
-                        ('intrinio',),
+                        ("intrinio",),
                     )
                 },
                 standard_params={
@@ -3364,8 +3014,8 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def revenue_per_geography(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the geographic breakdown of revenue for a given company over time.
@@ -3422,14 +3072,14 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.revenue_per_geography",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['quarter', 'annual']}}},
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["quarter", "annual"]}}},
             )
         )
 
@@ -3437,8 +3087,8 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def revenue_per_segment(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the revenue breakdown by business segment for a given company over time.
@@ -3495,14 +3145,14 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.revenue_per_segment",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'period': {'fmp': {'multiple_items_allowed': False, 'choices': ['quarter', 'annual']}}},
+                info={"period": {"fmp": {"multiple_items_allowed": False, "choices": ["quarter", "annual"]}}},
             )
         )
 
@@ -3510,9 +3160,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def search_attributes(
         self,
-        query: Annotated[str, OpenBBField(description='Query to search for.')],
-        limit: Annotated[Optional[int], OpenBBField(description='The number of data entries to return.')] = 1000,
-        provider: Annotated[Optional[Literal['intrinio']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.')] = None,
+        query: Annotated[str, OpenBBField(description="Query to search for.")],
+        limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return.")] = 1000,
+        provider: Annotated[Optional[Literal["intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: intrinio.")] = None,
         **kwargs
     ) -> OBBject:
         """Search Intrinio data tags to search in latest or historical attributes.
@@ -3578,7 +3228,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.search_attributes",
-                        ('intrinio',),
+                        ("intrinio",),
                     )
                 },
                 standard_params={
@@ -3591,76 +3241,11 @@ class ROUTER_equity_fundamental(Container):
 
     @exception_handler
     @validate
-    def sw_sectors(
-        self,
-        provider: Annotated[Optional[Literal['xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan.')] = None,
-        **kwargs
-    ) -> OBBject:
-        """Get the business analysis data for a given company over time.
-
-        Parameters
-        ----------
-        provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: xiaoyuan.
-        symbol : Optional[str]
-            Symbol to get data for. (provider: xiaoyuan)
-
-        Returns
-        -------
-        OBBject
-            results : list[SwSectors]
-                Serializable results.
-            provider : Optional[str]
-                Provider name.
-            warnings : Optional[list[Warning_]]
-                list of warnings.
-            chart : Optional[Chart]
-                Chart object.
-            extra : Dict[str, Any]
-                Extra info.
-
-        SwSectors
-        ---------
-        sw_l1_name : Optional[str]
-            Shenwan Level-1 Industry Names. (provider: xiaoyuan)
-        sw_l2_name : Optional[str]
-            Shenwan Level-2 Industry Names. (provider: xiaoyuan)
-        sw_l3_name : Optional[str]
-            Shenwan Level-3 Industry Names. (provider: xiaoyuan)
-        symbol : Optional[str]
-            Symbol representing the entity requested in the data. (provider: xiaoyuan)
-        name : Optional[str]
-            The name of the stock. (provider: xiaoyuan)
-
-        Examples
-        --------
-        >>> from openbb import obb
-        >>> obb.equity.fundamental.sw_sectors(symbol='600519.SS', provider='xiaoyuan')
-        """  # noqa: E501
-
-        return self._run(
-            "/equity/fundamental/sw_sectors",
-            **filter_inputs(
-                provider_choices={
-                    "provider": self._get_provider(
-                        provider,
-                        "equity.fundamental.sw_sectors",
-                        ('xiaoyuan',),
-                    )
-                },
-                standard_params={
-                },
-                extra_params=kwargs,
-            )
-        )
-
-    @exception_handler
-    @validate
     def trailing_dividend_yield(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for.')],
-        limit: Annotated[Optional[int], OpenBBField(description='The number of data entries to return. Default is 252, the number of trading days in a year.')] = 252,
-        provider: Annotated[Optional[Literal['tiingo']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: tiingo.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for.")],
+        limit: Annotated[Optional[int], OpenBBField(description="The number of data entries to return. Default is 252, the number of trading days in a year.")] = 252,
+        provider: Annotated[Optional[Literal["tiingo"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: tiingo.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the 1 year trailing dividend yield for a given company over time.
@@ -3709,7 +3294,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.trailing_dividend_yield",
-                        ('tiingo',),
+                        ("tiingo",),
                     )
                 },
                 standard_params={
@@ -3724,9 +3309,9 @@ class ROUTER_equity_fundamental(Container):
     @validate
     def transcript(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.')],
-        year: Annotated[Union[int, str, list[Union[int, str]]], OpenBBField(description='Year of the earnings call transcript. Multiple comma separated items allowed for provider(s): fmp.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp.")],
+        year: Annotated[Union[int, str, list[Union[int, str]]], OpenBBField(description="Year of the earnings call transcript. Multiple comma separated items allowed for provider(s): fmp.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get earnings call transcripts for a given company.
@@ -3780,7 +3365,7 @@ class ROUTER_equity_fundamental(Container):
                     "provider": self._get_provider(
                         provider,
                         "equity.fundamental.transcript",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
@@ -3788,6 +3373,6 @@ class ROUTER_equity_fundamental(Container):
                     "year": year,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}}, 'year': {'fmp': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}}, "year": {"fmp": {"multiple_items_allowed": True, "choices": None}}},
             )
         )

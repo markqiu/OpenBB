@@ -1,59 +1,15 @@
 ### THIS FILE IS AUTO-GENERATED. DO NOT EDIT. ###
 
-from openbb_core.app.static.container import Container
-from openbb_core.app.model.obbject import OBBject
-import openbb_core.provider
-from openbb_core.provider.abstract.data import Data
-import pandas
-from pandas import DataFrame, Series
-import numpy
-from numpy import ndarray
 import datetime
-from datetime import date
-import pydantic
-from pydantic import BaseModel
-from inspect import Parameter
-import typing
-from typing import TYPE_CHECKING, ForwardRef, Union, Optional, Literal, Any
-from annotated_types import Ge, Le, Gt, Lt
-from warnings import warn, simplefilter
-from typing_extensions import Annotated, deprecated
-from openbb_core.app.static.utils.decorators import exception_handler, validate
-
-from openbb_core.app.static.utils.filters import filter_inputs
-
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from typing import Literal, Optional, Union
 
 from openbb_core.app.model.field import OpenBBField
-from fastapi import Depends
-import openbb_core.app.model.command_context
-import openbb_core.app.provider_interface
-import typing
+from openbb_core.app.model.obbject import OBBject
+from openbb_core.app.static.container import Container
+from openbb_core.app.static.utils.decorators import exception_handler, validate
+from openbb_core.app.static.utils.filters import filter_inputs
+from typing_extensions import Annotated
 
-from openbb_core.app.model.command_context import CommandContext
-from openbb_core.app.provider_interface import (
-    OBBject_EtfCountries,
-    OBBject_EtfEquityExposure,
-    OBBject_EtfHistorical,
-    OBBject_EtfHoldings,
-    OBBject_EtfHoldingsDate,
-    OBBject_EtfInfo,
-    OBBject_EtfPricePerformance,
-    OBBject_EtfSearch,
-    OBBject_EtfSectors,
-)
-
-from typing import (
-    EtfCountries,
-    EtfEquityExposure,
-    EtfHistorical,
-    EtfHoldings,
-    EtfHoldingsDate,
-    EtfInfo,
-    EtfPricePerformance,
-    EtfSearch,
-    EtfSectors,
-)
 
 class ROUTER_etf(Container):
     """/etf
@@ -75,8 +31,8 @@ class ROUTER_etf(Container):
     @validate
     def countries(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. (ETF) Multiple comma separated items allowed for provider(s): fmp.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. (ETF) Multiple comma separated items allowed for provider(s): fmp.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """ETF Country weighting.
@@ -120,14 +76,14 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.countries",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -135,8 +91,8 @@ class ROUTER_etf(Container):
     @validate
     def equity_exposure(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. (Stock) Multiple comma separated items allowed for provider(s): fmp.')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. (Stock) Multiple comma separated items allowed for provider(s): fmp.")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the exposure to ETFs for a specific stock.
@@ -190,14 +146,14 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.equity_exposure",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -205,10 +161,10 @@ class ROUTER_etf(Container):
     @validate
     def historical(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, xiaoyuan, yfinance.')],
-        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='Start date of the data, in YYYY-MM-DD format.')] = None,
-        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description='End date of the data, in YYYY-MM-DD format.')] = None,
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'polygon', 'tiingo', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, yfinance.")],
+        start_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="Start date of the data, in YYYY-MM-DD format.")] = None,
+        end_date: Annotated[Union[datetime.date, None, str], OpenBBField(description="End date of the data, in YYYY-MM-DD format.")] = None,
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "polygon", "tiingo", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, tiingo, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """ETF Historical Market Price.
@@ -216,18 +172,17 @@ class ROUTER_etf(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, polygon, tiingo, yfinance.
         symbol : Union[str, list[str]]
-            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, xiaoyuan, yfinance.
+            Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, polygon, tiingo, yfinance.
         start_date : Union[date, None, str]
             Start date of the data, in YYYY-MM-DD format.
         end_date : Union[date, None, str]
             End date of the data, in YYYY-MM-DD format.
         interval : str
-            Time interval of the data to return. (provider: fmp, intrinio, polygon, tiingo, xiaoyuan, yfinance)
+            Time interval of the data to return. (provider: fmp, intrinio, polygon, tiingo, yfinance)
             Choices for fmp: '1m', '5m', '15m', '30m', '1h', '4h', '1d'
             Choices for intrinio: '1m', '5m', '10m', '15m', '30m', '60m', '1h', '1d', '1W', '1M', '1Q', '1Y'
-            Choices for xiaoyuan: '1d'
             Choices for yfinance: '1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1W', '1M', '1Q'
         start_time : Optional[datetime.time]
             Return intervals starting at the specified time on the `start_date` formatted as 'HH:MM:SS'. (provider: intrinio)
@@ -281,13 +236,15 @@ class ROUTER_etf(Container):
         vwap : Optional[float]
             Volume Weighted Average Price over the period.
         adj_close : Optional[float]
-            The adjusted close price. (provider: fmp, intrinio, tiingo, xiaoyuan)
+            The adjusted close price. (provider: fmp, intrinio, tiingo)
         unadjusted_volume : Optional[float]
             Unadjusted volume of the symbol. (provider: fmp)
         change : Optional[float]
-            Change in the price from the previous close. (provider: fmp, intrinio, xiaoyuan)
+            Change in the price from the previous close. (provider: fmp);
+            Change in the price of the symbol from the previous day. (provider: intrinio)
         change_percent : Optional[float]
-            Change in the price from the previous close, as a normalized percent. (provider: fmp, intrinio, xiaoyuan)
+            Change in the price from the previous close, as a normalized percent. (provider: fmp);
+            Percent change in the price of the symbol from the previous day. (provider: intrinio)
         average : Optional[float]
             Average trade price of an individual equity during the interval. (provider: intrinio)
         adj_open : Optional[float]
@@ -333,7 +290,7 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.historical",
-                        ('fmp', 'intrinio', 'polygon', 'tiingo', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "polygon", "tiingo", "yfinance"),
                     )
                 },
                 standard_params={
@@ -342,7 +299,7 @@ class ROUTER_etf(Container):
                     "end_date": end_date,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'polygon': {'multiple_items_allowed': True, 'choices': None}, 'tiingo': {'multiple_items_allowed': True, 'choices': None}, 'xiaoyuan': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': True, 'choices': None}}, 'interval': {'fmp': {'multiple_items_allowed': False, 'choices': ['1m', '5m', '15m', '30m', '1h', '4h', '1d']}, 'intrinio': {'multiple_items_allowed': False, 'choices': ['1m', '5m', '10m', '15m', '30m', '60m', '1h', '1d', '1W', '1M', '1Q', '1Y']}, 'tiingo': {'multiple_items_allowed': False, 'choices': ['1m', '5m', '15m', '30m', '90m', '1h', '2h', '4h', '1d', '1W', '1M', '1Y']}, 'xiaoyuan': {'multiple_items_allowed': False, 'choices': ['1d']}, 'yfinance': {'multiple_items_allowed': False, 'choices': ['1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1W', '1M', '1Q']}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "polygon": {"multiple_items_allowed": True, "choices": None}, "tiingo": {"multiple_items_allowed": True, "choices": None}, "yfinance": {"multiple_items_allowed": True, "choices": None}}, "interval": {"fmp": {"multiple_items_allowed": False, "choices": ["1m", "5m", "15m", "30m", "1h", "4h", "1d"]}, "intrinio": {"multiple_items_allowed": False, "choices": ["1m", "5m", "10m", "15m", "30m", "60m", "1h", "1d", "1W", "1M", "1Q", "1Y"]}, "tiingo": {"multiple_items_allowed": False, "choices": ["1m", "5m", "15m", "30m", "90m", "1h", "2h", "4h", "1d", "1W", "1M", "1Y"]}, "yfinance": {"multiple_items_allowed": False, "choices": ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1W", "1M", "1Q"]}}},
             )
         )
 
@@ -350,8 +307,8 @@ class ROUTER_etf(Container):
     @validate
     def holdings(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for. (ETF)')],
-        provider: Annotated[Optional[Literal['akshare', 'fmp', 'intrinio', 'sec']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: akshare, fmp, intrinio, sec.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for. (ETF)")],
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "sec"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, sec.")] = None,
         **kwargs
     ) -> OBBject:
         """Get the holdings for an individual ETF.
@@ -359,20 +316,16 @@ class ROUTER_etf(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: akshare, fmp, intrinio, sec.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, sec.
         symbol : str
             Symbol to get data for. (ETF)
-        year : Optional[str]
-             Entering a year will attempt to return the NPORT-P filing for the entered year. For Provider Akshare, only the year of date functions. Use the holdings_date command/endpoint to find available filing year for the ETF. (provider: akshare)
-        quarter : Optional[str]
-            Enter the quarter for which you want to retrieve the ETF holdings data. (provider: akshare)
-        use_cache : Optional[bool]
-            Whether or not to use cache. If True, cache will store for two days. (provider: akshare)
-        date : Union[str, date, None]
+        date : Union[date, str, None]
             A specific date to get data for. Entering a date will attempt to return the NPORT-P filing for the entered date. This needs to be _exactly_ the date of the filing. Use the holdings_date command/endpoint to find available filing dates for the ETF. (provider: fmp);
             The date represents the period ending. The date entered will return the closest filing. (provider: sec)
         cik : Optional[str]
             The CIK of the filing entity. Overrides symbol. (provider: fmp)
+        use_cache : bool
+            Whether or not to use cache for the request. (provider: sec)
 
         Returns
         -------
@@ -394,17 +347,6 @@ class ROUTER_etf(Container):
             Symbol representing the entity requested in the data. (ETF)
         name : Optional[str]
             Name of the ETF holding.
-        balance : Optional[int]
-            The balance of the holding, in shares or units. (provider: akshare, fmp);
-            The number of units of the security held, if available. (provider: intrinio);
-            The balance of the holding. (provider: sec)
-        value : Optional[float]
-            The value of the holding, in dollars. (provider: akshare, fmp, intrinio, sec)
-        weight : Optional[float]
-            The weight of the holding, as a normalized percent. (provider: akshare, fmp, intrinio);
-            The weight of the holding in ETF in %. (provider: sec)
-        acceptance_datetime : Optional[str]
-            The acceptance datetime of the filing. (provider: akshare, fmp)
         lei : Optional[str]
             The LEI of the holding. (provider: fmp, sec)
         title : Optional[str]
@@ -413,11 +355,20 @@ class ROUTER_etf(Container):
             The CUSIP of the holding. (provider: fmp, sec)
         isin : Optional[str]
             The ISIN of the holding. (provider: fmp, intrinio, sec)
+        balance : Optional[int]
+            The balance of the holding, in shares or units. (provider: fmp);
+            The number of units of the security held, if available. (provider: intrinio);
+            The balance of the holding. (provider: sec)
         units : Optional[Union[str, float]]
             The type of units. (provider: fmp);
             The units of the holding. (provider: sec)
         currency : Optional[str]
             The currency of the holding. (provider: fmp, sec)
+        value : Optional[float]
+            The value of the holding, in dollars. (provider: fmp, intrinio, sec)
+        weight : Optional[float]
+            The weight of the holding, as a normalized percent. (provider: fmp, intrinio);
+            The weight of the holding in ETF in %. (provider: sec)
         payoff_profile : Optional[str]
             The payoff profile of the holding. (provider: fmp, sec)
         asset_category : Optional[str]
@@ -438,6 +389,8 @@ class ROUTER_etf(Container):
             Whether the holding is loan by fund. (provider: fmp, sec)
         cik : Optional[str]
             The CIK of the filing. (provider: fmp)
+        acceptance_datetime : Optional[str]
+            The acceptance datetime of the filing. (provider: fmp)
         updated : Optional[Union[date, datetime]]
             The date the data was updated. (provider: fmp);
             The 'as_of' date for the holding. (provider: intrinio)
@@ -515,11 +468,11 @@ class ROUTER_etf(Container):
             The floating rate spread for reveivable portion of the swap. (provider: sec)
         rate_tenor_rec : Optional[str]
             The rate tenor for receivable portion of the swap. (provider: sec)
-        rate_tenor_unit_rec : Optional[Union[str, int]]
+        rate_tenor_unit_rec : Optional[Union[int, str]]
             The rate tenor unit for receivable portion of the swap. (provider: sec)
         reset_date_rec : Optional[str]
             The reset date for receivable portion of the swap. (provider: sec)
-        reset_date_unit_rec : Optional[Union[str, int]]
+        reset_date_unit_rec : Optional[Union[int, str]]
             The reset date unit for receivable portion of the swap. (provider: sec)
         rate_type_pmnt : Optional[str]
             The type of rate for payment portion of the swap. (provider: sec)
@@ -533,11 +486,11 @@ class ROUTER_etf(Container):
             The floating rate spread for payment portion of the swap. (provider: sec)
         rate_tenor_pmnt : Optional[str]
             The rate tenor for payment portion of the swap. (provider: sec)
-        rate_tenor_unit_pmnt : Optional[Union[str, int]]
+        rate_tenor_unit_pmnt : Optional[Union[int, str]]
             The rate tenor unit for payment portion of the swap. (provider: sec)
         reset_date_pmnt : Optional[str]
             The reset date for payment portion of the swap. (provider: sec)
-        reset_date_unit_pmnt : Optional[Union[str, int]]
+        reset_date_unit_pmnt : Optional[Union[int, str]]
             The reset date unit for payment portion of the swap. (provider: sec)
         repo_type : Optional[str]
             The type of repo. (provider: sec)
@@ -591,7 +544,7 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.holdings",
-                        ('akshare', 'fmp', 'intrinio', 'sec'),
+                        ("fmp", "intrinio", "sec"),
                     )
                 },
                 standard_params={
@@ -605,8 +558,8 @@ class ROUTER_etf(Container):
     @validate
     def holdings_date(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for. (ETF)')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for. (ETF)")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """Use this function to get the holdings dates, if available.
@@ -652,7 +605,7 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.holdings_date",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
@@ -666,8 +619,8 @@ class ROUTER_etf(Container):
     @validate
     def info(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. (ETF) Multiple comma separated items allowed for provider(s): fmp, intrinio, xiaoyuan, yfinance.')],
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'xiaoyuan', 'yfinance']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan, yfinance.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. (ETF) Multiple comma separated items allowed for provider(s): fmp, intrinio, yfinance.")],
+        provider: Annotated[Optional[Literal["fmp", "intrinio", "yfinance"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.")] = None,
         **kwargs
     ) -> OBBject:
         """ETF Information Overview.
@@ -675,11 +628,9 @@ class ROUTER_etf(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan, yfinance.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, yfinance.
         symbol : Union[str, list[str]]
-            Symbol to get data for. (ETF) Multiple comma separated items allowed for provider(s): fmp, intrinio, xiaoyuan, yfinance.
-        use_cache : Optional[bool]
-            Whether or not to use cache. If True, cache will store for two days. (provider: xiaoyuan)
+            Symbol to get data for. (ETF) Multiple comma separated items allowed for provider(s): fmp, intrinio, yfinance.
 
         Returns
         -------
@@ -740,12 +691,11 @@ class ROUTER_etf(Container):
         etn_maturity_date : Optional[date]
             If the product is an ETN, this field identifies the maturity date for the ETN. (provider: intrinio)
         is_listed : Optional[bool]
-            If true, the ETF is still listed on an exchange. (provider: intrinio, xiaoyuan)
+            If true, the ETF is still listed on an exchange. (provider: intrinio)
         close_date : Optional[date]
             The date on which the ETF was de-listed if it is no longer listed. (provider: intrinio)
         exchange : Optional[str]
             The exchange Market Identifier Code (MIC). (provider: intrinio);
-            The exchange the etf is listed on. (provider: xiaoyuan);
             The exchange the fund is listed on. (provider: yfinance)
         ric : Optional[str]
             Reuters Instrument Code (RIC). (provider: intrinio)
@@ -797,11 +747,9 @@ class ROUTER_etf(Container):
         index_linked : Optional[str]
             This field identifies whether an ETF is index linked or active. (provider: intrinio)
         index_name : Optional[str]
-            This field identifies the name of the underlying index tracked by the ETF, if applicable. (provider: intrinio);
-            The name of the index. (provider: xiaoyuan)
+            This field identifies the name of the underlying index tracked by the ETF, if applicable. (provider: intrinio)
         index_symbol : Optional[str]
-            This field identifies the OpenFIGI ticker for the Index underlying the ETF. (provider: intrinio);
-            The symbol of the index the etf tracks. (provider: xiaoyuan)
+            This field identifies the OpenFIGI ticker for the Index underlying the ETF. (provider: intrinio)
         parent_index : Optional[str]
             This field identifies the name of the parent index, which represents the broader universe from which the index underlying the ETF is created, if applicable. (provider: intrinio)
         index_family : Optional[str]
@@ -958,88 +906,8 @@ class ROUTER_etf(Container):
             Gross expense net of Fee Waivers, as a percentage of net assets as published by the ETF issuer. (provider: intrinio)
         etf_portfolio_turnover : Optional[float]
             The percentage of positions turned over in the last 12 months. (provider: intrinio)
-        base_date : Optional[date]
-            Date of ETF Establishment (provider: xiaoyuan)
         fund_type : Optional[str]
-            The etf category. (provider: xiaoyuan);
             The legal type of fund. (provider: yfinance)
-        last_price : Optional[float]
-            The last traded price. (provider: xiaoyuan)
-        year_high : Optional[float]
-            The one-year high of the price. (provider: xiaoyuan);
-            The fifty-two week high price. (provider: yfinance)
-        year_low : Optional[float]
-            The one-year low of the price. (provider: xiaoyuan);
-            The fifty-two week low price. (provider: yfinance)
-        ma_50d : Optional[float]
-            50-day moving average price. (provider: xiaoyuan, yfinance)
-        ma_200d : Optional[float]
-            200-day moving average price. (provider: xiaoyuan, yfinance)
-        index_dividend : Optional[float]
-            Definition: The dividend yield of an index is the ratio of the total annual dividend paid by the constituent stocks of the index to the total market capitalization of the constituent stocks at that time.
-                Calculation: 
-                For mainland China indices (e.g., Shanghai and Shenzhen indices):  
-          Index dividend yield = Total annual dividends of constituent stocks / (A-share market capitalization + B-share market capitalization of constituent stocks)  
-                For Hong Kong indices:  
-          Index dividend yield = Total annual dividends of constituent stocks / Total market capitalization of constituent stocks (provider: xiaoyuan)
-        etf_scale : Optional[float]
-            The scale of the etf. (provider: xiaoyuan)
-        administrative_fee_ratio : Optional[str]
-            The administrative fee ratio of the etf. (provider: xiaoyuan)
-        trustee_fee_ratio : Optional[str]
-            The trustee fee ratio of the etf. (provider: xiaoyuan)
-        total_dividend_count : Optional[int]
-            The total dividend count of the etf. (provider: xiaoyuan)
-        advisor : Optional[str]
-            The advisor of the etf. (provider: xiaoyuan)
-        five_year_gain : Optional[float]
-            The three-year gain of the etf. (provider: xiaoyuan)
-        ten_year_gain : Optional[float]
-            The five-year gain of the etf. (provider: xiaoyuan)
-        full_name : Optional[str]
-            The full name of the ETF. (provider: xiaoyuan)
-        fund_manager : Optional[str]
-            The fund manager of the ETF. (provider: xiaoyuan)
-        establishment_scale : Optional[str]
-            The establishment scale of the ETF. (provider: xiaoyuan)
-        issue_total_unit : Optional[str]
-            The total number of units issued by the ETF. (provider: xiaoyuan)
-        investment_philosophy : Optional[str]
-            The investment philosophy of the ETF. (provider: xiaoyuan)
-        investment_scope : Optional[str]
-            he investment scope of the ETF. (provider: xiaoyuan)
-        investment_strategy : Optional[str]
-            The investment strategy of the ETF. (provider: xiaoyuan)
-        management_fee : Optional[str]
-            The management fee of the ETF. (provider: xiaoyuan)
-        trustee_fee : Optional[str]
-            The rustee fee of the ETF. (provider: xiaoyuan)
-        service_fee : Optional[str]
-            The service fee of the ETF. (provider: xiaoyuan)
-        max_purchase_fee : Optional[str]
-            The maximum purchase fee of the ETF. (provider: xiaoyuan)
-        max_redemption_fee : Optional[str]
-            The maximum redemption fee of the ETF. (provider: xiaoyuan)
-        trustee : Optional[str]
-            The trustee of the ETF. (provider: xiaoyuan)
-        issue_date : Optional[date]
-            The issue date of the ETF. (provider: xiaoyuan)
-        investment_target : Optional[str]
-            The investment target of the ETF. (provider: xiaoyuan)
-        dividend_policy : Optional[str]
-            The dividend policy of the ETF. (provider: xiaoyuan)
-        risk_return_characteristic : Optional[str]
-            The risk-return characteristic of the ETF. (provider: xiaoyuan)
-        stock_net_ratio : Optional[str]
-            The stock net ratio of the ETF. (provider: xiaoyuan)
-        bond_net_ratio : Optional[str]
-            The bond net ratio of the ETF. (provider: xiaoyuan)
-        cash_net_ratio : Optional[str]
-            The cash net ratio of the ETF. (provider: xiaoyuan)
-        fund_net_ratio : Optional[str]
-            The fund net ratio of the ETF. (provider: xiaoyuan)
-        other_net_ratio : Optional[str]
-            The other net ratio of the ETF. (provider: xiaoyuan)
         category : Optional[str]
             The fund category. (provider: yfinance)
         exchange_timezone : Optional[str]
@@ -1058,6 +926,14 @@ class ROUTER_etf(Container):
             The trailing twelve month annual dividend rate of the fund, in currency units. (provider: yfinance)
         dividend_yield_ttm : Optional[float]
             The trailing twelve month annual dividend yield of the fund, as a normalized percent. (provider: yfinance)
+        year_high : Optional[float]
+            The fifty-two week high price. (provider: yfinance)
+        year_low : Optional[float]
+            The fifty-two week low price. (provider: yfinance)
+        ma_50d : Optional[float]
+            50-day moving average price. (provider: yfinance)
+        ma_200d : Optional[float]
+            200-day moving average price. (provider: yfinance)
         return_ytd : Optional[float]
             The year-to-date return of the fund, as a normalized percent. (provider: yfinance)
         return_3y_avg : Optional[float]
@@ -1104,14 +980,14 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.info",
-                        ('fmp', 'intrinio', 'xiaoyuan', 'yfinance'),
+                        ("fmp", "intrinio", "yfinance"),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'intrinio': {'multiple_items_allowed': True, 'choices': None}, 'xiaoyuan': {'multiple_items_allowed': True, 'choices': None}, 'yfinance': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "intrinio": {"multiple_items_allowed": True, "choices": None}, "yfinance": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -1119,8 +995,8 @@ class ROUTER_etf(Container):
     @validate
     def price_performance(
         self,
-        symbol: Annotated[Union[str, list[str]], OpenBBField(description='Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio.')],
-        provider: Annotated[Optional[Literal['fmp', 'intrinio']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio.')] = None,
+        symbol: Annotated[Union[str, list[str]], OpenBBField(description="Symbol to get data for. Multiple comma separated items allowed for provider(s): fmp, intrinio.")],
+        provider: Annotated[Optional[Literal["fmp", "intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio.")] = None,
         **kwargs
     ) -> OBBject:
         """Price performance as a return, over different periods.
@@ -1231,14 +1107,14 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.price_performance",
-                        ('fmp', 'intrinio'),
+                        ("fmp", "intrinio"),
                     )
                 },
                 standard_params={
                     "symbol": symbol,
                 },
                 extra_params=kwargs,
-                info={'symbol': {'fmp': {'multiple_items_allowed': True, 'choices': None}, 'intrinio': {'multiple_items_allowed': True, 'choices': None}}},
+                info={"symbol": {"fmp": {"multiple_items_allowed": True, "choices": None}, "intrinio": {"multiple_items_allowed": True, "choices": None}}},
             )
         )
 
@@ -1246,8 +1122,8 @@ class ROUTER_etf(Container):
     @validate
     def search(
         self,
-        query: Annotated[Optional[str], OpenBBField(description='Search query.')] = '',
-        provider: Annotated[Optional[Literal['fmp', 'intrinio', 'xiaoyuan']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan.')] = None,
+        query: Annotated[Optional[str], OpenBBField(description="Search query.")] = "",
+        provider: Annotated[Optional[Literal["fmp", "intrinio"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio.")] = None,
         **kwargs
     ) -> OBBject:
         """Search for ETFs.
@@ -1258,13 +1134,13 @@ class ROUTER_etf(Container):
         Parameters
         ----------
         provider : str
-            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio, xiaoyuan.
+            The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp, intrinio.
         query : Optional[str]
             Search query.
         exchange : str
             The exchange code the ETF trades on. (provider: fmp)
-        is_active : Union[Literal[True, False], None, bool]
-            Whether the ETF is actively trading. (provider: fmp, xiaoyuan)
+        is_active : Optional[Literal[True, False]]
+            Whether the ETF is actively trading. (provider: fmp)
 
         Returns
         -------
@@ -1302,8 +1178,7 @@ class ROUTER_etf(Container):
             The current trading volume of the ETF. (provider: fmp)
         exchange : Optional[str]
             The exchange code the ETF trades on. (provider: fmp);
-            The exchange MIC code. (provider: intrinio);
-            The exchange on which the stock is listed. (provider: xiaoyuan)
+            The exchange MIC code. (provider: intrinio)
         exchange_name : Optional[str]
             The full name of the exchange the ETF trades on. (provider: fmp)
         country : Optional[str]
@@ -1320,56 +1195,6 @@ class ROUTER_etf(Container):
             The Stock Exchange Daily Official list. (provider: intrinio)
         intrinio_id : Optional[str]
             The unique Intrinio ID for the security. (provider: intrinio)
-        list_date : Optional[date]
-            The date on which the stock was listed on the exchange. (provider: xiaoyuan)
-        end_date : Optional[date]
-            The date on which the stock was delisted from the exchange. (provider: xiaoyuan)
-        benchmark : Optional[str]
-            The benchmark of the ETF. (provider: xiaoyuan)
-        fund_scale : Optional[str]
-            The fund scale of the ETF. (provider: xiaoyuan)
-        unit_total : Optional[str]
-            The total number of units of the ETF. (provider: xiaoyuan)
-        return_1m : Optional[str]
-            The return of the ETF in the last month. (provider: xiaoyuan)
-        return_3m : Optional[str]
-            The return of the ETF in the last three months. (provider: xiaoyuan)
-        return_6m : Optional[str]
-            The return of the ETF in the last six months. (provider: xiaoyuan)
-        return_1y : Optional[str]
-            The return of the ETF in the last year. (provider: xiaoyuan)
-        return_3y : Optional[str]
-            The return of the ETF in the last three years. (provider: xiaoyuan)
-        return_5y : Optional[str]
-            The return of the ETF in the last five years. (provider: xiaoyuan)
-        return_10y : Optional[str]
-            The return of the ETF in the last ten years. (provider: xiaoyuan)
-        return_ytd : Optional[str]
-            The return of the ETF in the year to date. (provider: xiaoyuan)
-        return_ltd : Optional[str]
-            The return of the ETF in the last trading day. (provider: xiaoyuan)
-        dividend_count : Optional[float]
-            The number of dividends paid by the ETF. (provider: xiaoyuan)
-        dividend_total : Optional[str]
-            The total amount of dividends paid by the ETF. (provider: xiaoyuan)
-        dividend_per_unit : Optional[str]
-            The amount of dividends paid per unit of the ETF. (provider: xiaoyuan)
-        max_subscribe_fee : Optional[str]
-            The maximum subscription fee of the ETF. (provider: xiaoyuan)
-        rank_return_1m : Optional[str]
-            The rank of the ETF in the last month. (provider: xiaoyuan)
-        rank_return_3m : Optional[str]
-            The rank of the ETF in the last three months. (provider: xiaoyuan)
-        rank_return_6m : Optional[str]
-            The rank of the ETF in the last six months. (provider: xiaoyuan)
-        rank_return_1y : Optional[str]
-            The rank of the ETF in the last year. (provider: xiaoyuan)
-        rank_return_3y : Optional[str]
-            The rank of the ETF in the last three years. (provider: xiaoyuan)
-        rank_return_ytd : Optional[str]
-            The rank of the ETF in the year to date. (provider: xiaoyuan)
-        timestamp : Optional[date]
-            The timestamp of the data. (provider: xiaoyuan)
 
         Examples
         --------
@@ -1387,14 +1212,14 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.search",
-                        ('fmp', 'intrinio', 'xiaoyuan'),
+                        ("fmp", "intrinio"),
                     )
                 },
                 standard_params={
                     "query": query,
                 },
                 extra_params=kwargs,
-                info={'exchange': {'fmp': {'multiple_items_allowed': False, 'choices': ['AMEX', 'NYSE', 'NASDAQ', 'ETF', 'TSX', 'EURONEXT']}}},
+                info={"exchange": {"fmp": {"multiple_items_allowed": False, "choices": ["AMEX", "NYSE", "NASDAQ", "ETF", "TSX", "EURONEXT"]}}},
             )
         )
 
@@ -1402,8 +1227,8 @@ class ROUTER_etf(Container):
     @validate
     def sectors(
         self,
-        symbol: Annotated[str, OpenBBField(description='Symbol to get data for. (ETF)')],
-        provider: Annotated[Optional[Literal['fmp']], OpenBBField(description='The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.')] = None,
+        symbol: Annotated[str, OpenBBField(description="Symbol to get data for. (ETF)")],
+        provider: Annotated[Optional[Literal["fmp"]], OpenBBField(description="The provider to use, by default None. If None, the priority list configured in the settings is used. Default priority: fmp.")] = None,
         **kwargs
     ) -> OBBject:
         """ETF Sector weighting.
@@ -1449,7 +1274,7 @@ class ROUTER_etf(Container):
                     "provider": self._get_provider(
                         provider,
                         "etf.sectors",
-                        ('fmp',),
+                        ("fmp",),
                     )
                 },
                 standard_params={
