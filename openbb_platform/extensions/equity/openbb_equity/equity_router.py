@@ -76,6 +76,22 @@ async def screener(
 
 
 @router.command(
+    model="EquityScreenerMetrics", examples=[APIEx(parameters={"provider": "xiaoyuan"})]
+)
+async def screener_metrics(
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
+) -> OBBject:
+    """All metrics for screener.
+
+    These metrics include market cap, price, beta, volume, and dividend yield.
+    """
+    return await OBBject.from_query(Query(**locals()))
+
+
+@router.command(
     model="EquityInfo",
     examples=[APIEx(parameters={"symbol": "AAPL", "provider": "fmp"})],
 )
