@@ -129,8 +129,16 @@ class NasdaqEconomicCalendarFetcher(
             """Get the calendar data for a single date."""
             response: List = []
             url = f"https://api.nasdaq.com/api/calendar/economicevents?date={date}"
-            r_json = await get_data_from_url(url=url, file_path="economic_calendar", use_cache=query.use_cache,
-                                             headers=IPO_HEADERS)
+            r_json = await amake_request(url=url, headers=IPO_HEADERS)
+            if (
+                isinstance(r_json, dict)
+                and (status := r_json.get("status", {}))
+                and (messages := status.get("bCodeMessage", []))
+                and (error_message := messages[0].get("errorMessage", ""))
+            ):
+                raise OpenBBError(
+                    f"Nasdaq Error -> {error_message}",
+                )
             if r_json is not None and r_json.get("data"):  # type: ignore
                 response = r_json["data"].get("rows")  # type: ignore
             if response:
