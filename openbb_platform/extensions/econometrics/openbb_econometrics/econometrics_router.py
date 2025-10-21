@@ -1,7 +1,7 @@
 """Econometrics Router."""
 
 from itertools import combinations
-from typing import Literal, Optional
+from typing import Literal
 
 from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.example import APIEx, PythonEx
@@ -1017,7 +1017,7 @@ def panel_fmac(
     ],
 )
 def variance_inflation_factor(
-    data: list[Data], columns: Optional[list] = None
+    data: list[Data], columns: list | None = None
 ) -> OBBject[list[Data]]:
     """Calculate VIF (variance inflation factor), which tests for collinearity.
 

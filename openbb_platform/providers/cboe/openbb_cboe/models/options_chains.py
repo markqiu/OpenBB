@@ -3,7 +3,7 @@
 # pylint: disable= unused-argument
 
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 from openbb_core.app.model.abstract.error import OpenBBError
 from openbb_core.provider.abstract.annotated_result import AnnotatedResult
@@ -45,16 +45,16 @@ class CboeOptionsChainsFetcher(
     """Cboe Options Chains Fetcher."""
 
     @staticmethod
-    def transform_query(params: Dict[str, Any]) -> CboeOptionsChainsQueryParams:
+    def transform_query(params: dict[str, Any]) -> CboeOptionsChainsQueryParams:
         """Transform the query."""
         return CboeOptionsChainsQueryParams(**params)
 
     @staticmethod
     async def aextract_data(
         query: CboeOptionsChainsQueryParams,
-        credentials: Optional[Dict[str, str]],
+        credentials: dict[str, str] | None,
         **kwargs: Any,
-    ) -> Dict:
+    ) -> dict:
         """Return the raw data from the Cboe endpoint."""
         # pylint: disable=import-outside-toplevel
         from openbb_cboe.utils.helpers import (
@@ -83,7 +83,7 @@ class CboeOptionsChainsFetcher(
     @staticmethod
     def transform_data(
         query: CboeOptionsChainsQueryParams,
-        data: Dict,
+        data: dict,
         **kwargs: Any,
     ) -> AnnotatedResult[CboeOptionsChainsData]:
         """Transform the data to the standard format."""
@@ -151,6 +151,12 @@ class CboeOptionsChainsFetcher(
         option_df_index = option_df_index.reset_index().drop(
             columns=["match", "level_0"]
         )
+        # Filter out adjusted options.
+        valid_expiration_mask = option_df_index["expiration"].str.len() <= 6
+        option_df_index = option_df_index[valid_expiration_mask]
+        valid_indices = option_df_index.index
+        options_df = options_df.iloc[valid_indices]
+
         option_df_index.option_type = option_df_index.option_type.str.replace(
             "C", "call"
         ).str.replace("P", "put")

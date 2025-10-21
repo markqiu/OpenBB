@@ -1,6 +1,6 @@
 """Utility functions for parsing SEC Form 13F-HR."""
 
-from typing import Any, Optional
+from typing import Any
 
 from openbb_core.app.model.abstract.error import OpenBBError
 
@@ -18,7 +18,7 @@ def date_to_quarter_end(date: str) -> str:
     )
 
 
-async def get_13f_candidates(symbol: Optional[str] = None, cik: Optional[str] = None):
+async def get_13f_candidates(symbol: str | None = None, cik: str | None = None):
     """Get the 13F-HR filings for a given symbol or CIK."""
     # pylint: disable=import-outside-toplevel
     from openbb_sec.models.company_filings import SecCompanyFilingsFetcher
@@ -187,7 +187,7 @@ async def parse_13f_hr(filing: str):
         data.loc[:, "putCall"] = data["putCall"].fillna("--")
 
     # Add the period ending so that the filing is identified when multiple are requested.
-    data["period_ending"] = to_datetime(period_ending, yearfirst=False).date()
+    data.loc[:, "period_ending"] = to_datetime(period_ending, yearfirst=False).date()
     df = DataFrame(data)
     # Aggregate the data because there are multiple entries for each security and we need the totals.
     # We break it down by CUSIP, security type, and option type.
@@ -220,8 +220,8 @@ async def parse_13f_hr(filing: str):
         if col in df.columns and all(df[col] == 0):
             df.drop(columns=col, inplace=True)
 
-    total_value = df["value"].sum()
-    df["weight"] = round(df["value"] / total_value, 6)
+    total_value = df.value.sum()
+    df.loc[:, "weight"] = round(df.value.astype(float) / total_value, 6)
 
     return (
         df.reset_index()

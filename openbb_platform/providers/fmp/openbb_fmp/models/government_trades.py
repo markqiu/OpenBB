@@ -29,6 +29,8 @@ class FMPGovernmentTradesQueryParams(GovernmentTradesQueryParams):
 class FMPGovernmentTradesData(GovernmentTradesData):
     """Government Trades Data Model."""
 
+    model_config = ConfigDict(extra="ignore")
+
     __alias_dict__ = {
         "symbol": "ticker",
         "transaction_date": "transactionDate",
@@ -40,20 +42,20 @@ class FMPGovernmentTradesData(GovernmentTradesData):
     transaction_date: Optional[str] = Field(
         default=None, description="Date of the transaction."
     )
-    owner: Optional[str] = Field(
+    owner: str | None = Field(
         default=None, description="Ownership status (e.g., Spouse, Joint)."
     )
-    asset_type: Optional[str] = Field(
+    asset_type: str | None = Field(
         default=None, description="Type of asset involved in the transaction."
     )
-    asset_description: Optional[str] = Field(
+    asset_description: str | None = Field(
         default=None, description="Description of the asset."
     )
     type: Optional[str] = Field(
         default=None, description="Type of transaction (e.g., Sale, Purchase)."
     )
-    amount: Optional[str] = Field(default=None, description="Transaction amount range.")
-    comment: Optional[str] = Field(
+    amount: str | None = Field(default=None, description="Transaction amount range.")
+    comment: str | None = Field(
         default=None, description="Additional comments on the transaction."
     )
 
@@ -83,9 +85,9 @@ class FMPGovernmentTradesFetcher(
             symbols = query.symbol.split(",")
         results: List[Dict] = []
         chamber_url_dict = {
-            "house": ["senate-disclosure"],
-            "senate": ["senate-trading"],
-            "all": ["senate-disclosure", "senate-trading"],
+            "house": ["house-trades"],
+            "senate": ["senate-trades"],
+            "all": ["house-trades", "senate-trades"],
         }
         api_key = credentials.get("fmp_api_key") if credentials else ""
 
