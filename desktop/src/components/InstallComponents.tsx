@@ -156,6 +156,13 @@ export const ExtensionSelector = ({
 	  category: "other-openbb",
 	  credentials: [],
 	},
+	{
+		id: "openbb-cookiecutter",
+		name: "OpenBB Cookiecutter",
+		description: "Template for creating new OpenBB extension projects.",
+		category: "other-openbb",
+		credentials: [],
+	},
   ];
 
   // Update the getFilteredExtensions function to use the new hasMatchingExtensions
@@ -829,8 +836,7 @@ export const ExtensionSelector = ({
 													className="my-2 text-theme-secondary"
 													/>
 												),
-												// eslint-disable-next-line @typescript-eslint/no-unused-vars
-												code: ({ inline, ...props }) => (
+												code: ({ ...props }) => (
 													<code
 													{...props}
 													className="bg-theme-tertiary px-1 py-0.5 rounded text-theme-primary"

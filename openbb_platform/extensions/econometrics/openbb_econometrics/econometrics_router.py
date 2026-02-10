@@ -1,26 +1,79 @@
 """Econometrics Router."""
 
-from itertools import combinations
-from typing import Literal
+# pylint: disable=too-many-lines
 
-from openbb_core.app.deprecation import OpenBBDeprecationWarning
+from itertools import combinations
+from typing import Any, Literal
+
 from openbb_core.app.model.example import APIEx, PythonEx
 from openbb_core.app.model.obbject import OBBject
 from openbb_core.app.router import Router
 from openbb_core.provider.abstract.data import Data
-from pydantic import PositiveInt
+from pydantic import BaseModel, PositiveInt, model_serializer
 
 router = Router(prefix="", description="Econometrics analysis tools.")
 
 
+class OLSRegressionResults(BaseModel):
+    """OLS Regression Results that serializes statsmodels objects."""
+
+    model: Any
+    results: Any
+
+    class Config:
+        """Pydantic config."""
+
+        arbitrary_types_allowed = True
+
+    @model_serializer
+    def serialize_model(self) -> dict:
+        """Serialize statsmodels objects to a dictionary."""
+        results = self.results
+        conf_int = results.conf_int()
+        conf_int_dict = (
+            conf_int.to_dict()
+            if hasattr(conf_int, "to_dict")
+            else conf_int.to_dict("index")
+        )
+        return {
+            "params": (
+                results.params.to_dict()
+                if hasattr(results.params, "to_dict")
+                else dict(results.params)
+            ),
+            "rsquared": float(results.rsquared),
+            "rsquared_adj": float(results.rsquared_adj),
+            "fvalue": float(results.fvalue) if results.fvalue is not None else None,
+            "f_pvalue": (
+                float(results.f_pvalue) if results.f_pvalue is not None else None
+            ),
+            "aic": float(results.aic),
+            "bic": float(results.bic),
+            "llf": float(results.llf),
+            "nobs": int(results.nobs),
+            "df_model": float(results.df_model),
+            "df_resid": float(results.df_resid),
+            "pvalues": (
+                results.pvalues.to_dict()
+                if hasattr(results.pvalues, "to_dict")
+                else dict(results.pvalues)
+            ),
+            "tvalues": (
+                results.tvalues.to_dict()
+                if hasattr(results.tvalues, "to_dict")
+                else dict(results.tvalues)
+            ),
+            "bse": (
+                results.bse.to_dict()
+                if hasattr(results.bse, "to_dict")
+                else dict(results.bse)
+            ),
+            "conf_int": conf_int_dict,
+        }
+
+
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Get the correlation matrix of a dataset.",
@@ -84,13 +137,6 @@ def correlation_matrix(
 
 @router.command(
     methods=["POST"],
-    include_in_schema=False,
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Perform Ordinary Least Squares (OLS) regression.",
@@ -112,7 +158,7 @@ def ols_regression(
     data: list[Data],
     y_column: str,
     x_columns: list[str],
-) -> OBBject[dict]:
+) -> OBBject[OLSRegressionResults]:
     """Perform Ordinary Least Squares (OLS) regression.
 
     OLS regression is a fundamental statistical method to explore and model the relationship between a
@@ -131,7 +177,7 @@ def ols_regression(
 
     Returns
     -------
-    OBBject[dict]
+    OBBject[OLSRegressionResults]
         OBBject with the results being model and results objects.
     """
     # pylint: disable=import-outside-toplevel
@@ -146,17 +192,11 @@ def ols_regression(
     y = get_target_column(basemodel_to_df(data), y_column)
     model = sm.OLS(y, X)
     results = model.fit()
-    return OBBject(results={"model": model, "results": results})
+    return OBBject(results=OLSRegressionResults(model=model, results=results))
 
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Perform Ordinary Least Squares (OLS) regression and return the summary.",
@@ -251,12 +291,6 @@ def ols_regression_summary(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Perform Durbin-Watson test for autocorrelation.",
@@ -320,12 +354,6 @@ def autocorrelation(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Perform Breusch-Godfrey Lagrange Multiplier tests for residual autocorrelation.",
@@ -406,12 +434,6 @@ def residual_autocorrelation(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Perform co-integration test between two timeseries.",
@@ -482,12 +504,6 @@ def cointegration(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Perform Granger causality test to determine if X 'causes' y.",
@@ -564,12 +580,6 @@ def causality(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         PythonEx(
             description="Perform Augmented Dickey-Fuller (ADF) unit root test.",
@@ -636,12 +646,6 @@ def unit_root(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(
             parameters={
@@ -698,12 +702,6 @@ def panel_random_effects(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(
             parameters={
@@ -758,12 +756,6 @@ def panel_between(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(
             parameters={
@@ -819,12 +811,6 @@ def panel_pooled(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(
             parameters={
@@ -879,12 +865,6 @@ def panel_fixed(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(
             parameters={
@@ -938,12 +918,6 @@ def panel_first_difference(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
     examples=[
         APIEx(
             parameters={
@@ -999,25 +973,24 @@ def panel_fmac(
 
 @router.command(
     methods=["POST"],
-    deprecated=True,
-    deprecation=OpenBBDeprecationWarning(
-        message="There are no available OPENBB_API_PASSWORD and OPENBB_API_USERNAME, so we don't support this endpoint. Please ignore it.",
-        since=(4, 3),
-        expected_removal=(4, 5),
-    ),
-    include_in_schema=False,
     examples=[
         PythonEx(
             description="Calculate the variance inflation factor.",
             code=[
                 "stock_data = obb.equity.price.historical(symbol='TSLA', start_date='2023-01-01', provider='yfinance').to_df()",  # noqa: E501  pylint: disable= C0301
-                'obb.econometrics.variance_inflation_factor(data=stock_data, column="close")',
+                'obb.econometrics.variance_inflation_factor(data=stock_data, columns=["open", "high", "low", "close"])',  # noqa: E501  pylint: disable= C0301
             ],
+        ),
+        APIEx(
+            parameters={
+                "columns": ["open", "high", "low"],
+                "data": APIEx.mock_data("timeseries"),
+            }
         ),
     ],
 )
 def variance_inflation_factor(
-    data: list[Data], columns: list | None = None
+    data: list[Data], columns: list[str] | None = None
 ) -> OBBject[list[Data]]:
     """Calculate VIF (variance inflation factor), which tests for collinearity.
 
@@ -1065,7 +1038,7 @@ def variance_inflation_factor(
     df = add_constant(dataset if columns is None else dataset[columns])
 
     # Remove date and string type because VIF doesn't work for these types
-    df = df.select_dtypes(exclude=["object", "datetime", "timedelta"])
+    df = df.select_dtypes(exclude=["object", "datetime", "timedelta"])  # type: ignore
 
     # Calculate the VIF values
     vif_values: dict = {}
