@@ -19,7 +19,7 @@ openbb-cftc = "^1.2.1"
 openbb-congress-gov = "^1.1.1"
 openbb-econdb = "^1.4.1"
 openbb-federal-reserve = "^1.5.1"
-openbb-fmp = "^1.5.2"
+openbb-fmp = { path = "providers/fmp", develop = false }
 openbb-fred = "^1.5.1"
 openbb-government-us = "^1.5.2"
 openbb-imf = "^2.0.0"

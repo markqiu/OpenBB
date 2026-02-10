@@ -1,0 +1,5 @@
+include openbb_core/provider/utils/country_utils.py
+include openbb_core/provider/utils/country_data.json
+include openbb_core/provider/utils/*.py
+include openbb_core/provider/utils/*.json
+recursive-include openbb_core/provider/utils *.py *.json
