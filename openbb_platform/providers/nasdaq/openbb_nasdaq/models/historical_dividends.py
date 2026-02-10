@@ -6,7 +6,7 @@ from datetime import (
     date as dateType,
     datetime,
 )
-from typing import Any
+from typing import Any, Optional
 from warnings import warn
 
 from dateutil import parser

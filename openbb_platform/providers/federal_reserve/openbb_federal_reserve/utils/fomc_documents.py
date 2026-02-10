@@ -1,7 +1,7 @@
 """FOMC document and release utilities."""
 
 from functools import lru_cache
-from typing import Literal
+from typing import Literal, Optional
 
 from openbb_core.provider.utils.lru import ttl_cache
 

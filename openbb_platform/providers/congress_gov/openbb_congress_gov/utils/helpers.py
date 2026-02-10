@@ -1,6 +1,6 @@
 """Congress.gov helpers."""
 
-from typing import Literal
+from typing import Literal, Optional
 
 from fastapi.exceptions import HTTPException
 from openbb_congress_gov.utils.constants import BillTypes, base_url, bill_type_options

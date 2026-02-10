@@ -1,6 +1,6 @@
 """Deribit Helpers Module."""
 
-from typing import Literal
+from typing import Literal, Optional
 
 from async_lru import alru_cache
 from openbb_core.app.model.abstract.error import OpenBBError

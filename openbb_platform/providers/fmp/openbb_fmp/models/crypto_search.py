@@ -86,7 +86,7 @@ class FMPCryptoSearchFetcher(
         """Return the transformed data."""
         # pylint: disable=import-outside-toplevel
         from pandas import DataFrame
-        from pandas import NA
+        import numpy as np
 
         cryptos = DataFrame(data)
         if query.query:
@@ -95,8 +95,8 @@ class FMPCryptoSearchFetcher(
                 | cryptos["name"].str.contains(query.query, case=False)
                 | cryptos["exchange"].str.contains(query.query, case=False)
             ]
-        # Replace NaN values with None to ensure JSON compliance
-        cryptos = cryptos.where(cryptos.notna(), None)
+        # Replace NaN values with None to ensure JSON compliance and Pydantic validation
+        cryptos = cryptos.replace({np.nan: None})
         return [
             FMPCryptoSearchData.model_validate(d) for d in cryptos.to_dict("records")
         ]

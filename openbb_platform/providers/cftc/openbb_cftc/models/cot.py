@@ -5,7 +5,7 @@
 from datetime import (
     datetime,
 )
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 from openbb_cftc.utils.helpers import get_cot
 from openbb_core.app.model.abstract.error import OpenBBError

@@ -1,6 +1,6 @@
 """BLS Helpers."""
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Union, Optional
 
 if TYPE_CHECKING:
     from pandas import DataFrame

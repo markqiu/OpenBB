@@ -1,4 +1,6 @@
 """Options Router."""
+from typing import Literal
+
 from openbb_core.app.deprecation import OpenBBDeprecationWarning
 from openbb_core.app.model.command_context import CommandContext
 from openbb_core.app.model.example import APIEx, PythonEx

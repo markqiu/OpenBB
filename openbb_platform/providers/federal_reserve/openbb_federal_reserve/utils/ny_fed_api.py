@@ -2,7 +2,7 @@
 
 # pylint: disable=too-many-arguments,too-many-locals,unused-argument
 
-from typing import Literal
+from typing import Literal, Optional
 
 from openbb_core.app.model.abstract.error import OpenBBError
 from openbb_core.provider.utils.errors import EmptyDataError

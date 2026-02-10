@@ -1,7 +1,7 @@
 """Government Trades Standard Model."""
 
 from datetime import date as dateType
-from typing import Literal
+from typing import Literal, Optional
 
 from openbb_core.provider.abstract.data import Data
 from openbb_core.provider.abstract.query_params import QueryParams

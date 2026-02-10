@@ -2,7 +2,7 @@
 
 from datetime import date
 from functools import lru_cache
-from typing import Any
+from typing import Any, Optional
 
 from openbb_core.app.model.abstract.error import OpenBBError
 from openbb_core.provider.utils.errors import EmptyDataError, UnauthorizedError

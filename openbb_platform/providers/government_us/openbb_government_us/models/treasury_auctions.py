@@ -2,7 +2,7 @@
 import json
 # pylint: disable=unused-argument
 
-from typing import Any
+from typing import Any, Optional
 
 import pandas as pd
 

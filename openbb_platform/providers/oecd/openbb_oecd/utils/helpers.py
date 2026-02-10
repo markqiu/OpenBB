@@ -4,7 +4,7 @@ import ssl
 from datetime import date
 from io import StringIO
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, Optional
 
 import requests
 import urllib3
