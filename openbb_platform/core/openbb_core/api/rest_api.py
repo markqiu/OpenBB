@@ -21,29 +21,49 @@ from openbb_core.env import Env
 logger = logging.getLogger("uvicorn.error")
 
 
+class SafeJSONEncoder(json.JSONEncoder):
+    """Custom JSON encoder that handles NaN and Inf values."""
+
+    def default(self, obj):
+        """Convert NaN and Inf to None for JSON compliance."""
+        if isinstance(obj, float):
+            if math.isnan(obj) or math.isinf(obj):
+                return None
+        return super().default(obj)
+
+    def iterencode(self, obj, _one_shot=False):
+        """Encode with NaN/Inf handling."""
+        def replace_nan_inf(o):
+            """Recursively replace NaN and Inf with None."""
+            if isinstance(o, dict):
+                return {k: replace_nan_inf(v) for k, v in o.items()}
+            elif isinstance(o, list):
+                return [replace_nan_inf(item) for item in o]
+            elif isinstance(o, float):
+                if math.isnan(o) or math.isinf(o):
+                    return None
+            return o
+
+        safe_obj = replace_nan_inf(obj)
+        return super().iterencode(safe_obj, _one_shot)
+
+
 class SafeJSONResponse(JSONResponse):
     """Custom JSONResponse that handles NaN and Inf values."""
 
     def render(self, content: any) -> bytes:
         """Render content to JSON, replacing NaN and Inf with null."""
-        def convert_nan_inf(obj):
-            """Convert NaN and Inf values to None for JSON compliance."""
-            if isinstance(obj, float):
-                if math.isnan(obj) or math.isinf(obj):
-                    return None
-            elif isinstance(obj, dict):
-                return {k: convert_nan_inf(v) for k, v in obj.items()}
-            elif isinstance(obj, list):
-                return [convert_nan_inf(item) for item in obj]
-            return obj
-
-        # Convert NaN and Inf values to None
-        safe_content = convert_nan_inf(content)
-        
         # Use jsonable_encoder to handle Pydantic models and other complex types
-        json_data = jsonable_encoder(safe_content)
+        json_data = jsonable_encoder(content)
         
-        return json.dumps(json_data).encode("utf-8")
+        # Use custom encoder to handle NaN and Inf
+        return json.dumps(
+            json_data,
+            ensure_ascii=False,
+            allow_nan=False,
+            cls=SafeJSONEncoder,
+            indent=None,
+        ).encode("utf-8")
 
 system = SystemService().system_settings
 
