@@ -93,6 +93,34 @@ async def search(
 
 
 @router.command(
+    model="IndexValuationMultiples",
+    examples=[
+        APIEx(
+            description="Get index valuation multiples (PE, PB, PS, etc.) from East Money.",
+            parameters={"symbol": "000300.SH", "provider": "eastmoney"},
+        ),
+        APIEx(
+            description="Get index valuation multiples from XiaoYuan.",
+            parameters={"symbol": "000001", "provider": "xiaoyuan"},
+        ),
+    ],
+)
+async def valuation_multiples(
+    cc: CommandContext,
+    provider_choices: ProviderChoices,
+    standard_params: StandardParams,
+    extra_params: ExtraParams,
+) -> OBBject:
+    """Get index valuation multiples (PE, PB, PS, market cap, dividend yield, etc.).
+    
+    Available for Chinese indices through eastmoney and xiaoyuan providers.
+    
+    Providers: eastmoney, xiaoyuan
+    """
+    return await OBBject.from_query(Query(**locals()))
+
+
+@router.command(
     model="SP500Multiples",
     examples=[
         APIEx(parameters={"provider": "multpl"}),
