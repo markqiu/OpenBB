@@ -78,10 +78,24 @@ class Fetcher(Generic[Q, R]):
         **kwargs,
     ) -> R | AnnotatedResult[R]:
         """Fetch data from a provider."""
+        import asyncio
+        from inspect import iscoroutinefunction
+
         query = cls.transform_query(params=params)
-        data = await maybe_coroutine(
-            cls.extract_data, query=query, credentials=credentials, **kwargs
-        )
+        # 同步 fetcher（jqdatasdk/EmQuantAPI 等）统一放线程池并加超时：
+        # - 避免同步 SDK 的网络挂起卡死 event loop（曾导致服务假死）
+        # - 120s 超时释放被挂起占用的线程
+        if iscoroutinefunction(cls.extract_data):
+            data = await maybe_coroutine(
+                cls.extract_data, query=query, credentials=credentials, **kwargs
+            )
+        else:
+            data = await asyncio.wait_for(
+                asyncio.to_thread(
+                    cls.extract_data, query=query, credentials=credentials, **kwargs
+                ),
+                timeout=120,
+            )
         return cls.transform_data(query=query, data=data, **kwargs)
 
     @classproperty
